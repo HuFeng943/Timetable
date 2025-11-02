@@ -29,10 +29,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch(Dispatchers.IO) {ProfileInstaller.writeProfile(this@MainActivity)} // 给没Google Play的设备跑跑 AOT
+        lifecycleScope.launch(Dispatchers.IO)
+        { ProfileInstaller.writeProfile(this@MainActivity)} // 给没Google Play的设备跑跑 AOT
         // 硬编码时间，测试用
-        val courses = getSampleTimetable().getCoursesForDate(
-            LocalDate(2025, 11, 1))
+        val courses = getSampleTimetable().toDayUiCourses(LocalDate(2025,11,1))
 
         setContent {
             TimeTableTheme{
@@ -63,10 +63,11 @@ class MainActivity : ComponentActivity() {
 
 
 // 临时示例数据
-private fun getSampleTimetable(): UserTimeTable {
-    return UserTimeTable(
+private fun getSampleTimetable(): TimeTable {
+    return TimeTable(
         allCourses = listOf(
             Course(
+                id = 1145,
                 name = "物理5 (双周)",
                 timeSlots = listOf(
                     TimeSlot(
@@ -80,6 +81,7 @@ private fun getSampleTimetable(): UserTimeTable {
                 location = "B202"
             ),
             Course(
+                id = 11919,
                 name = "数学6 (单周)",
                 timeSlots = listOf(
                     TimeSlot(
@@ -101,6 +103,7 @@ private fun getSampleTimetable(): UserTimeTable {
                 location = "A101"
             ),
             Course(
+                id = 810,
                 name = "英语6 (每周)",
                 timeSlots = listOf(
                     // 周六的英语课
@@ -121,6 +124,8 @@ private fun getSampleTimetable(): UserTimeTable {
         ),
         semesterName = "2025秋季",
         createdAt = kotlin.time.Clock.System.now(),
-        semesterStart = LocalDate(2025, 10, 1) // 2025-10-01 是周三
+        semesterStart = LocalDate(2025, 10, 1), // 2025-10-01 是周三
+        timeTableId = 114514,
+        semesterEnd = null
     )
 }
