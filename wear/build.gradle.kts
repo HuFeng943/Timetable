@@ -20,11 +20,19 @@ android {
         versionCode = 1
         versionName = "1.0"
         ndk {
-            // 仅打包 armeabi-v7a（如果你的 Wear OS 没有 64 位需求）
-            abiFilters += listOf("armeabi-v7a")
+            abiFilters += listOf("armeabi-v7a", "x86", "arm64-v8a", "x86_64")
         }
     }
 
+    splits {
+        abi {
+            isEnable = true // 启用 ABI 分割打包
+            reset()
+            include("armeabi-v7a", "x86", "arm64-v8a", "x86_64")
+
+            isUniversalApk = true
+        }
+    }
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -35,6 +43,7 @@ android {
             )
         }
     }
+
     useLibrary("wear-sdk")
     buildFeatures {
         compose = true

@@ -77,7 +77,10 @@ fun TextTime(time: LocalTime) {
     val context = LocalContext.current
     val is24Hour = remember { DateFormat.is24HourFormat(context) }
     val localTime = remember(time) { java.time.LocalTime.of(time.hour, time.minute) }
-
+    val aTextStyle = MaterialTheme.typography.labelSmall.copy(
+        fontSize = 9.sp,
+        lineHeight = 9.sp
+    )
     val timeStr = remember(localTime, is24Hour) {
         if (is24Hour) TimeFormatters.formatter24h.format(localTime)
         else TimeFormatters.formatter12h.format(localTime)
@@ -92,8 +95,14 @@ fun TextTime(time: LocalTime) {
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.Top
         ) {
-            Text(text = timeStr, style = MaterialTheme.typography.labelMedium)
-            Text(text = amPm, style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp, lineHeight = 9.sp))
+            Text(
+                text = timeStr,
+                style = MaterialTheme.typography.labelMedium
+            )
+            Text(
+                text = amPm,
+                style = aTextStyle
+            )
         }
     }
 }
