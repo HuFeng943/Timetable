@@ -6,7 +6,7 @@ import kotlinx.datetime.isoDayNumber
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TimeSlot( // 课程时间
+data class TimeSlot(
     val startTime: LocalTime,
     val endTime: LocalTime,
     val dayOfWeek: DayOfWeek,

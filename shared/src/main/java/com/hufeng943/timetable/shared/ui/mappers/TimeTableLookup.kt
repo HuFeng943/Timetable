@@ -1,4 +1,3 @@
-// 文件名: ./ui/mappers/TimeTableLookup.kt
 package com.hufeng943.timetable.shared.ui.mappers
 
 import com.hufeng943.timetable.shared.model.TimeSlot
@@ -6,17 +5,18 @@ import com.hufeng943.timetable.shared.model.TimeTable
 import com.hufeng943.timetable.shared.ui.CourseUi
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
 
-// 用timeSlotId查对应TimeSlot
-fun TimeTable.findTimeSlotById(timeSlotId: Long): TimeSlot? {
-    // 依赖于 TimeTable.allTimeSlotsMap
-    return this.allTimeSlotsMap[timeSlotId]
-}
-// 用CourseWithSlotId反查CourseUi
-fun TimeTable.toCourseUi(
-    courseWithSlotId: CourseWithSlotId,
-): CourseUi? {
-    val course = this.courseMap[courseWithSlotId.courseID]
-    val timeSlot = this.allTimeSlotsMap[courseWithSlotId.timeSlotID]
+/**
+ * 通过timeSlotId查找对应的对象
+ * @return TimeSlot 查找失败则返回 null
+ */
+fun TimeTable.findTimeSlotById(timeSlotId: Long): TimeSlot? = this.timeSlotsMap[timeSlotId]
+/**
+ * 通过CourseWithSlotId反查CourseUi
+ * @return CourseUi 查找失败则返回 null
+ */
+fun TimeTable.toCourseUi(courseWithSlotId: CourseWithSlotId): CourseUi? {
+    val course = this.courseMap[courseWithSlotId.courseId]
+    val timeSlot = this.timeSlotsMap[courseWithSlotId.timeSlotId]
 
     // 没找到？
     if (course == null || timeSlot == null) return null
