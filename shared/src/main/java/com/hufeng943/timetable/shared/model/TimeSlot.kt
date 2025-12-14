@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TimeSlot(
-    val id: Long = 0,
+    val id: Long,
     val startTime: LocalTime,
     val endTime: LocalTime,
     val dayOfWeek: DayOfWeek,
