@@ -14,6 +14,7 @@ import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.itemsIndexed
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.presentation.ui.components.TimeTableCard
 import com.hufeng943.timetable.shared.model.TimeTable
@@ -43,36 +44,38 @@ fun TimetablePager(
         }
 
         else -> {
+            val scrollState = rememberScalingLazyListState(initialCenterItemIndex = targetIndex)
             val sortedCourses = remember(coursesIdList) {
                 coursesIdList.sortedWith(compareBy { timeTable.toCourseUi(it)!!.timeSlot.startTime })
             }
 
-
-            ScalingLazyColumn(
-                modifier = modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                state = rememberScalingLazyListState(initialCenterItemIndex = targetIndex)
-            ) {
-                item {
-                    Text(
-                        text = title, style = MaterialTheme.typography.titleMedium
-                    )
-                }
-                itemsIndexed(
-                    items = sortedCourses,
-                    key = { _, item -> "${item.courseId}-${item.timeSlotId}" } // 唯一 key
-                ) { dailyOrderIndex, idPair ->
-                    val course =
-                        timeTable.toCourseUi(idPair)?.copy(dailyOrder = dailyOrderIndex + 1)
-                    if (course != null) {
-                        TimeTableCard(course) {
-                            // 传递两ID
-                            navController.navigate("course_detail/${idPair.courseId}/${idPair.timeSlotId}")
+            ScreenScaffold(scrollState = scrollState) {
+                ScalingLazyColumn(
+                    modifier = modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    state = scrollState
+                ) {
+                    item {
+                        Text(
+                            text = title, style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                    itemsIndexed(
+                        items = sortedCourses,
+                        key = { _, item -> "${item.courseId}-${item.timeSlotId}" } // 唯一 key
+                    ) { dailyOrderIndex, idPair ->
+                        val course =
+                            timeTable.toCourseUi(idPair)?.copy(dailyOrder = dailyOrderIndex + 1)
+                        if (course != null) {
+                            TimeTableCard(course) {
+                                // 传递两ID
+                                navController.navigate("course_detail/${idPair.courseId}/${idPair.timeSlotId}")
+                            }
                         }
                     }
-                }
 
+                }
             }
         }
     }

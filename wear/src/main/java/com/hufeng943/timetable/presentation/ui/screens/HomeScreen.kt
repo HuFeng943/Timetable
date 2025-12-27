@@ -1,46 +1,38 @@
 package com.hufeng943.timetable.presentation.ui.screens
 
-import androidx.compose.foundation.layout.Box
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.navigation.NavHostController
 import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
+import com.hufeng943.timetable.presentation.ui.pagers.MorePager
 import com.hufeng943.timetable.presentation.ui.pagers.TimetablePager
 import com.hufeng943.timetable.shared.model.TimeTable
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
+import com.hufeng943.timetable.shared.ui.mappers.toCourseWithSlots
 
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    timeTable: TimeTable,
-    todayCoursesIdList: List<CourseWithSlotId>
+    timeTables: List<TimeTable>
 ) {
+    // 假设你只关心第一个课表
+    val timeTable: TimeTable? = timeTables?.firstOrNull()
+    // 生成今天的课程 ID 列表（可以根据你的逻辑改）
+    val todayCoursesIdList: List<CourseWithSlotId>? = timeTable?.toCourseWithSlots()
+    Log.v("todayCoursesIdList1", todayCoursesIdList.toString())
+
     HorizontalPager(
-        modifier = Modifier.fillMaxSize(), state = rememberPagerState { 10 }) { page ->
+        modifier = Modifier.fillMaxSize(), state = rememberPagerState { 2 }) { page ->
         when (page) {
             0 -> TimetablePager(
                 timeTable = timeTable, // 传递 TimeTable
                 coursesIdList = todayCoursesIdList, title = "今日程", navController = navController
             )
-            else -> PagePlaceholder(page)
+            1 -> MorePager()
         }
     }
 
-}
-
-@Composable
-private fun PagePlaceholder(page: Int) {
-    Box(
-        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-    ) {
-        BasicText(
-            text = "占位符这 $page 块", style = TextStyle(color = Color.White)
-        )
-    }
 }

@@ -77,11 +77,28 @@ dependencies {
     implementation(libs.androidx.wear.tooling.preview)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.splashscreen)
+
+    implementation(libs.androidx.wear.compose.material3)
+    implementation(libs.androidx.wear.compose.foundation)
+    implementation(libs.androidx.wear.compose.navigation)
+    implementation(libs.androidx.compose.material.icons.core)
+
+    // implementation(libs.horologist.compose.layout)
     implementation(libs.androidx.tiles)
     implementation(libs.androidx.tiles.tooling.preview)
     implementation(libs.horologist.compose.tools)
     implementation(libs.horologist.tiles)
     implementation(libs.androidx.watchface.complications.data.source.ktx)
+
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.androidx.profileinstaller)
+    implementation(project(":shared"))
+
+    /*
+
+
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.runtime)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -94,9 +111,10 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.kotlinx.datetime)
     implementation(project(":shared"))
-    implementation(libs.androidx.profileinstaller)
+
     implementation(libs.horologist.compose.layout)
     implementation(libs.androidx.wear.compose.material3)
     implementation(libs.androidx.wear.compose.foundation)
     implementation(libs.androidx.wear.compose.navigation)
+    */
 }
