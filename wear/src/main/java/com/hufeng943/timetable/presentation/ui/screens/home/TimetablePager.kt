@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
@@ -16,6 +17,7 @@ import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
+import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.components.TimeTableCard
 import com.hufeng943.timetable.shared.model.TimeTable
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
@@ -37,7 +39,7 @@ fun TimetablePager(
                 modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
             ) {
                 BasicText(
-                    text = "今天没有课程，是自由的一天！",
+                    text = stringResource(R.string.home_empty_course_hint),
                     style = MaterialTheme.typography.titleMedium
                 )
             }

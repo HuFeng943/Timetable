@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
@@ -22,6 +23,7 @@ import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
+import com.hufeng943.timetable.R
 
 @Composable
 fun MorePager(
@@ -30,11 +32,11 @@ fun MorePager(
     val scrollState = rememberScalingLazyListState()
 
     val menuItems = listOf(
-        MoreMenuItemUi("编辑课程表", Icons.Default.Edit) {
+        MoreMenuItemUi(stringResource(R.string.more_menu_edit_timetable), Icons.Default.Edit) {
             navController.navigate("edit_course")
         },
-        MoreMenuItemUi("设置中心", Icons.Default.Settings) {TODO()},
-        MoreMenuItemUi("关于我们", Icons.Default.Info) {TODO()},
+        MoreMenuItemUi(stringResource(R.string.more_menu_settings), Icons.Default.Settings) {TODO()},
+        MoreMenuItemUi(stringResource(R.string.more_menu_about), Icons.Default.Info) {TODO()},
     )
     ScreenScaffold(scrollState = scrollState) {
         ScalingLazyColumn(
@@ -43,7 +45,7 @@ fun MorePager(
         ) {
             item {
                 ListHeader {
-                    Text("更多")
+                    Text(stringResource(R.string.more_header_title))
                 }
             }
 

@@ -7,7 +7,6 @@ import androidx.wear.compose.material3.ColorScheme
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.dynamicColorScheme
 
-// 在你的 Theme.kt 里
 @Composable
 fun TimeTableTheme(
     content: @Composable () -> Unit

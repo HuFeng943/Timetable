@@ -3,9 +3,11 @@ package com.hufeng943.timetable.presentation.ui.screens.home
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
+import com.hufeng943.timetable.R
 import com.hufeng943.timetable.shared.model.TimeTable
 import com.hufeng943.timetable.shared.ui.mappers.toCourseWithSlots
 
@@ -23,7 +25,7 @@ fun HomeScreen(
                     TimetablePager(
                         timeTable = timeTable, // 传递 TimeTable
                         coursesIdList = timeTable.toCourseWithSlots(),
-                        title = "今日程",
+                        title = stringResource(R.string.home_title_today),
                         navController = navController
                     )
                 } else {
