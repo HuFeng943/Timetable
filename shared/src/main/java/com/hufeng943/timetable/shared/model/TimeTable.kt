@@ -21,7 +21,8 @@ data class TimeTable(
     @Serializable(with = InstantAsLongSerializer::class)// 这是kotlin.time.Instant
     val createdAt: Instant,
     val semesterStart: LocalDate, // 课表开始日期
-    val semesterEnd: LocalDate? = null // 课表结束日期,有可能永不结束
+    val semesterEnd: LocalDate? = null, // 课表结束日期,有可能永不结束
+    val color: Long
 ) {
     init {
         require(semesterName.isNotBlank()) { "Semester name cannot be blank." }

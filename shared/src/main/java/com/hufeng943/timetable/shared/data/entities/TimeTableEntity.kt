@@ -10,5 +10,6 @@ data class TimeTableEntity(
     val semesterName: String,
     val createdAtMillis: Long,
     val semesterStartEpochDay: Long,
-    val semesterEndEpochDay: Long?
+    val semesterEndEpochDay: Long?,
+    val color: Long,
 )

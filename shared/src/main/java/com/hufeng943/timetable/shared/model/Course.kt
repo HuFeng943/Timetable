@@ -12,7 +12,7 @@ data class Course(
     val name: String,
     val timeSlots: List<TimeSlot> = emptyList(),
     val location: String? = null,
-    val color: Long = 0xFF2196F3, // 默认蓝色
+    val color: Long,
     val teacher: String? = null
 ) {
     init {

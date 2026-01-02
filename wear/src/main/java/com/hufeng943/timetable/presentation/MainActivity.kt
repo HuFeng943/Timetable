@@ -23,7 +23,9 @@ class MainActivity : ComponentActivity() {
     private val appDatabase: AppDatabase by lazy {
         Room.databaseBuilder(
             applicationContext, AppDatabase::class.java, "timetable-db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
     private val repository: TimeTableRepositoryImpl by lazy {
         TimeTableRepositoryImpl(appDatabase.timeTableDao())

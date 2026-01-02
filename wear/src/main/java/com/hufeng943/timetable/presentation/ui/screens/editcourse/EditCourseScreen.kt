@@ -5,14 +5,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
+import com.hufeng943.timetable.shared.model.TimeTable
 
 @Composable
-fun EditCourseScreen() {
+fun EditCourseScreen(timeTables: List<TimeTable>) {
     val scrollState = rememberScalingLazyListState()
     ScreenScaffold(scrollState = scrollState) {
         ScalingLazyColumn(
@@ -24,7 +26,15 @@ fun EditCourseScreen() {
                     Text(stringResource(R.string.edit_course_header_title))
                 }
             }
-
+            if (timeTables.isEmpty()) {
+                item {
+                    Text("还没有课表")
+                }
+            } else {
+                items(timeTables) { timeTable ->
+                    Text(timeTable.semesterName)
+                }
+            }
         }
     }
 }

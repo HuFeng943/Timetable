@@ -39,12 +39,12 @@ fun AppNavHost(viewModel: TimeTableViewModel) {
                 }
                 composable(NavRoutes.MAIN) {
                     Log.v("navController1", (timeTables == null).toString())
-                    timeTables?.let { tables ->
+                    RequireTable(timeTables) { tables ->
                         HomeScreen(tables)
-                    } ?: LoadingScreen(timeTables)
+                    }
                 }
                 composable(NavRoutes.COURSE_DETAIL) { backStackEntry ->
-                    timeTables?.let { tables ->
+                    RequireTable(timeTables) { tables ->
                         val courseId = backStackEntry.longArg("courseId")
                         val timeSlotId = backStackEntry.longArg("timeSlotId")
                         if (courseId != null && timeSlotId != null) {
@@ -56,10 +56,12 @@ fun AppNavHost(viewModel: TimeTableViewModel) {
                             navController.navigate(NavRoutes.ERROR)
                             // 这里才是真的出错了
                         }
-                    } ?: LoadingScreen(timeTables)
+                    }
                 }
                 composable(NavRoutes.EDIT_COURSE) {
-                    EditCourseScreen()
+                    RequireTable(timeTables) { tables ->
+                        EditCourseScreen(tables)
+                    }
                 }
             }
         }
@@ -68,3 +70,13 @@ fun AppNavHost(viewModel: TimeTableViewModel) {
 
 // 对一堆getString()的封装
 fun NavBackStackEntry.longArg(key: String): Long? = arguments?.getString(key)?.toLongOrNull()
+
+// 封装了重复多次的判断
+@Composable
+fun RequireTable(
+    timeTables: List<TimeTable>?, content: @Composable (List<TimeTable>) -> Unit
+) {
+    timeTables?.let { tables ->
+        content(tables)
+    } ?: LoadingScreen()
+}

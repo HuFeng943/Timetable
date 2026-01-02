@@ -13,7 +13,7 @@ import com.hufeng943.timetable.shared.data.entities.TimeTableEntity
         CourseEntity::class,
         TimeSlotEntity::class
     ],
-    version = 1,
+    version = 2,
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun timeTableDao(): TimeTableDao

@@ -13,7 +13,7 @@ import com.hufeng943.timetable.presentation.ui.NavRoutes
 import com.hufeng943.timetable.shared.model.TimeTable
 
 @Composable
-fun LoadingScreen(timeTables: List<TimeTable>?) {
+fun LoadingScreen(timeTables: List<TimeTable>? = null) {
     val navController = LocalNavController.current
 
     Log.v("navController2", (timeTables==null).toString())

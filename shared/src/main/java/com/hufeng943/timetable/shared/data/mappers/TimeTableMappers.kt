@@ -22,7 +22,9 @@ fun TimeTableWithCourses.toTimeTable(): TimeTable {
         createdAt = createdAt,
         semesterStart = semesterStart,
         semesterEnd = semesterEnd,
-        allCourses = this.courses.map { it.toCourse() })
+        allCourses = this.courses.map { it.toCourse() },
+        color = tableEntity.color
+    )
 }
 
 fun TimeTable.toTimeTableEntity(): TimeTableEntity = TimeTableEntity(
@@ -30,5 +32,6 @@ fun TimeTable.toTimeTableEntity(): TimeTableEntity = TimeTableEntity(
     semesterName = this.semesterName,
     createdAtMillis = this.createdAt.toEpochMilliseconds(),
     semesterStartEpochDay = this.semesterStart.toEpochDays(),
-    semesterEndEpochDay = this.semesterEnd?.toEpochDays()
+    semesterEndEpochDay = this.semesterEnd?.toEpochDays(),
+    color = this.color
 )
