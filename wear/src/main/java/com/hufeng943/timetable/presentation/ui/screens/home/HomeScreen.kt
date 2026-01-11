@@ -1,11 +1,16 @@
 package com.hufeng943.timetable.presentation.ui.screens.home
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
+import androidx.wear.compose.material3.HorizontalPageIndicator
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.shared.model.TimeTable
 import com.hufeng943.timetable.shared.ui.mappers.toCourseWithSlots
@@ -14,23 +19,33 @@ import com.hufeng943.timetable.shared.ui.mappers.toCourseWithSlots
 fun HomeScreen(timeTables: List<TimeTable>) {
     // TODO 可选择课表
     val timeTable: TimeTable? = timeTables.firstOrNull()
-    HorizontalPager(
-        modifier = Modifier.fillMaxSize(), state = rememberPagerState { 2 }) { page ->
-        when (page) {
-            0 -> {
-                if (timeTable != null) {
-                    TimetablePager(
-                        timeTable = timeTable, // 传递 TimeTable
-                        coursesIdList = timeTable.toCourseWithSlots(),
-                        title = stringResource(R.string.home_title_today)
-                    )
-                } else {
-                    EmptyPager()
+    val pagerState = rememberPagerState(pageCount = { 2 })
+    Box(modifier = Modifier.fillMaxSize()) {
+        HorizontalPager(
+            modifier = Modifier.fillMaxSize(), state = pagerState
+        ) { page ->
+            when (page) {
+                0 -> {
+                    if (timeTable != null) {
+                        TimetablePager(
+                            timeTable = timeTable, // 传递 TimeTable
+                            coursesIdList = timeTable.toCourseWithSlots(),
+                            title = stringResource(R.string.home_title_today)
+                        )
+                    } else {
+                        EmptyPager()
+                    }
                 }
+
+                1 -> MorePager()
             }
-
-            1 -> MorePager()
         }
+        // 页面指示器
+        HorizontalPageIndicator(
+            pagerState = pagerState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 6.dp)
+        )
     }
-
 }
