@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.ui.screens.editcourse
+package com.hufeng943.timetable.presentation.ui.screens.edit
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +29,7 @@ import kotlinx.datetime.LocalDate
 import kotlin.time.Clock
 
 @Composable
-fun EditCourseScreen(
+fun EditTimeTable(
     timeTables: List<TimeTable>,
     onAction: (TableAction) -> Unit
 ) {
