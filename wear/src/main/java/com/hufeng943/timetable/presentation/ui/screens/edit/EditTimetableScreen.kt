@@ -1,6 +1,5 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
@@ -27,7 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.toColorLong
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
@@ -85,8 +84,6 @@ fun EditTimetable(
     var semesterEndDate: LocalDate? by remember { mutableStateOf(timetable?.semesterEnd) }
     var semesterName by remember { mutableStateOf(timetable?.semesterName ?: "哈吉米") }
     var semesterColor by remember { mutableStateOf(Color(timetable?.color ?: 0xFFE57373)) }
-    val a = timetable?.color
-    Log.d("a", a.toString())
     Crossfade(
         targetState = pickerType, animationSpec = tween(durationMillis = 350)
     ) { currentPicker ->
@@ -101,7 +98,7 @@ fun EditTimetable(
                                 createdAt = timetable?.createdAt ?: Clock.System.now(),
                                 semesterStart = semesterStartDate,
                                 semesterEnd = semesterEndDate,
-                                color = semesterColor.toColorLong()
+                                color = semesterColor.toArgb().toLong()
                             )
                             onAction(TableAction.Upsert(newTable))
                             navController.popBackStack()
