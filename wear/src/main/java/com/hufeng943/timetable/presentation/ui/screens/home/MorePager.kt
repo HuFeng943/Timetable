@@ -39,7 +39,7 @@ fun MorePager() {
             // 1. 编辑课表
             item {
                 Button(
-                    onClick = { navController.navigate(NavRoutes.EDIT_COURSE) },
+                    onClick = { navController.navigate(NavRoutes.LIST_TIMETABLE) },
                     modifier = Modifier.fillMaxWidth(),
                     icon = {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = null)

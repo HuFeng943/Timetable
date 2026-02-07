@@ -11,8 +11,8 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.presentation.ui.screens.detail.CourseDetailScreen
-import com.hufeng943.timetable.presentation.ui.screens.edit.AddTimetable
 import com.hufeng943.timetable.presentation.ui.screens.edit.EditTimetable
+import com.hufeng943.timetable.presentation.ui.screens.edit.TimetableList
 import com.hufeng943.timetable.presentation.ui.screens.home.HomeScreen
 import com.hufeng943.timetable.presentation.ui.screens.loading.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.TimetableViewModel
@@ -57,16 +57,16 @@ fun AppNavHost(viewModel: TimetableViewModel = hiltViewModel()) {
                     }
                 }
             }
-            composable(NavRoutes.EDIT_COURSE) {
+            composable(NavRoutes.LIST_TIMETABLE) {
                 RequireTable(timetables) { tables ->
-                    EditTimetable(
+                    TimetableList(
                         tables, onAction = viewModel::onAction
                     )
                 }
             }
-            composable(NavRoutes.ADD_COURSE) {
+            composable(NavRoutes.EDIT_TIMETABLE) {
                 RequireTable(timetables) {
-                    AddTimetable(
+                    EditTimetable(
                         onAction = viewModel::onAction
                     )
                 }
