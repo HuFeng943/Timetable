@@ -39,12 +39,12 @@ fun AppNavHost(viewModel: TimetableViewModel = hiltViewModel()) {
             }
             composable(NavRoutes.MAIN) {
                 Log.v("navController1", (timetables == null).toString())
-                RequireTable(timetables) { tables ->
+                DataStateGuard(timetables) { tables ->
                     HomeScreen(tables)
                 }
             }
             composable(NavRoutes.COURSE_DETAIL) { backStackEntry ->
-                RequireTable(timetables) { tables ->
+                DataStateGuard(timetables) { tables ->
                     val courseId = backStackEntry.longArg("courseId")
                     val timeSlotId = backStackEntry.longArg("timeSlotId")
                     if (courseId != null && timeSlotId != null) {
@@ -58,14 +58,14 @@ fun AppNavHost(viewModel: TimetableViewModel = hiltViewModel()) {
                 }
             }
             composable(NavRoutes.LIST_TIMETABLE) {
-                RequireTable(timetables) { tables ->
+                DataStateGuard(timetables) { tables ->
                     TimetableList(
                         tables, onAction = viewModel::onAction
                     )
                 }
             }
             composable(NavRoutes.EDIT_TIMETABLE) {
-                RequireTable(timetables) {
+                DataStateGuard(timetables) {
                     EditTimetable(
                         onAction = viewModel::onAction
                     )
@@ -81,10 +81,13 @@ fun NavBackStackEntry.longArg(key: String): Long? = arguments?.getString(key)?.t
 
 // 封装了重复多次的判断
 @Composable
-fun RequireTable(
-    timetables: List<Timetable>?, content: @Composable (List<Timetable>) -> Unit
+fun <T> DataStateGuard(
+    data: T?,
+    loadingContent: @Composable () -> Unit = { LoadingScreen() },
+    content: @Composable (T) -> Unit
 ) {
-    timetables?.let { tables ->
-        content(tables)
-    } ?: LoadingScreen()
+    when {
+        data == null -> loadingContent()
+        else -> content(data)
+    }
 }
