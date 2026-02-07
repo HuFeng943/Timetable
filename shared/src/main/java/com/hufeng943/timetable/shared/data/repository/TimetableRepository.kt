@@ -6,10 +6,10 @@ import com.hufeng943.timetable.shared.model.Timetable
 import kotlinx.coroutines.flow.Flow
 
 interface TimetableRepository {
-    // 插入
-    suspend fun insertTimetable(timetable: Timetable): Long
-    suspend fun insertCourse(course: Course, timetableId: Long): Long
-    suspend fun insertTimeSlot(courseId: Long, timeSlot: TimeSlot): Long
+    // 更新
+    suspend fun upsertTimetable(timetable: Timetable): Long
+    suspend fun upsertCourse(course: Course, timetableId: Long): Long
+    suspend fun upsertTimeSlot(courseId: Long, timeSlot: TimeSlot): Long
 
     // 删除课表
     suspend fun deleteTimetable(timetableId: Long)

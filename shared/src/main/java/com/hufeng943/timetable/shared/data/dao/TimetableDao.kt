@@ -2,10 +2,9 @@ package com.hufeng943.timetable.shared.data.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Upsert
 import com.hufeng943.timetable.shared.data.entities.CourseEntity
 import com.hufeng943.timetable.shared.data.entities.TimeSlotEntity
 import com.hufeng943.timetable.shared.data.entities.TimetableEntity
@@ -14,15 +13,15 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TimetableDao {
-    // ------插入------
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTimetable(timetable: TimetableEntity): Long
+    // ------更新------
+    @Upsert
+    suspend fun upsertTimetable(timetable: TimetableEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCourse(course: CourseEntity): Long
+    @Upsert
+    suspend fun upsertCourse(course: CourseEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTimeSlot(slot: TimeSlotEntity): Long
+    @Upsert
+    suspend fun upsertTimeSlot(slot: TimeSlotEntity): Long
 
     // ------删除------
     @Delete

@@ -12,19 +12,19 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class TimetableRepositoryImpl(private val dao: TimetableDao) : TimetableRepository {
-    override suspend fun insertTimetable(timetable: Timetable): Long {
+    override suspend fun upsertTimetable(timetable: Timetable): Long {
         val timetableEntity = timetable.toTimetableEntity()
-        return dao.insertTimetable(timetableEntity)
+        return dao.upsertTimetable(timetableEntity)
     }
 
-    override suspend fun insertCourse(course: Course, timetableId: Long): Long {
+    override suspend fun upsertCourse(course: Course, timetableId: Long): Long {
         val courseEntity = course.toCourseEntity(timetableId)
-        return dao.insertCourse(courseEntity)
+        return dao.upsertCourse(courseEntity)
     }
 
-    override suspend fun insertTimeSlot(courseId: Long, timeSlot: TimeSlot): Long {
+    override suspend fun upsertTimeSlot(courseId: Long, timeSlot: TimeSlot): Long {
         val timeSlotEntity = timeSlot.toTimeSlotEntity(courseId)
-        return dao.insertTimeSlot(timeSlotEntity)
+        return dao.upsertTimeSlot(timeSlotEntity)
     }
 
     override suspend fun deleteTimetable(timetableId: Long) {

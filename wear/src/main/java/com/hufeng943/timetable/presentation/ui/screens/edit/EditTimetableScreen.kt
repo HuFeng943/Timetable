@@ -1,5 +1,6 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
@@ -44,8 +45,8 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.contract.TableAction
 import com.hufeng943.timetable.presentation.ui.LocalNavController
+import com.hufeng943.timetable.presentation.viewmodel.TableAction
 import com.hufeng943.timetable.shared.model.Timetable
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -84,7 +85,8 @@ fun EditTimetable(
     var semesterEndDate: LocalDate? by remember { mutableStateOf(timetable?.semesterEnd) }
     var semesterName by remember { mutableStateOf(timetable?.semesterName ?: "哈吉米") }
     var semesterColor by remember { mutableStateOf(Color(timetable?.color ?: 0xFFE57373)) }
-
+    val a = timetable?.color
+    Log.d("a", a.toString())
     Crossfade(
         targetState = pickerType, animationSpec = tween(durationMillis = 350)
     ) { currentPicker ->
@@ -94,13 +96,14 @@ fun EditTimetable(
                     ScreenScaffold(scrollState = scrollState, edgeButton = {
                         EdgeButton(onClick = {
                             val newTable = Timetable(
+                                timetableId = timetable?.timetableId ?: 0,
                                 semesterName = semesterName,
-                                createdAt = Clock.System.now(),
+                                createdAt = timetable?.createdAt ?: Clock.System.now(),
                                 semesterStart = semesterStartDate,
                                 semesterEnd = semesterEndDate,
                                 color = semesterColor.toColorLong()
                             )
-                            onAction(TableAction.Add(newTable))
+                            onAction(TableAction.Upsert(newTable))
                             navController.popBackStack()
                         }) {
                             Icon(

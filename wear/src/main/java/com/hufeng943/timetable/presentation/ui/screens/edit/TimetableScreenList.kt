@@ -18,10 +18,10 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.contract.TableAction
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.NavRoutes
 import com.hufeng943.timetable.presentation.ui.NavRoutes.editTimetable
+import com.hufeng943.timetable.presentation.viewmodel.TableAction
 import com.hufeng943.timetable.shared.model.Timetable
 
 @Composable
