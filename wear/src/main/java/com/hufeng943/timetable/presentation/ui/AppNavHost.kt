@@ -47,7 +47,7 @@ fun AppNavHost(viewModel: TimetableViewModel = hiltViewModel()) {
                 DataStateGuard(timetables) { tables ->
                     val courseId = backStackEntry.longArg("courseId")
                     val timeSlotId = backStackEntry.longArg("timeSlotId")
-                    if (courseId != null && timeSlotId != null) {
+                    if (courseId != null && timeSlotId != null) {// TODO timetableID
                         val timetable: Timetable? = tables.firstOrNull()
                         CourseDetailScreen(
                             timetable, CourseWithSlotId(courseId, timeSlotId)
@@ -64,9 +64,12 @@ fun AppNavHost(viewModel: TimetableViewModel = hiltViewModel()) {
                     )
                 }
             }
-            composable(NavRoutes.EDIT_TIMETABLE) {
-                DataStateGuard(timetables) {
+            composable(NavRoutes.EDIT_TIMETABLE) { backStackEntry ->
+                DataStateGuard(timetables) { tables ->
+                    val timetableId = backStackEntry.longArg("timetableId")
+                    val timetable = tables.find { it.timetableId == timetableId }
                     EditTimetable(
+                        timetable,
                         onAction = viewModel::onAction
                     )
                 }

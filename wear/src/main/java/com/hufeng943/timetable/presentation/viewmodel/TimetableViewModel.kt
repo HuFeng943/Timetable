@@ -23,14 +23,9 @@ class TimetableViewModel @Inject constructor(
 
     fun onAction(action: TableAction) {
         when (action) {
-            is TableAction.Add -> addTimetable(action.table)
+            is TableAction.Add -> viewModelScope.launch {
+                repository.insertTimetable(action.table)
+            }
         }
     }
-
-    fun addTimetable(newTable: Timetable) {
-        viewModelScope.launch {
-            repository.insertTimetable(newTable)
-        }
-    }
-
 }
