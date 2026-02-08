@@ -31,7 +31,12 @@ fun AppNavHost(viewModel: TimetableViewModel = hiltViewModel()) {
         ) {
 
             composable(NavRoutes.LOADING) {
-                LoadingScreen(timetables)
+                LoadingScreen(timetables) {
+                    navController.navigate(NavRoutes.MAIN) {
+                        popUpTo(NavRoutes.LOADING) { inclusive = true }
+                        Log.v("navController", "加载完成，跳转！")
+                    }
+                }
             }
             composable(NavRoutes.ERROR) {
                 Log.v("navController", NavRoutes.ERROR)
@@ -86,7 +91,7 @@ fun NavBackStackEntry.longArg(key: String): Long? = arguments?.getString(key)?.t
 @Composable
 fun <T> DataStateGuard(
     data: T?,
-    loadingContent: @Composable () -> Unit = { LoadingScreen() },
+    loadingContent: @Composable () -> Unit = {},
     content: @Composable (T) -> Unit
 ) {
     when {

@@ -32,7 +32,6 @@ fun TimetablePager(
     targetIndex: Int = 0
 ) {
     val navController = LocalNavController.current
-
     when {
         coursesIdList.isEmpty() -> {
             Box(
