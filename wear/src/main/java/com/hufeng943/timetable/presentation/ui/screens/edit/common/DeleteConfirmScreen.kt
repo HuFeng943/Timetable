@@ -25,11 +25,11 @@ import androidx.wear.compose.material3.Text
 fun DeleteConfirmScreen(
     detail: String, onConfirm: () -> Unit, onCancel: () -> Unit
 ) {
-    val confirmScrollState = rememberScalingLazyListState()
-    ScreenScaffold(scrollState = confirmScrollState) {
+    val scrollState = rememberScalingLazyListState()
+    ScreenScaffold(scrollState = scrollState) {
         ScalingLazyColumn(
             modifier = Modifier.fillMaxSize(),
-            state = confirmScrollState,
+            state = scrollState,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {

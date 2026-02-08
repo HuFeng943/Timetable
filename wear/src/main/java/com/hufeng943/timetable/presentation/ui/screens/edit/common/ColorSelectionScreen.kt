@@ -41,11 +41,11 @@ fun ColorSelectionScreen(onSave: (color: Color) -> Unit) {
             0xFFFFB74D
         ).map { Color(it) }
     }
-    val scrollStateColor = rememberScalingLazyListState()
-    ScreenScaffold(scrollState = scrollStateColor) {
+    val scrollState = rememberScalingLazyListState()
+    ScreenScaffold(scrollState = scrollState) {
         ScalingLazyColumn(
             modifier = Modifier.fillMaxSize(),
-            state = scrollStateColor,
+            state = scrollState,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
