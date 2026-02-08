@@ -1,8 +1,5 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit.timetable
 
-import androidx.activity.compose.BackHandler
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -45,6 +42,9 @@ import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
+import androidx.wear.compose.navigation.SwipeDismissableNavHost
+import androidx.wear.compose.navigation.composable
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.viewmodel.TableAction
@@ -61,7 +61,6 @@ fun EditTimetable(
     timetable: Timetable? = null, onAction: (TableAction) -> Unit
 ) {
     val scrollState = rememberScalingLazyListState()
-    var pickerType by remember { mutableStateOf<PickerType>(PickerType.Main) }
     val navController = LocalNavController.current
     val haptic = LocalHapticFeedback.current
     val colorList = listOf(
@@ -79,157 +78,21 @@ fun EditTimetable(
         0xFFFFB74D
     ).map { Color(it) }
 
+    val internalNavController = rememberSwipeDismissableNavController()
     val toDay = Clock.System.todayIn(TimeZone.currentSystemDefault())
     val state = remember(timetable) { EditTimetableState(timetable, toDay) }
 
-    Crossfade(
-        targetState = pickerType, animationSpec = tween(durationMillis = 350)
-    ) { currentPicker ->
-        when (currentPicker) {
-            PickerType.Main -> {
-                AppScaffold {
-                    ScreenScaffold(scrollState = scrollState, edgeButton = {
-                        EdgeButton(
-                            onClick = {
-                                onAction(TableAction.Upsert(state.snapShot()))
-                                navController.popBackStack()
-                            }) {
-                            Icon(
-                                Icons.Default.Check,
-                                contentDescription = stringResource(R.string.check)
-                            )
-                        }
-                    }) {
-                        ScalingLazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            state = scrollState,
-                        ) {
-                            item {
-                                ListHeader {
-                                    Text(
-                                        stringResource(R.string.edit_timetable_add),
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
-                                }
-                            }
-
-                            item {// 修改名称
-                                TitleCard(
-                                    onClick = { pickerType = PickerType.SemesterName },
-                                    title = {
-                                        Text(
-                                            stringResource(R.string.edit_timetable_name),
-                                            style = MaterialTheme.typography.labelLarge
-                                        )
-                                    },
-                                ) {
-                                    Text(
-                                        state.semesterName,
-                                        style = MaterialTheme.typography.labelLarge
-                                    )
-                                }
-                            }
-
-                            item {// 开始日期
-                                TitleCard(
-                                    onClick = { pickerType = PickerType.StartDate },
-                                    onLongClick = { state.updateStartDate() }, // 默认重置为今天
-                                    subtitle = { if (state.semesterStartDate != toDay) Text("长按设置为当前日期") },
-                                    title = { Text(stringResource(R.string.edit_timetable_start)) },
-                                ) {
-                                    Text(
-                                        state.semesterStartDate.toString(),
-                                        style = MaterialTheme.typography.labelLarge
-                                    )
-                                }
-                            }
-
-                            item {// 结束日期
-                                TitleCard(
-                                    onClick = { pickerType = PickerType.EndDate },
-                                    onLongClick = { state.updateEndDate() },
-                                    subtitle = { if (state.semesterEndDate != null) Text("长按设置为永不结束") },
-                                    title = { Text(stringResource(R.string.edit_timetable_end)) },
-                                ) {
-                                    Text(
-                                        state.semesterEndDate?.toString() ?: "永不结束",
-                                        style = MaterialTheme.typography.labelLarge
-                                    )
-                                }
-                            }
-
-                            item {// 颜色
-                                TitleCard(
-                                    onClick = { pickerType = PickerType.Color },
-                                    title = { Text(stringResource(R.string.edit_timetable_color)) },
-                                ) {
-                                    Spacer(modifier = Modifier.height(6.dp))
-                                    Box(// 圆形效果
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .size(
-                                                40.dp
-                                            )
-                                            .background(
-                                                state.semesterColor, MaterialTheme.shapes.medium
-                                            )
-                                    )
-                                }
-                            }
-
-                            if (timetable != null) { // 只有编辑时才显示
-                                item {
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    TitleCard(onClick = {
-//                                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                        pickerType = PickerType.DeleteConfirm
-                                    }, title = {
-                                        Text(
-                                            "删除此课表", color = MaterialTheme.colorScheme.error
-                                        )
-                                    })
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            PickerType.StartDate -> {
-                BackHandler {}// 禁止返回
-                DatePicker(
-                    onDatePicked = { newDate ->
-                        state.updateStartDate(newDate.toKotlinLocalDate())
-                        pickerType = PickerType.Main
-                    },
-                    initialDate = state.semesterStartDate.toJavaLocalDate(),
-                )
-            }
-
-            PickerType.EndDate -> {
-                BackHandler {}// 禁止返回
-                DatePicker(
-                    onDatePicked = { newDate ->
-                        state.updateEndDate(newDate.toKotlinLocalDate())
-                        pickerType = PickerType.Main
-                    },
-                    initialDate = (state.semesterEndDate
-                        ?: state.semesterStartDate).toJavaLocalDate()
-                )
-            }
-
-            PickerType.SemesterName -> {
-                BackHandler { pickerType = PickerType.Main }
-                val scrollState = rememberScalingLazyListState()
-                // 状态管理
-                var textValue by remember { mutableStateOf(state.semesterName) }
-
+    SwipeDismissableNavHost(
+        navController = internalNavController, startDestination = InternalNavRoutes.MAIN
+    ) {
+        composable(InternalNavRoutes.MAIN) {
+            AppScaffold {
                 ScreenScaffold(scrollState = scrollState, edgeButton = {
-                    EdgeButton(onClick = {
-                        state.semesterName = textValue
-                        pickerType = PickerType.Main
-                    }) {
+                    EdgeButton(
+                        onClick = {
+                            onAction(TableAction.Upsert(state.snapShot()))
+                            navController.popBackStack()
+                        }) {
                         Icon(
                             Icons.Default.Check, contentDescription = stringResource(R.string.check)
                         )
@@ -238,135 +101,262 @@ fun EditTimetable(
                     ScalingLazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        state = scrollState
-                    ) {
-                        item {
-                            ListHeader {
-                                Text(text = "输入课表名称")
-                            }
-                        }
-                        item {
-                            BasicTextField(
-                                value = textValue,
-                                onValueChange = {
-                                    // 过滤掉换行符
-                                    textValue = it.replace("\n", "")
-                                },
-                                singleLine = true,
-                                textStyle = MaterialTheme.typography.titleMedium.copy(
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    textAlign = TextAlign.Center
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(
-                                        color = MaterialTheme.colorScheme.surfaceContainer,
-                                        shape = CircleShape // 圆角两边
-                                    )
-                                    .padding(vertical = 12.dp, horizontal = 8.dp),
-                                cursorBrush = SolidColor(MaterialTheme.colorScheme.primary)
-                            )
-                        }
-                    }
-                }
-            }
-
-            PickerType.Color -> {
-                BackHandler { pickerType = PickerType.Main }
-                val scrollStateColor = rememberScalingLazyListState()
-                ScreenScaffold(scrollState = scrollStateColor) {
-                    ScalingLazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        state = scrollStateColor,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        item {
-                            ListHeader { Text("选择颜色") }
-                        }
-
-                        // 颜色分组 每行 3 个
-                        val rows = colorList.chunked(3)
-                        items(rows.size) { rowIndex ->
-                            Row(
-                                modifier = Modifier.padding(vertical = 4.dp)
-                            ) {
-                                rows[rowIndex].forEach { color ->
-                                    Box(// 圆形按钮效果
-                                        modifier = Modifier
-                                            .padding(horizontal = 6.dp)
-                                            .size(
-                                                48.dp
-                                            )
-                                            .background(color, CircleShape)
-                                            .clickable {
-                                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)// 模拟按钮按下震动
-                                                state.semesterColor = color
-                                                pickerType = PickerType.Main
-                                            })
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            PickerType.DeleteConfirm -> {
-                BackHandler {}
-
-                val confirmScrollState = rememberScalingLazyListState()
-                ScreenScaffold(scrollState = confirmScrollState) {
-                    ScalingLazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        state = confirmScrollState,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        state = scrollState,
                     ) {
                         item {
                             ListHeader {
                                 Text(
-                                    "确定删除吗？",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.onSurface
+                                    stringResource(R.string.edit_timetable_add),
+                                    style = MaterialTheme.typography.titleMedium
                                 )
                             }
                         }
 
-                        item {
+                        item {// 修改名称
+                            TitleCard(
+                                onClick = { internalNavController.navigate(InternalNavRoutes.SEMESTER_NAME) },
+                                title = {
+                                    Text(
+                                        stringResource(R.string.edit_timetable_name),
+                                        style = MaterialTheme.typography.labelLarge
+                                    )
+                                },
+                            ) {
+                                Text(
+                                    state.semesterName, style = MaterialTheme.typography.labelLarge
+                                )
+                            }
+                        }
+
+                        item {// 开始日期
+                            TitleCard(
+                                onClick = { internalNavController.navigate(InternalNavRoutes.START_DATE) },
+                                onLongClick = { state.updateStartDate() }, // 默认重置为今天
+                                subtitle = { if (state.semesterStartDate != toDay) Text("长按设置为当前日期") },
+                                title = { Text(stringResource(R.string.edit_timetable_start)) },
+                            ) {
+                                Text(
+                                    state.semesterStartDate.toString(),
+                                    style = MaterialTheme.typography.labelLarge
+                                )
+                            }
+                        }
+
+                        item {// 结束日期
+                            TitleCard(
+                                onClick = { internalNavController.navigate(InternalNavRoutes.END_DATE) },
+                                onLongClick = { state.updateEndDate() },
+                                subtitle = { if (state.semesterEndDate != null) Text("长按设置为永不结束") },
+                                title = { Text(stringResource(R.string.edit_timetable_end)) },
+                            ) {
+                                Text(
+                                    state.semesterEndDate?.toString() ?: "永不结束",
+                                    style = MaterialTheme.typography.labelLarge
+                                )
+                            }
+                        }
+
+                        item {// 颜色
+                            TitleCard(
+                                onClick = { internalNavController.navigate(InternalNavRoutes.COLOR) },
+                                title = { Text(stringResource(R.string.edit_timetable_color)) },
+                            ) {
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Box(// 圆形效果
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .size(
+                                            40.dp
+                                        )
+                                        .background(
+                                            state.semesterColor, MaterialTheme.shapes.medium
+                                        )
+                                )
+                            }
+                        }
+
+                        if (timetable != null) { // 只有编辑时才显示
+                            item {
+                                Spacer(modifier = Modifier.height(16.dp))
+                                TitleCard(onClick = {
+//                                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    internalNavController.navigate(InternalNavRoutes.DELETE_CONFIRM)
+                                }, title = {
+                                    Text(
+                                        "删除此课表", color = MaterialTheme.colorScheme.error
+                                    )
+                                })
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        composable(InternalNavRoutes.START_DATE) {
+            DatePicker(
+                onDatePicked = { newDate ->
+                    state.updateStartDate(newDate.toKotlinLocalDate())
+                    internalNavController.popBackStack()
+                },
+                initialDate = state.semesterStartDate.toJavaLocalDate(),
+            )
+        }
+
+        composable(InternalNavRoutes.END_DATE) {
+            DatePicker(
+                onDatePicked = { newDate ->
+                    state.updateEndDate(newDate.toKotlinLocalDate())
+                    internalNavController.popBackStack()
+                },
+                initialDate = (state.semesterEndDate ?: state.semesterStartDate).toJavaLocalDate()
+            )
+        }
+
+        composable(InternalNavRoutes.SEMESTER_NAME) {
+            val scrollState = rememberScalingLazyListState()
+            // 状态管理
+            var textValue by remember { mutableStateOf(state.semesterName) }
+
+            ScreenScaffold(scrollState = scrollState, edgeButton = {
+                EdgeButton(onClick = {
+                    state.semesterName = textValue
+                    internalNavController.popBackStack()
+                }) {
+                    Icon(
+                        Icons.Default.Check, contentDescription = stringResource(R.string.check)
+                    )
+                }
+            }) {
+                ScalingLazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    state = scrollState
+                ) {
+                    item {
+                        ListHeader {
+                            Text(text = "输入课表名称")
+                        }
+                    }
+                    item {
+                        BasicTextField(
+                            value = textValue,
+                            onValueChange = {
+                                // 过滤掉换行符
+                                textValue = it.replace("\n", "")
+                            },
+                            singleLine = true,
+                            textStyle = MaterialTheme.typography.titleMedium.copy(
+                                color = MaterialTheme.colorScheme.onSurface,
+                                textAlign = TextAlign.Center
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = MaterialTheme.colorScheme.surfaceContainer,
+                                    shape = CircleShape // 圆角两边
+                                )
+                                .padding(vertical = 12.dp, horizontal = 8.dp),
+                            cursorBrush = SolidColor(MaterialTheme.colorScheme.primary)
+                        )
+                    }
+                }
+            }
+        }
+
+        composable(InternalNavRoutes.COLOR) {
+            val scrollStateColor = rememberScalingLazyListState()
+            ScreenScaffold(scrollState = scrollStateColor) {
+                ScalingLazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    state = scrollStateColor,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    item {
+                        ListHeader { Text("选择颜色") }
+                    }
+
+                    // 颜色分组 每行 3 个
+                    val rows = colorList.chunked(3)
+                    items(rows.size) { rowIndex ->
+                        Row(
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        ) {
+                            rows[rowIndex].forEach { color ->
+                                Box(// 圆形按钮效果
+                                    modifier = Modifier
+                                        .padding(horizontal = 6.dp)
+                                        .size(
+                                            48.dp
+                                        )
+                                        .background(color, CircleShape)
+                                        .clickable {
+                                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)// 模拟按钮按下震动
+                                            state.semesterColor = color
+                                            internalNavController.popBackStack()
+                                        })
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        composable(InternalNavRoutes.DELETE_CONFIRM) {
+
+            val confirmScrollState = rememberScalingLazyListState()
+            ScreenScaffold(scrollState = confirmScrollState) {
+                ScalingLazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    state = confirmScrollState,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    item {
+                        ListHeader {
                             Text(
-                                text = "课表 “${state.semesterName}” 一旦删除就找不回来了",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(horizontal = 10.dp)
+                                "确定删除吗？",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         }
+                    }
 
-                        item {
-                            // 取消
-                            FilledTonalButton(
-                                onClick = { pickerType = PickerType.Main },
-                                modifier = Modifier.fillMaxWidth(0.8f)
-                            ) {
-                                Text("我再想想")
-                            }
+                    item {
+                        Text(
+                            text = "课表 “${state.semesterName}” 一旦删除就找不回来了",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(horizontal = 10.dp)
+                        )
+                    }
+
+                    item {
+                        // 取消
+                        FilledTonalButton(
+                            onClick = { internalNavController.popBackStack() },
+                            modifier = Modifier.fillMaxWidth(0.8f)
+                        ) {
+                            Text("我再想想")
+                        }
+                    }
+
+                    item {
+                        Button(
+                            onClick = {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                if (timetable != null) onAction(TableAction.Delete(timetable.timetableId))
+                                navController.popBackStack()
+                            },
+                            modifier = Modifier.fillMaxWidth(0.8f),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.error,
+                                contentColor = MaterialTheme.colorScheme.onError
+                            )
+                        ) {
+                            Text("确认删除")
                         }
 
-                        item {
-                            Button(
-                                onClick = {
-                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    if (timetable != null) onAction(TableAction.Delete(timetable.timetableId))
-                                    navController.popBackStack()
-                                },
-                                modifier = Modifier.fillMaxWidth(0.8f),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.error,
-                                    contentColor = MaterialTheme.colorScheme.onError
-                                )
-                            ) {
-                                Text("确认删除")
-                            }
-
-                        }
                     }
                 }
             }
@@ -374,11 +364,12 @@ fun EditTimetable(
     }
 }
 
-sealed class PickerType {
-    object Main : PickerType()
-    object SemesterName : PickerType()
-    object StartDate : PickerType()
-    object EndDate : PickerType()
-    object Color : PickerType()
-    object DeleteConfirm : PickerType()
+
+object InternalNavRoutes {
+    const val MAIN = "main"
+    const val START_DATE = "start_date"
+    const val END_DATE = "end_date"
+    const val SEMESTER_NAME = "semester_name"
+    const val COLOR = "color"
+    const val DELETE_CONFIRM = "delete_confirm"
 }
