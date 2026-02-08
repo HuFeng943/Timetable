@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 
 sealed class TableAction {
     data class Upsert(val table: Timetable) : TableAction()
+    data class Delete(val timetableId: Long) : TableAction()
     // TODO ......
 }
 
@@ -29,6 +30,9 @@ class TimetableViewModel @Inject constructor(
         when (action) {
             is TableAction.Upsert -> viewModelScope.launch {
                 repository.upsertTimetable(action.table)
+            }
+            is TableAction.Delete -> viewModelScope.launch {
+                repository.deleteTimetable(action.timetableId)
             }
         }
     }

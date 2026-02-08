@@ -34,8 +34,11 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.AppScaffold
+import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.DatePicker
 import androidx.wear.compose.material3.EdgeButton
+import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
@@ -174,6 +177,20 @@ fun EditTimetable(
                                     )
                                 }
                             }
+
+                            if (timetable != null) { // 只有编辑时才显示
+                                item {
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    TitleCard(onClick = {
+//                                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        pickerType = PickerType.DeleteConfirm
+                                    }, title = {
+                                        Text(
+                                            "删除此课表", color = MaterialTheme.colorScheme.error
+                                        )
+                                    })
+                                }
+                            }
                         }
                     }
                 }
@@ -292,6 +309,67 @@ fun EditTimetable(
                     }
                 }
             }
+
+            PickerType.DeleteConfirm -> {
+                BackHandler {}
+
+                val confirmScrollState = rememberScalingLazyListState()
+                ScreenScaffold(scrollState = confirmScrollState) {
+                    ScalingLazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        state = confirmScrollState,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        item {
+                            ListHeader {
+                                Text(
+                                    "确定删除吗？",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
+
+                        item {
+                            Text(
+                                text = "课表 “${state.semesterName}” 一旦删除就找不回来了",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                        }
+
+                        item {
+                            // 取消
+                            FilledTonalButton(
+                                onClick = { pickerType = PickerType.Main },
+                                modifier = Modifier.fillMaxWidth(0.8f)
+                            ) {
+                                Text("我再想想")
+                            }
+                        }
+
+                        item {
+                            Button(
+                                onClick = {
+                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    if (timetable != null) onAction(TableAction.Delete(timetable.timetableId))
+                                    navController.popBackStack()
+                                },
+                                modifier = Modifier.fillMaxWidth(0.8f),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.error,
+                                    contentColor = MaterialTheme.colorScheme.onError
+                                )
+                            ) {
+                                Text("确认删除")
+                            }
+
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -302,4 +380,5 @@ sealed class PickerType {
     object StartDate : PickerType()
     object EndDate : PickerType()
     object Color : PickerType()
+    object DeleteConfirm : PickerType()
 }
