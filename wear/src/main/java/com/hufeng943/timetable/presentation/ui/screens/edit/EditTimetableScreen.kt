@@ -26,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
@@ -47,13 +46,11 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.viewmodel.TableAction
 import com.hufeng943.timetable.shared.model.Timetable
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.todayIn
 import kotlin.time.Clock
-
 
 @Suppress("AssignedValueIsNeverRead")
 @Composable
@@ -80,10 +77,8 @@ fun EditTimetable(
     ).map { Color(it) }
 
     val toDay = Clock.System.todayIn(TimeZone.currentSystemDefault())
-    var semesterStartDate by remember { mutableStateOf(timetable?.semesterStart ?: toDay) }
-    var semesterEndDate: LocalDate? by remember { mutableStateOf(timetable?.semesterEnd) }
-    var semesterName by remember { mutableStateOf(timetable?.semesterName ?: "哈吉米") }
-    var semesterColor by remember { mutableStateOf(Color(timetable?.color ?: 0xFFE57373)) }
+    val state = remember(timetable) { EditTimetableState(timetable, toDay) }
+
     Crossfade(
         targetState = pickerType, animationSpec = tween(durationMillis = 350)
     ) { currentPicker ->
@@ -91,18 +86,11 @@ fun EditTimetable(
             PickerType.Main -> {
                 AppScaffold {
                     ScreenScaffold(scrollState = scrollState, edgeButton = {
-                        EdgeButton(onClick = {
-                            val newTable = Timetable(
-                                timetableId = timetable?.timetableId ?: 0,
-                                semesterName = semesterName,
-                                createdAt = timetable?.createdAt ?: Clock.System.now(),
-                                semesterStart = semesterStartDate,
-                                semesterEnd = semesterEndDate,
-                                color = semesterColor.toArgb().toLong()
-                            )
-                            onAction(TableAction.Upsert(newTable))
-                            navController.popBackStack()
-                        }) {
+                        EdgeButton(
+                            onClick = {
+                                onAction(TableAction.Upsert(state.snapShot()))
+                                navController.popBackStack()
+                            }) {
                             Icon(
                                 Icons.Default.Check,
                                 contentDescription = stringResource(R.string.check)
@@ -134,7 +122,8 @@ fun EditTimetable(
                                     },
                                 ) {
                                     Text(
-                                        semesterName, style = MaterialTheme.typography.labelLarge
+                                        state.semesterName,
+                                        style = MaterialTheme.typography.labelLarge
                                     )
                                 }
                             }
@@ -142,20 +131,12 @@ fun EditTimetable(
                             item {// 开始日期
                                 TitleCard(
                                     onClick = { pickerType = PickerType.StartDate },
-                                    onLongClick = {
-                                        semesterStartDate = toDay
-                                        semesterEndDate?.let { end ->
-                                            // 如果新修改的开始日期大于结束日期，则重置结束日期为新的开始日期
-                                            if (end < semesterStartDate) {
-                                                semesterEndDate = semesterStartDate
-                                            }
-                                        }
-                                    },
-                                    subtitle = { if (semesterStartDate != toDay) Text("长按设置为当前日期") },
+                                    onLongClick = { state.updateStartDate() }, // 默认重置为今天
+                                    subtitle = { if (state.semesterStartDate != toDay) Text("长按设置为当前日期") },
                                     title = { Text(stringResource(R.string.edit_timetable_start)) },
                                 ) {
                                     Text(
-                                        semesterStartDate.toString(),
+                                        state.semesterStartDate.toString(),
                                         style = MaterialTheme.typography.labelLarge
                                     )
                                 }
@@ -164,16 +145,17 @@ fun EditTimetable(
                             item {// 结束日期
                                 TitleCard(
                                     onClick = { pickerType = PickerType.EndDate },
-                                    onLongClick = { semesterEndDate = null },
-                                    subtitle = { if (semesterEndDate != null) Text("长按设置为永不结束") },
+                                    onLongClick = { state.updateEndDate() },
+                                    subtitle = { if (state.semesterEndDate != null) Text("长按设置为永不结束") },
                                     title = { Text(stringResource(R.string.edit_timetable_end)) },
                                 ) {
                                     Text(
-                                        semesterEndDate?.toString() ?: "永不结束",
+                                        state.semesterEndDate?.toString() ?: "永不结束",
                                         style = MaterialTheme.typography.labelLarge
                                     )
                                 }
                             }
+
                             item {// 颜色
                                 TitleCard(
                                     onClick = { pickerType = PickerType.Color },
@@ -187,7 +169,7 @@ fun EditTimetable(
                                                 40.dp
                                             )
                                             .background(
-                                                semesterColor, MaterialTheme.shapes.medium
+                                                state.semesterColor, MaterialTheme.shapes.medium
                                             )
                                     )
                                 }
@@ -201,15 +183,10 @@ fun EditTimetable(
                 BackHandler {}// 禁止返回
                 DatePicker(
                     onDatePicked = { newDate ->
-                        semesterStartDate = newDate.toKotlinLocalDate()
-                        semesterEndDate?.let { end ->// 如果新修改的开始日期大于结束日期，则重置结束日期为新的开始日期
-                            if (end < semesterStartDate) {
-                                semesterEndDate = semesterStartDate
-                            }
-                        }
+                        state.updateStartDate(newDate.toKotlinLocalDate())
                         pickerType = PickerType.Main
                     },
-                    initialDate = semesterStartDate.toJavaLocalDate(),
+                    initialDate = state.semesterStartDate.toJavaLocalDate(),
                 )
             }
 
@@ -217,11 +194,12 @@ fun EditTimetable(
                 BackHandler {}// 禁止返回
                 DatePicker(
                     onDatePicked = { newDate ->
-                        semesterEndDate = newDate.toKotlinLocalDate()
+                        state.updateEndDate(newDate.toKotlinLocalDate())
                         pickerType = PickerType.Main
                     },
-                    initialDate = (semesterEndDate ?: semesterStartDate).toJavaLocalDate(),
-                    minValidDate = semesterStartDate.toJavaLocalDate()
+                    initialDate = (state.semesterEndDate
+                        ?: state.semesterStartDate).toJavaLocalDate(),
+                    minValidDate = state.semesterStartDate.toJavaLocalDate()
                 )
             }
 
@@ -229,10 +207,11 @@ fun EditTimetable(
                 BackHandler { pickerType = PickerType.Main }
                 val scrollState = rememberScalingLazyListState()
                 // 状态管理
-                var textValue by remember { mutableStateOf(semesterName) }
+                var textValue by remember { mutableStateOf(state.semesterName) }
+
                 ScreenScaffold(scrollState = scrollState, edgeButton = {
                     EdgeButton(onClick = {
-                        semesterName = textValue
+                        state.semesterName = textValue
                         pickerType = PickerType.Main
                     }) {
                         Icon(
@@ -279,8 +258,6 @@ fun EditTimetable(
             PickerType.Color -> {
                 BackHandler { pickerType = PickerType.Main }
                 val scrollStateColor = rememberScalingLazyListState()
-
-
                 ScreenScaffold(scrollState = scrollStateColor) {
                     ScalingLazyColumn(
                         modifier = Modifier.fillMaxSize(),
@@ -307,7 +284,7 @@ fun EditTimetable(
                                             .background(color, CircleShape)
                                             .clickable {
                                                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)// 模拟按钮按下震动
-                                                semesterColor = color
+                                                state.semesterColor = color
                                                 pickerType = PickerType.Main
                                             })
                                 }
