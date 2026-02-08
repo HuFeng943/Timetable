@@ -31,11 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.AppScaffold
-import androidx.wear.compose.material3.Button
-import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.DatePicker
 import androidx.wear.compose.material3.EdgeButton
-import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
@@ -47,6 +44,7 @@ import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
+import com.hufeng943.timetable.presentation.ui.screens.edit.common.DeleteConfirm
 import com.hufeng943.timetable.presentation.viewmodel.TableAction
 import com.hufeng943.timetable.shared.model.Timetable
 import kotlinx.datetime.TimeZone
@@ -303,63 +301,13 @@ fun EditTimetable(
         }
 
         composable(InternalNavRoutes.DELETE_CONFIRM) {
-
-            val confirmScrollState = rememberScalingLazyListState()
-            ScreenScaffold(scrollState = confirmScrollState) {
-                ScalingLazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    state = confirmScrollState,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    item {
-                        ListHeader {
-                            Text(
-                                "确定删除吗？",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                    }
-
-                    item {
-                        Text(
-                            text = "课表 “${state.semesterName}” 一旦删除就找不回来了",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(horizontal = 10.dp)
-                        )
-                    }
-
-                    item {
-                        // 取消
-                        FilledTonalButton(
-                            onClick = { internalNavController.popBackStack() },
-                            modifier = Modifier.fillMaxWidth(0.8f)
-                        ) {
-                            Text("我再想想")
-                        }
-                    }
-
-                    item {
-                        Button(
-                            onClick = {
-                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                if (timetable != null) onAction(TableAction.Delete(timetable.timetableId))
-                                navController.popBackStack()
-                            },
-                            modifier = Modifier.fillMaxWidth(0.8f),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.error,
-                                contentColor = MaterialTheme.colorScheme.onError
-                            )
-                        ) {
-                            Text("确认删除")
-                        }
-
-                    }
-                }
-            }
+            DeleteConfirm(detail = "课表 “${state.semesterName}”", onConfirm = {
+                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                if (timetable != null) onAction(TableAction.Delete(timetable.timetableId))
+                navController.popBackStack()
+            }, onCancel = {
+                internalNavController.popBackStack() // 只是关掉确认页，回到编辑页
+            })
         }
     }
 }
