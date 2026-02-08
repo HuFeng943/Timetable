@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.ui.screens.edit.timetable
+package com.hufeng943.timetable.presentation.ui.screens.edit.course
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,11 +21,11 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.NavRoutes
 import com.hufeng943.timetable.presentation.ui.NavRoutes.editTimetable
-import com.hufeng943.timetable.shared.model.Timetable
+import com.hufeng943.timetable.shared.model.Course
 
 @Composable
-fun TimetableListScreen(
-    timetables: List<Timetable>
+fun CourseListScreen(
+    courses: List<Course>
 ) {
     val navController = LocalNavController.current
     val scrollState = rememberScalingLazyListState()
@@ -48,20 +48,20 @@ fun TimetableListScreen(
                         Text(stringResource(R.string.edit_timetable_title))
                     }
                 }
-                if (timetables.isEmpty()) {
+                if (courses.isEmpty()) {
                     item {
                         Text(stringResource(R.string.edit_timetable_empty))
                     }
                 } else {
-                    items(timetables, key = { it.timetableId }) { timetable ->
+                    items(courses, key = { it.id }) { course ->
                         TitleCard(// TODO 课表未开始/正进行/已结束状态显示
                             onClick = {},
-                            onLongClick = { navController.navigate(editTimetable(timetable.timetableId)) },
-                            title = { Text(timetable.semesterName) },
+                            onLongClick = { navController.navigate(editTimetable(course.id)) },
+                            title = { Text(course.name) },
                             subtitle = {
                                 Text(
                                     text = stringResource(
-                                        R.string.edit_timetable_number, timetable.allCourses.size
+                                        R.string.edit_timetable_number, course.timeSlots.size
                                     )
                                 )
                             },
