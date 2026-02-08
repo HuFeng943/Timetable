@@ -6,22 +6,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
@@ -41,6 +33,7 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.screens.edit.common.ColorSelectionScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.common.DeleteConfirmScreen
+import com.hufeng943.timetable.presentation.ui.screens.edit.common.NameEditScreen
 import com.hufeng943.timetable.presentation.viewmodel.TableAction
 import com.hufeng943.timetable.shared.model.Timetable
 import kotlinx.datetime.TimeZone
@@ -193,53 +186,11 @@ fun EditTimetableScreen(
         }
 
         composable(InternalNavRoutes.SEMESTER_NAME) {
-            val scrollState = rememberScalingLazyListState()
-            // 状态管理
-            var textValue by remember { mutableStateOf(state.semesterName) }
-
-            ScreenScaffold(scrollState = scrollState, edgeButton = {
-                EdgeButton(onClick = {
-                    state.semesterName = textValue
-                    internalNavController.popBackStack()
-                }) {
-                    Icon(
-                        Icons.Default.Check, contentDescription = stringResource(R.string.check)
-                    )
-                }
-            }) {
-                ScalingLazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    state = scrollState
-                ) {
-                    item {
-                        ListHeader {
-                            Text(text = "输入课表名称")
-                        }
-                    }
-                    item {
-                        BasicTextField(
-                            value = textValue,
-                            onValueChange = {
-                                // 过滤掉换行符
-                                textValue = it.replace("\n", "")
-                            },
-                            singleLine = true,
-                            textStyle = MaterialTheme.typography.titleMedium.copy(
-                                color = MaterialTheme.colorScheme.onSurface,
-                                textAlign = TextAlign.Center
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    color = MaterialTheme.colorScheme.surfaceContainer,
-                                    shape = CircleShape // 圆角两边
-                                )
-                                .padding(vertical = 12.dp, horizontal = 8.dp),
-                            cursorBrush = SolidColor(MaterialTheme.colorScheme.primary)
-                        )
-                    }
-                }
+            NameEditScreen(
+                label = "输入课表名称", initialText = state.semesterName
+            ) { newValue ->
+                state.semesterName = newValue
+                internalNavController.popBackStack() // 保存后滑回去
             }
         }
 
