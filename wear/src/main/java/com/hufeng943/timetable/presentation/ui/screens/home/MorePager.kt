@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
-import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
@@ -38,7 +38,7 @@ fun MorePager() {
 
             // 1. 编辑课表
             item {
-                Button(
+                FilledTonalButton(
                     onClick = { navController.navigate(NavRoutes.LIST_TIMETABLE) },
                     modifier = Modifier.fillMaxWidth(),
                     icon = {
@@ -52,7 +52,7 @@ fun MorePager() {
 
             // 2. 设置
             item {
-                Button(
+                FilledTonalButton(
                     onClick = { /* TODO */ },
                     modifier = Modifier.fillMaxWidth(),
                     icon = {
@@ -66,7 +66,7 @@ fun MorePager() {
 
             // 3. 关于
             item {
-                Button(
+                FilledTonalButton(
                     onClick = { /* TODO */ },
                     modifier = Modifier.fillMaxWidth(),
                     icon = {

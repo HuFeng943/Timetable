@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -18,8 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.AppScaffold
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.DatePicker
 import androidx.wear.compose.material3.EdgeButton
+import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
@@ -42,7 +45,6 @@ import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.todayIn
 import kotlin.time.Clock
 
-@Suppress("AssignedValueIsNeverRead")
 @Composable
 fun EditTimetableScreen(
     timetable: Timetable? = null, onAction: (TableAction) -> Unit
@@ -149,15 +151,22 @@ fun EditTimetableScreen(
 
                         if (timetable != null) { // 只有编辑时才显示
                             item {
-                                Spacer(modifier = Modifier.height(16.dp))
-                                TitleCard(onClick = {
-//                                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                FilledTonalButton(
+                                    onClick = {
                                     internalNavController.navigate(InternalNavRoutes.DELETE_CONFIRM)
-                                }, title = {
-                                    Text(
-                                        "删除此课表", color = MaterialTheme.colorScheme.error
+                                    }, modifier = Modifier.fillMaxWidth(), icon = {
+                                        Icon(
+                                            imageVector = Icons.Default.Delete,
+                                            contentDescription = null
                                     )
-                                })
+                                    }, colors = ButtonDefaults.filledTonalButtonColors(
+                                        containerColor = MaterialTheme.colorScheme.errorContainer,
+                                        iconColor = MaterialTheme.colorScheme.onErrorContainer,
+                                        contentColor = MaterialTheme.colorScheme.onErrorContainer
+                                    )
+                                ) {
+                                    Text("删除此课表")
+                                }
                             }
                         }
                     }

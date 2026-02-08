@@ -29,6 +29,7 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
 
+@Suppress("AssignedValueIsNeverRead")
 @Composable
 fun NameEditScreen(
     label: String, initialText: String, onSave: (String) -> Unit
