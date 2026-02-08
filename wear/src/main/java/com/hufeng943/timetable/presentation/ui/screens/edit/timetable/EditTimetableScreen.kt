@@ -302,7 +302,6 @@ fun EditTimetableScreen(
 
         composable(InternalNavRoutes.DELETE_CONFIRM) {
             DeleteConfirmScreen(detail = "课表 “${state.semesterName}”", onConfirm = {
-                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                 if (timetable != null) onAction(TableAction.Delete(timetable.timetableId))
                 navController.popBackStack()
             }, onCancel = {
