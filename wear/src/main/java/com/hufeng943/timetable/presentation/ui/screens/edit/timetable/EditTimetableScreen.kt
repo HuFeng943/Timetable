@@ -1,9 +1,7 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit.timetable
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,10 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,6 +39,7 @@ import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
+import com.hufeng943.timetable.presentation.ui.screens.edit.common.ColorSelectionScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.common.DeleteConfirmScreen
 import com.hufeng943.timetable.presentation.viewmodel.TableAction
 import com.hufeng943.timetable.shared.model.Timetable
@@ -60,21 +56,6 @@ fun EditTimetableScreen(
 ) {
     val scrollState = rememberScalingLazyListState()
     val navController = LocalNavController.current
-    val haptic = LocalHapticFeedback.current
-    val colorList = listOf(
-        0xFFE57373,
-        0xFFF06292,
-        0xFFBA68C8,
-        0xFF9575CD,
-        0xFF7986CB,
-        0xFF64B5F6,
-        0xFF4FC3F7,
-        0xFF4DD0E1,
-        0xFF4DB6AC,
-        0xFF81C784,
-        0xFFAED581,
-        0xFFFFB74D
-    ).map { Color(it) }
 
     val internalNavController = rememberSwipeDismissableNavController()
     val toDay = Clock.System.todayIn(TimeZone.currentSystemDefault())
@@ -263,40 +244,9 @@ fun EditTimetableScreen(
         }
 
         composable(InternalNavRoutes.COLOR) {
-            val scrollStateColor = rememberScalingLazyListState()
-            ScreenScaffold(scrollState = scrollStateColor) {
-                ScalingLazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    state = scrollStateColor,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    item {
-                        ListHeader { Text("选择颜色") }
-                    }
-
-                    // 颜色分组 每行 3 个
-                    val rows = colorList.chunked(3)
-                    items(rows.size) { rowIndex ->
-                        Row(
-                            modifier = Modifier.padding(vertical = 4.dp)
-                        ) {
-                            rows[rowIndex].forEach { color ->
-                                Box(// 圆形按钮效果
-                                    modifier = Modifier
-                                        .padding(horizontal = 6.dp)
-                                        .size(
-                                            48.dp
-                                        )
-                                        .background(color, CircleShape)
-                                        .clickable {
-                                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)// 模拟按钮按下震动
-                                            state.semesterColor = color
-                                            internalNavController.popBackStack()
-                                        })
-                            }
-                        }
-                    }
-                }
+            ColorSelectionScreen { color ->
+                state.semesterColor = color
+                internalNavController.popBackStack()
             }
         }
 
