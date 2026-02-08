@@ -26,8 +26,8 @@ fun CourseDetailScreen(timetable: Timetable?, courseWithSlotId: CourseWithSlotId
             HorizontalPager(
                 modifier = Modifier.fillMaxSize(), state = rememberPagerState { 2 }) { page ->
                 when (page) {
-                    0 -> Details(courseId)
-                    1 -> CourseList(courseId)
+                    0 -> DetailsPager(courseId)
+                    1 -> CourseListPager(courseId)
                 }
             }
         } else Text(text = "未找到课程数据", color = Color.Red)

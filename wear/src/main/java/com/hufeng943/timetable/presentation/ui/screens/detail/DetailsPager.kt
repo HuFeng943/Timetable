@@ -12,7 +12,7 @@ import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.shared.ui.CourseUi
 
 @Composable
-fun Details(courseUi: CourseUi) {
+fun DetailsPager(courseUi: CourseUi) {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(

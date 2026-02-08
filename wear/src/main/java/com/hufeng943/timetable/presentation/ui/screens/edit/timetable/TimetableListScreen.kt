@@ -25,7 +25,7 @@ import com.hufeng943.timetable.presentation.viewmodel.TableAction
 import com.hufeng943.timetable.shared.model.Timetable
 
 @Composable
-fun TimetableList(
+fun TimetableListScreen(
     timetables: List<Timetable>, onAction: (TableAction) -> Unit
 ) {
     val navController = LocalNavController.current

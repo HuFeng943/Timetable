@@ -19,7 +19,7 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 
 @Composable
-fun DeleteConfirm(
+fun DeleteConfirmScreen(
     detail: String, onConfirm: () -> Unit, onCancel: () -> Unit
 ) {
     val confirmScrollState = rememberScalingLazyListState()

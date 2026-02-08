@@ -11,8 +11,8 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.presentation.ui.screens.detail.CourseDetailScreen
-import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.EditTimetable
-import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.TimetableList
+import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.EditTimetableScreen
+import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.TimetableListScreen
 import com.hufeng943.timetable.presentation.ui.screens.home.HomeScreen
 import com.hufeng943.timetable.presentation.ui.screens.loading.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.TimetableViewModel
@@ -59,7 +59,7 @@ fun AppNavHost(viewModel: TimetableViewModel = hiltViewModel()) {
             }
             composable(NavRoutes.LIST_TIMETABLE) {
                 DataStateGuard(timetables) { tables ->
-                    TimetableList(
+                    TimetableListScreen(
                         tables, onAction = viewModel::onAction
                     )
                 }
@@ -68,7 +68,7 @@ fun AppNavHost(viewModel: TimetableViewModel = hiltViewModel()) {
                 DataStateGuard(timetables) { tables ->
                     val timetableId = backStackEntry.longArg("timetableId")
                     val timetable = tables.find { it.timetableId == timetableId }
-                    EditTimetable(
+                    EditTimetableScreen(
                         timetable,
                         onAction = viewModel::onAction
                     )

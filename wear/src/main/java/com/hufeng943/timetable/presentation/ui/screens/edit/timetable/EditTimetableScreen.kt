@@ -44,7 +44,7 @@ import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
-import com.hufeng943.timetable.presentation.ui.screens.edit.common.DeleteConfirm
+import com.hufeng943.timetable.presentation.ui.screens.edit.common.DeleteConfirmScreen
 import com.hufeng943.timetable.presentation.viewmodel.TableAction
 import com.hufeng943.timetable.shared.model.Timetable
 import kotlinx.datetime.TimeZone
@@ -55,7 +55,7 @@ import kotlin.time.Clock
 
 @Suppress("AssignedValueIsNeverRead")
 @Composable
-fun EditTimetable(
+fun EditTimetableScreen(
     timetable: Timetable? = null, onAction: (TableAction) -> Unit
 ) {
     val scrollState = rememberScalingLazyListState()
@@ -301,7 +301,7 @@ fun EditTimetable(
         }
 
         composable(InternalNavRoutes.DELETE_CONFIRM) {
-            DeleteConfirm(detail = "课表 “${state.semesterName}”", onConfirm = {
+            DeleteConfirmScreen(detail = "课表 “${state.semesterName}”", onConfirm = {
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                 if (timetable != null) onAction(TableAction.Delete(timetable.timetableId))
                 navController.popBackStack()
