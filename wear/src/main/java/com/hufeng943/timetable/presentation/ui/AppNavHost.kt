@@ -60,7 +60,7 @@ fun AppNavHost(viewModel: TimetableViewModel = hiltViewModel()) {
             composable(NavRoutes.LIST_TIMETABLE) {
                 DataStateGuard(timetables) { tables ->
                     TimetableListScreen(
-                        tables, onAction = viewModel::onAction
+                        tables
                     )
                 }
             }

@@ -21,12 +21,11 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.NavRoutes
 import com.hufeng943.timetable.presentation.ui.NavRoutes.editTimetable
-import com.hufeng943.timetable.presentation.viewmodel.TableAction
 import com.hufeng943.timetable.shared.model.Timetable
 
 @Composable
 fun TimetableListScreen(
-    timetables: List<Timetable>, onAction: (TableAction) -> Unit
+    timetables: List<Timetable>
 ) {
     val navController = LocalNavController.current
     val scrollState = rememberScalingLazyListState()
