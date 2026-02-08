@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.ui.screens.edit
+package com.hufeng943.timetable.presentation.ui.screens.edit.timetable
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

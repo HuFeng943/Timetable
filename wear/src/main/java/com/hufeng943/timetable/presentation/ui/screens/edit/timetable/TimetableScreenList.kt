@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.ui.screens.edit
+package com.hufeng943.timetable.presentation.ui.screens.edit.timetable
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth

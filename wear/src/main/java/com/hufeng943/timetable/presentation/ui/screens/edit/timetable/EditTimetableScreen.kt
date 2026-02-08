@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.ui.screens.edit
+package com.hufeng943.timetable.presentation.ui.screens.edit.timetable
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
@@ -198,8 +198,7 @@ fun EditTimetable(
                         pickerType = PickerType.Main
                     },
                     initialDate = (state.semesterEndDate
-                        ?: state.semesterStartDate).toJavaLocalDate(),
-                    minValidDate = state.semesterStartDate.toJavaLocalDate()
+                        ?: state.semesterStartDate).toJavaLocalDate()
                 )
             }
 

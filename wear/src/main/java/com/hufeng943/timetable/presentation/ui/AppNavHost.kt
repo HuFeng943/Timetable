@@ -11,8 +11,8 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.presentation.ui.screens.detail.CourseDetailScreen
-import com.hufeng943.timetable.presentation.ui.screens.edit.EditTimetable
-import com.hufeng943.timetable.presentation.ui.screens.edit.TimetableList
+import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.EditTimetable
+import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.TimetableList
 import com.hufeng943.timetable.presentation.ui.screens.home.HomeScreen
 import com.hufeng943.timetable.presentation.ui.screens.loading.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.TimetableViewModel
