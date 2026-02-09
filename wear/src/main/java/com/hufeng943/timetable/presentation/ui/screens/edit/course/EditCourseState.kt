@@ -9,7 +9,7 @@ import com.hufeng943.timetable.shared.model.Timetable
 import kotlinx.datetime.LocalDate
 import kotlin.time.Clock
 
-class EditTimetableState(
+class EditCourseState(
     private val initialTimetable: Timetable?,
     private val today: LocalDate
 ) {

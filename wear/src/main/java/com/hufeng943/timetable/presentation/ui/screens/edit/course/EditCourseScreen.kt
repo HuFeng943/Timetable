@@ -44,7 +44,7 @@ import kotlinx.datetime.todayIn
 import kotlin.time.Clock
 
 @Composable
-fun EditTimetableScreen(
+fun EditCourseScreen(
     timetable: Timetable? = null, onAction: (TableAction) -> Unit
 ) {
     val scrollState = rememberScalingLazyListState()
@@ -52,7 +52,7 @@ fun EditTimetableScreen(
 
     val internalNavController = rememberSwipeDismissableNavController()
     val toDay = Clock.System.todayIn(TimeZone.currentSystemDefault())
-    val state = remember(timetable) { EditTimetableState(timetable, toDay) }
+    val state = remember(timetable) { EditCourseState(timetable, toDay) }
 
     SwipeDismissableNavHost(
         navController = internalNavController, startDestination = InternalNavRoutes.MAIN
