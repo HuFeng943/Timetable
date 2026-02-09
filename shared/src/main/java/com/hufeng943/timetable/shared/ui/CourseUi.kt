@@ -8,6 +8,7 @@ import com.hufeng943.timetable.shared.model.TimeSlot
  * 可以由Course转换而来
  */
 data class CourseUi(
+    val id: Long,
     val name: String,
     val timeSlot: TimeSlot,
     val color: Long,

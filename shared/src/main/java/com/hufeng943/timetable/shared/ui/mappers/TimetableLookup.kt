@@ -10,6 +10,7 @@ import com.hufeng943.timetable.shared.ui.CourseWithSlotId
  * @return TimeSlot 查找失败则返回 null
  */
 fun Timetable.findTimeSlotById(timeSlotId: Long): TimeSlot? = this.timeSlotsMap[timeSlotId]
+
 /**
  * 通过CourseWithSlotId反查CourseUi
  * @return CourseUi 查找失败则返回 null
@@ -26,6 +27,7 @@ fun Timetable.toCourseUi(courseWithSlotId: CourseWithSlotId): CourseUi? {
         timeSlot = timeSlot,
         color = course.color,
         location = course.location,
-        teacher = course.teacher
+        teacher = course.teacher,
+        id = course.id
     )
 }
