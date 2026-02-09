@@ -46,5 +46,9 @@ fun Course.toCourseUi(timeSlot: TimeSlot): CourseUi = CourseUi(
     timeSlot = timeSlot,
     color = this.color,
     location = this.location,
-    teacher = this.teacher,
+    teacher = this.teacher
 )
+
+fun Course.toListCourseUi(): List<CourseUi> = this.timeSlots.map { slot ->
+    this.toCourseUi(slot)
+}
