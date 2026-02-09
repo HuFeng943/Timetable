@@ -70,14 +70,15 @@ fun EditTimetableScreen(
                 }
             }) { contentPadding ->
                 ScalingLazyColumn(
-                    state = scrollState,
-                    contentPadding = contentPadding
+                    state = scrollState, contentPadding = contentPadding
                 ) {
                     item {
                         ListHeader {
-                            Text(
-                                stringResource(R.string.edit_timetable_add)
-                            )
+                            if (timetable == null) {
+                                Text(stringResource(R.string.edit_timetable_add))
+                            } else {
+                                Text("编辑课表")
+                            }
                         }
                     }
 
