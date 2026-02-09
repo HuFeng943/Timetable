@@ -29,7 +29,8 @@ import com.hufeng943.timetable.shared.ui.mappers.toCourseUi
 
 @Composable
 fun TimetablePager(
-    viewModel: TimetableViewModel = hiltViewModel(), targetIndex: Int = 0
+    viewModel: TimetableViewModel = hiltViewModel(),
+    targetIndex: Int = 0
 ) {
     val uiState by viewModel.currentTableUi.collectAsState()
     // EmptyPager() 没有课表才
@@ -79,7 +80,6 @@ fun TimetablePager(
                                 timetable.toCourseUi(idPair)?.copy(dailyOrder = dailyOrderIndex + 1)
                             if (course != null) {
                                 TimetableCard(course) {
-                                    // 传递两ID
                                     navController.navigate(courseDetail(idPair.timeSlotId))
                                 }
                             }

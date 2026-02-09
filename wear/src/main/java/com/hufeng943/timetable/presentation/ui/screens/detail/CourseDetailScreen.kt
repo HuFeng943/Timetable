@@ -18,9 +18,8 @@ import com.hufeng943.timetable.presentation.viewmodel.UiState
 
 @Composable
 fun CourseDetailScreen(
-    viewModel: CourseDetailViewModel = hiltViewModel() // 注入你那牛逼的 ViewModel
+    viewModel: CourseDetailViewModel = hiltViewModel()
 ) {
-    // 监听 ViewModel 里的 detailState
     val uiDetailState by viewModel.detailState.collectAsStateWithLifecycle()
 
     when (val state = uiDetailState) {

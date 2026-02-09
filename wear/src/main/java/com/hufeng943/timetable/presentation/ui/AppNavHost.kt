@@ -8,6 +8,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.presentation.ui.screens.detail.CourseDetailScreen
+import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.TimetableListScreen
 import com.hufeng943.timetable.presentation.ui.screens.home.HomeScreen
 
 // 对一堆getString()的封装
@@ -24,15 +25,9 @@ fun AppNavHost() {
             ) {
                 composable(NavRoutes.MAIN) { HomeScreen() }
 
-                composable(NavRoutes.COURSE_DETAIL) {
-                    CourseDetailScreen()
-                }
+                composable(NavRoutes.COURSE_DETAIL) { CourseDetailScreen() }
 
-                composable(NavRoutes.LIST_TIMETABLE) {
-//                    TimetableListScreen(TODO
-//                        timetables!!
-//                    )
-                }
+                composable(NavRoutes.LIST_TIMETABLE) { TimetableListScreen() }
 
 
                 composable(NavRoutes.EDIT_TIMETABLE) { backStackEntry ->
