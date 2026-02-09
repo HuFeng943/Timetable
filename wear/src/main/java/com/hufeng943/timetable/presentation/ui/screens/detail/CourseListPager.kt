@@ -4,6 +4,6 @@ import androidx.compose.runtime.Composable
 import com.hufeng943.timetable.shared.ui.CourseUi
 
 @Composable
-fun CourseListPager(courseUi: CourseUi) {
+fun CourseListPager(courseUis: List<CourseUi>) {
     //TODO
 }
