@@ -62,4 +62,22 @@ interface TimetableDao {
     @Transaction
     @Query("SELECT * FROM time_slots WHERE id = :slotId")
     fun getTimeSlotById(slotId: Long): Flow<TimeSlotEntity?>
+
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM courses 
+        WHERE id = (SELECT courseId FROM time_slots WHERE id = :slotId)
+    """
+    )
+    fun getCourseByTimeSlotId(slotId: Long): Flow<CourseWithSlots?>
+
+    @Transaction
+    @Query(
+        """
+    SELECT * FROM time_tables 
+    WHERE id = (SELECT timetableId FROM courses WHERE id = :courseId)
+"""
+    )
+    fun getTimetableByCourseId(courseId: Long): Flow<TimetableWithCourses?>
 }

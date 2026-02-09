@@ -58,4 +58,12 @@ class TimetableRepositoryImpl(private val dao: TimetableDao) : TimetableReposito
     override fun getTimeSlotById(timeSlotId: Long): Flow<TimeSlot?> {
         return dao.getTimeSlotById(timeSlotId).map { it?.toTimeSlot() }
     }
+
+    override fun getCourseByTimeSlotId(timeSlotId: Long): Flow<Course?> {
+        return dao.getCourseByTimeSlotId(timeSlotId).map { it?.toCourse() }
+    }
+
+    override fun getTimetableByCourseId(courseId: Long): Flow<Timetable?> {
+        return dao.getTimetableByCourseId(courseId).map { it?.toTimetable() }
+    }
 }

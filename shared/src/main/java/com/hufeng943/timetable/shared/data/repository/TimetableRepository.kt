@@ -21,5 +21,6 @@ interface TimetableRepository {
     fun getTimetableById(timetableId: Long): Flow<Timetable?>
     fun getCourseById(courseId: Long): Flow<Course?>
     fun getTimeSlotById(timeSlotId: Long): Flow<TimeSlot?>
-
+    fun getCourseByTimeSlotId(timeSlotId: Long): Flow<Course?>
+    fun getTimetableByCourseId(courseId: Long): Flow<Timetable?>
 }
