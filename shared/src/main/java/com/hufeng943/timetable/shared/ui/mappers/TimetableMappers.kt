@@ -1,6 +1,7 @@
 package com.hufeng943.timetable.shared.ui.mappers
 
 import com.hufeng943.timetable.shared.model.Timetable
+import com.hufeng943.timetable.shared.ui.CourseUi
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
@@ -44,4 +45,12 @@ fun Timetable.toDayCourseWithSlots(
 ): List<CourseWithSlotId> {
     if (weekIndex == 0) return emptyList()
     return allCourses.flatMap { course -> course.toDayCourseWithSlots(targetDayOfWeek, weekIndex) }
+}
+
+fun Timetable.toDayCourseUi(
+    targetDayOfWeek: DayOfWeek,
+    weekIndex: Int
+): List<CourseUi> {
+    if (weekIndex == 0) return emptyList()
+    return allCourses.flatMap { course -> course.toDayCourseUi(targetDayOfWeek, weekIndex) }
 }

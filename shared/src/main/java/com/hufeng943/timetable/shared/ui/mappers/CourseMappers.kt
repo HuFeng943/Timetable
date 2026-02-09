@@ -52,3 +52,16 @@ fun Course.toCourseUi(timeSlot: TimeSlot): CourseUi = CourseUi(
 fun Course.toListCourseUi(): List<CourseUi> = this.timeSlots.map { slot ->
     this.toCourseUi(slot)
 }
+
+fun Course.toDayCourseUi(
+    targetDayOfWeek: DayOfWeek, weekIndex: Int
+): List<CourseUi> = timeSlots.filter { it.dayOfWeek == targetDayOfWeek }.filter { slot ->
+    val isOddWeek = weekIndex % 2 != 0 // 计算当前周是单周还是双周
+    when (slot.recurrence) {
+        WeekPattern.EVERY_WEEK -> true
+        WeekPattern.ODD_WEEK -> isOddWeek
+        WeekPattern.EVEN_WEEK -> !isOddWeek
+    }
+}.map { slot ->
+    toCourseUi(slot)
+}
