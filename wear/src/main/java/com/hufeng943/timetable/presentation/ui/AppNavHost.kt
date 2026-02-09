@@ -1,6 +1,5 @@
 package com.hufeng943.timetable.presentation.ui
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -20,6 +19,10 @@ import com.hufeng943.timetable.presentation.viewmodel.TimetableViewModel
 import com.hufeng943.timetable.shared.model.Timetable
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
 
+// 对一堆getString()的封装
+private fun NavBackStackEntry.longArg(key: String): Long? =
+    arguments?.getString(key)?.toLongOrNull()
+
 @Composable
 fun AppNavHost(viewModel: TimetableViewModel = hiltViewModel()) {
     val navController = rememberSwipeDismissableNavController()
@@ -27,58 +30,37 @@ fun AppNavHost(viewModel: TimetableViewModel = hiltViewModel()) {
     val timetables by viewModel.timetables.collectAsState()
 
     AppScaffold {
-        CompositionLocalProvider(LocalNavController provides navController) {
-            SwipeDismissableNavHost(
-                navController = navController, startDestination = NavRoutes.LOADING
-            ) {
-                composable(NavRoutes.LOADING) {
-                    LoadingScreen(timetables) {
-                        navController.navigate(NavRoutes.MAIN) {
-                            popUpTo(NavRoutes.LOADING) { inclusive = true }
-                            Log.v("navController", "加载完成，跳转！")
-                        }
+        when (timetables) {
+            null -> LoadingScreen()
+            else -> CompositionLocalProvider(LocalNavController provides navController) {
+                SwipeDismissableNavHost(
+                    navController = navController, startDestination = NavRoutes.MAIN
+                ) {
+                    composable(NavRoutes.MAIN) {
+                        HomeScreen(timetables!!)
                     }
-                }
 
-                composable(NavRoutes.ERROR) {
-                    Log.v("navController", NavRoutes.ERROR)
-                    TODO()// TODO 单独一个异常界面 可以传递的不同的相关的错误信息
-                }
-
-                composable(NavRoutes.MAIN) {
-                    Log.v("navController1", (timetables == null).toString())
-                    DataStateGuard(timetables) { tables ->
-                        HomeScreen(tables)
-                    }
-                }
-
-                composable(NavRoutes.COURSE_DETAIL) { backStackEntry ->
-                    DataStateGuard(timetables) { tables ->
+                    composable(NavRoutes.COURSE_DETAIL) { backStackEntry ->
                         val courseId = backStackEntry.longArg("courseId")
                         val timeSlotId = backStackEntry.longArg("timeSlotId")
                         if (courseId != null && timeSlotId != null) {// TODO timetableID
-                            val timetable: Timetable? = tables.firstOrNull()
+                            val timetable: Timetable? = timetables!!.firstOrNull()
                             CourseDetailScreen(
-                                timetable, CourseWithSlotId(courseId, timeSlotId)
+                                timetable!!, CourseWithSlotId(courseId, timeSlotId)
                             )
-                        } else {
-                            navController.navigate(NavRoutes.ERROR)
                         }
                     }
-                }
 
-                composable(NavRoutes.LIST_TIMETABLE) {
-                    DataStateGuard(timetables) { tables ->
+                    composable(NavRoutes.LIST_TIMETABLE) {
                         TimetableListScreen(
-                            tables
+                            timetables!!
                         )
                     }
-                }
 
-                composable(NavRoutes.EDIT_TIMETABLE) { backStackEntry ->
-                    DataStateGuard(timetables) { tables ->
+
+                    composable(NavRoutes.EDIT_TIMETABLE) { backStackEntry ->
                         val timetableId = backStackEntry.longArg("timetableId")
-                        val timetable = tables.find { it.timetableId == timetableId }
+                        val timetable = timetables!!.find { it.timetableId == timetableId }
                         EditTimetableScreen(
                             timetable, onAction = viewModel::onAction
                         )
@@ -86,19 +68,6 @@ fun AppNavHost(viewModel: TimetableViewModel = hiltViewModel()) {
                 }
             }
         }
-    }
-}
 
-// 对一堆getString()的封装
-fun NavBackStackEntry.longArg(key: String): Long? = arguments?.getString(key)?.toLongOrNull()
-
-// 封装了重复多次的判断
-@Composable
-fun <T> DataStateGuard(
-    data: T?, loadingContent: @Composable () -> Unit = {}, content: @Composable (T) -> Unit
-) {
-    when {
-        data == null -> loadingContent()
-        else -> content(data)
     }
 }
