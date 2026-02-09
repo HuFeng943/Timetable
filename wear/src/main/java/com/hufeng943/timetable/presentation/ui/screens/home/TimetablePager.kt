@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,13 +23,11 @@ import com.hufeng943.timetable.presentation.ui.components.TimetableCard
 import com.hufeng943.timetable.presentation.ui.screens.loading.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.TimetableViewModel
 import com.hufeng943.timetable.presentation.viewmodel.UiState
-import com.hufeng943.timetable.shared.ui.mappers.toCourseUi
 
 
 @Composable
 fun TimetablePager(
-    viewModel: TimetableViewModel = hiltViewModel(),
-    targetIndex: Int = 0
+    viewModel: TimetableViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.currentTableUi.collectAsState()
     // EmptyPager() 没有课表才
@@ -39,8 +36,8 @@ fun TimetablePager(
         UiState.Loading -> LoadingScreen()
         UiState.Empty -> EmptyPager()
         is UiState.Success -> {
-            val (timetable, coursesIdList) = state.data
-            if (coursesIdList.isEmpty()) {
+            val coursesUi = state.data
+            if (coursesUi.isEmpty()) {
                 ScreenScaffold {// 有课表但没有课！
                     Box(
                         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
@@ -52,11 +49,7 @@ fun TimetablePager(
                     }
                 }
             } else {
-
-                val scrollState = rememberScalingLazyListState(initialCenterItemIndex = targetIndex)
-                val sortedCourses = remember(coursesIdList) {
-                    coursesIdList.sortedWith(compareBy { timetable.toCourseUi(it)!!.timeSlot.startTime })
-                }
+                val scrollState = rememberScalingLazyListState(initialCenterItemIndex = 0)
 
                 ScreenScaffold(scrollState = scrollState) { contentPadding ->
                     ScalingLazyColumn(
@@ -73,15 +66,11 @@ fun TimetablePager(
                             }
                         }
                         itemsIndexed(
-                            items = sortedCourses,
-                            key = { _, item -> "${item.courseId}-${item.timeSlotId}" } // 唯一 key
-                        ) { dailyOrderIndex, idPair ->
-                            val course =
-                                timetable.toCourseUi(idPair)?.copy(dailyOrder = dailyOrderIndex + 1)
-                            if (course != null) {
-                                TimetableCard(course) {
-                                    navController.navigate(courseDetail(idPair.timeSlotId))
-                                }
+                            items = coursesUi,
+                            key = { _, courseUi -> courseUi.timeSlot.id } // 唯一 key
+                        ) { _, courseUi ->
+                            TimetableCard(courseUi) {
+                                navController.navigate(courseDetail(courseUi.timeSlot.id))
                             }
                         }
                     }
@@ -90,3 +79,4 @@ fun TimetablePager(
         }
     }
 }
+
