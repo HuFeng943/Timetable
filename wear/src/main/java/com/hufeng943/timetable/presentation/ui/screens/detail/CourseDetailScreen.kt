@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
-import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.shared.model.Timetable
 import com.hufeng943.timetable.shared.ui.CourseWithSlotId
@@ -14,7 +13,6 @@ import com.hufeng943.timetable.shared.ui.mappers.toCourseUi
 
 @Composable
 fun CourseDetailScreen(timetable: Timetable?, courseWithSlotId: CourseWithSlotId?) {
-    AppScaffold {
         val courseId = if (timetable != null && courseWithSlotId != null) {
             timetable.toCourseUi(
                 CourseWithSlotId(
@@ -31,5 +29,4 @@ fun CourseDetailScreen(timetable: Timetable?, courseWithSlotId: CourseWithSlotId
                 }
             }
         } else Text(text = "未找到课程数据", color = Color.Red)
-    }
 }

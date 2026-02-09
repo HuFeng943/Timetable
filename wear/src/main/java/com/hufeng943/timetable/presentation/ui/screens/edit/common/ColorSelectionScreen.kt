@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -42,11 +41,11 @@ fun ColorSelectionScreen(onSave: (color: Color) -> Unit) {
         ).map { Color(it) }
     }
     val scrollState = rememberScalingLazyListState()
-    ScreenScaffold(scrollState = scrollState) {
+    ScreenScaffold(scrollState = scrollState) { contentPadding ->
         ScalingLazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = scrollState,
-            horizontalAlignment = Alignment.CenterHorizontally
+            contentPadding = contentPadding
         ) {
             item {
                 ListHeader { Text("选择颜色") }

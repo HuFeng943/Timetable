@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
@@ -46,11 +45,11 @@ fun NameEditScreen(
                 Icons.Default.Check, contentDescription = stringResource(R.string.check)
             )
         }
-    }) {
+    }) { contentPadding ->
         ScalingLazyColumn(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            state = scrollState
+            state = scrollState,
+            contentPadding = contentPadding
         ) {
             item {
                 ListHeader {

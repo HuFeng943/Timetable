@@ -10,7 +10,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
-import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.HorizontalPageIndicator
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.shared.model.Timetable
@@ -27,22 +26,19 @@ fun HomeScreen(timetables: List<Timetable>) {
         ) { page ->
             when (page) {
                 0 -> {
-                    AppScaffold {
-                        if (timetable != null) {
-                            TimetablePager(
-                                timetable = timetable, // 传递 Timetable
-                                coursesIdList = timetable.toCourseWithSlots(),
-                                title = stringResource(R.string.home_title)
-                            )
-                        } else {
-                            EmptyPager()
-                        }
+                    if (timetable != null) {
+                        TimetablePager(
+                            timetable = timetable, // 传递 Timetable
+                            coursesIdList = timetable.toCourseWithSlots(),
+                            title = stringResource(R.string.home_title)
+                        )
+                    } else {
+                        EmptyPager()
                     }
                 }
 
-                1 -> AppScaffold {
-                    MorePager()
-                }
+                1 -> MorePager()
+
             }
         }
         // 页面指示器

@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.wear.compose.material3.Text
 
 @Composable
-fun EmptyPager() {
+fun EmptyPager() {//TODO
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(text = "没有课表！！！")

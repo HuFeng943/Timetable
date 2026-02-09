@@ -2,7 +2,6 @@ package com.hufeng943.timetable.presentation.ui.screens.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -26,18 +25,15 @@ import com.hufeng943.timetable.shared.ui.mappers.toCourseUi
 
 @Composable
 fun TimetablePager(
-    timetable: Timetable,
-    coursesIdList: List<CourseWithSlotId>,
-    title: String,
-    targetIndex: Int = 0
+    timetable: Timetable, coursesIdList: List<CourseWithSlotId>, title: String, targetIndex: Int = 0
 ) {
     val navController = LocalNavController.current
     when {
-        coursesIdList.isEmpty() -> {
+        coursesIdList.isEmpty() -> ScreenScaffold {
             Box(
                 modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
             ) {
-                BasicText(
+                Text(
                     text = stringResource(R.string.home_empty_course_hint),
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -50,11 +46,11 @@ fun TimetablePager(
                 coursesIdList.sortedWith(compareBy { timetable.toCourseUi(it)!!.timeSlot.startTime })
             }
 
-            ScreenScaffold(scrollState = scrollState) {
+            ScreenScaffold(scrollState = scrollState) { contentPadding ->
                 ScalingLazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    state = scrollState
+                    state = scrollState,
+                    contentPadding = contentPadding
                 ) {
                     item {
                         ListHeader {
@@ -74,8 +70,7 @@ fun TimetablePager(
                                 // 传递两ID
                                 navController.navigate(
                                     courseDetail(
-                                        idPair.courseId,
-                                        idPair.timeSlotId
+                                        idPair.courseId, idPair.timeSlotId
                                     )
                                 )
                             }

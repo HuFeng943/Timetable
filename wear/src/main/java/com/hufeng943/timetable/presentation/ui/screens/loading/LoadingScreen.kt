@@ -12,15 +12,12 @@ import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.shared.model.Timetable
 
 @Composable
-fun LoadingScreen(timetables: List<Timetable>? = null, complete: () -> Unit) {
-
+fun LoadingScreen(timetables: List<Timetable>? = null, onLoaded: () -> Unit) {
     Log.v("navController2", (timetables == null).toString())
     LaunchedEffect(timetables) {
-        if (timetables != null) {
-            complete()
-        }
+        if (timetables != null) onLoaded()
     }
-    ScreenScaffold {
+    ScreenScaffold(timeText = {}) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text("课程加载中…")
         }

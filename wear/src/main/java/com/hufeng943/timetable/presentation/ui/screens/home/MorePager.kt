@@ -25,10 +25,9 @@ fun MorePager() {
     val scrollState = rememberScalingLazyListState()
     val navController = LocalNavController.current
 
-    ScreenScaffold(scrollState = scrollState) {
+    ScreenScaffold(scrollState = scrollState) { contentPadding ->
         ScalingLazyColumn(
-            state = scrollState,
-            modifier = Modifier.fillMaxSize(),
+            state = scrollState, modifier = Modifier.fillMaxSize(), contentPadding = contentPadding
         ) {
             item {
                 ListHeader {
@@ -46,8 +45,7 @@ fun MorePager() {
                     },
                     label = {
                         Text(stringResource(R.string.more_menu_edit))
-                    }
-                )
+                    })
             }
 
             // 2. 设置
@@ -60,8 +58,7 @@ fun MorePager() {
                     },
                     label = {
                         Text(stringResource(R.string.more_menu_settings))
-                    }
-                )
+                    })
             }
 
             // 3. 关于
@@ -74,8 +71,7 @@ fun MorePager() {
                     },
                     label = {
                         Text(stringResource(R.string.more_menu_about))
-                    }
-                )
+                    })
             }
         }
     }

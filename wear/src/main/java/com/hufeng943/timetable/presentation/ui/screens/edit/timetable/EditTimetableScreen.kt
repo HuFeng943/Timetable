@@ -3,7 +3,6 @@ package com.hufeng943.timetable.presentation.ui.screens.edit.timetable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -12,13 +11,11 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
-import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.DatePicker
 import androidx.wear.compose.material3.EdgeButton
@@ -60,116 +57,114 @@ fun EditTimetableScreen(
         navController = internalNavController, startDestination = InternalNavRoutes.MAIN
     ) {
         composable(InternalNavRoutes.MAIN) {
-            AppScaffold {
-                ScreenScaffold(scrollState = scrollState, edgeButton = {
-                    EdgeButton(
-                        onClick = {
-                            onAction(TableAction.Upsert(state.snapShot()))
-                            navController.popBackStack()
-                        }) {
-                        Icon(
-                            Icons.Default.Check, contentDescription = stringResource(R.string.check)
-                        )
+
+            ScreenScaffold(scrollState = scrollState, edgeButton = {
+                EdgeButton(
+                    onClick = {
+                        onAction(TableAction.Upsert(state.snapShot()))
+                        navController.popBackStack()
+                    }) {
+                    Icon(
+                        Icons.Default.Check, contentDescription = stringResource(R.string.check)
+                    )
+                }
+            }) { contentPadding ->
+                ScalingLazyColumn(
+                    state = scrollState,
+                    contentPadding = contentPadding
+                ) {
+                    item {
+                        ListHeader {
+                            Text(
+                                stringResource(R.string.edit_timetable_add)
+                            )
+                        }
                     }
-                }) {
-                    ScalingLazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        state = scrollState,
-                    ) {
+
+                    item {// 修改名称
+                        TitleCard(
+                            onClick = { internalNavController.navigate(InternalNavRoutes.SEMESTER_NAME) },
+                            title = {
+                                Text(
+                                    stringResource(R.string.edit_timetable_name),
+                                    style = MaterialTheme.typography.labelLarge
+                                )
+                            },
+                        ) {
+                            Text(
+                                state.semesterName, style = MaterialTheme.typography.labelLarge
+                            )
+                        }
+                    }
+
+                    item {// 开始日期
+                        TitleCard(
+                            onClick = { internalNavController.navigate(InternalNavRoutes.START_DATE) },
+                            onLongClick = { state.updateStartDate() }, // 默认重置为今天
+                            subtitle = { if (state.semesterStartDate != toDay) Text("长按设置为当前日期") },
+                            title = { Text(stringResource(R.string.edit_timetable_start)) },
+                        ) {
+                            Text(
+                                state.semesterStartDate.toString(),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
+                    }
+
+                    item {// 结束日期
+                        TitleCard(
+                            onClick = { internalNavController.navigate(InternalNavRoutes.END_DATE) },
+                            onLongClick = { state.updateEndDate() },
+                            subtitle = { if (state.semesterEndDate != null) Text("长按设置为永不结束") },
+                            title = { Text(stringResource(R.string.edit_timetable_end)) },
+                        ) {
+                            Text(
+                                state.semesterEndDate?.toString() ?: "永不结束",
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
+                    }
+
+                    item {// 颜色
+                        TitleCard(
+                            onClick = { internalNavController.navigate(InternalNavRoutes.COLOR) },
+                            title = { Text(stringResource(R.string.edit_timetable_color)) },
+                        ) {
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Box(// 圆形效果
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .size(
+                                        40.dp
+                                    )
+                                    .background(
+                                        state.semesterColor, MaterialTheme.shapes.medium
+                                    )
+                            )
+                        }
+                    }
+
+                    if (timetable != null) { // 只有编辑时才显示
                         item {
-                            ListHeader {
-                                Text(
-                                    stringResource(R.string.edit_timetable_add),
-                                    style = MaterialTheme.typography.titleMedium
-                                )
-                            }
-                        }
-
-                        item {// 修改名称
-                            TitleCard(
-                                onClick = { internalNavController.navigate(InternalNavRoutes.SEMESTER_NAME) },
-                                title = {
-                                    Text(
-                                        stringResource(R.string.edit_timetable_name),
-                                        style = MaterialTheme.typography.labelLarge
-                                    )
-                                },
-                            ) {
-                                Text(
-                                    state.semesterName, style = MaterialTheme.typography.labelLarge
-                                )
-                            }
-                        }
-
-                        item {// 开始日期
-                            TitleCard(
-                                onClick = { internalNavController.navigate(InternalNavRoutes.START_DATE) },
-                                onLongClick = { state.updateStartDate() }, // 默认重置为今天
-                                subtitle = { if (state.semesterStartDate != toDay) Text("长按设置为当前日期") },
-                                title = { Text(stringResource(R.string.edit_timetable_start)) },
-                            ) {
-                                Text(
-                                    state.semesterStartDate.toString(),
-                                    style = MaterialTheme.typography.labelLarge
-                                )
-                            }
-                        }
-
-                        item {// 结束日期
-                            TitleCard(
-                                onClick = { internalNavController.navigate(InternalNavRoutes.END_DATE) },
-                                onLongClick = { state.updateEndDate() },
-                                subtitle = { if (state.semesterEndDate != null) Text("长按设置为永不结束") },
-                                title = { Text(stringResource(R.string.edit_timetable_end)) },
-                            ) {
-                                Text(
-                                    state.semesterEndDate?.toString() ?: "永不结束",
-                                    style = MaterialTheme.typography.labelLarge
-                                )
-                            }
-                        }
-
-                        item {// 颜色
-                            TitleCard(
-                                onClick = { internalNavController.navigate(InternalNavRoutes.COLOR) },
-                                title = { Text(stringResource(R.string.edit_timetable_color)) },
-                            ) {
-                                Spacer(modifier = Modifier.height(6.dp))
-                                Box(// 圆形效果
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .size(
-                                            40.dp
-                                        )
-                                        .background(
-                                            state.semesterColor, MaterialTheme.shapes.medium
-                                        )
-                                )
-                            }
-                        }
-
-                        if (timetable != null) { // 只有编辑时才显示
-                            item {
-                                FilledTonalButton(
-                                    onClick = {
+                            FilledTonalButton(
+                                onClick = {
                                     internalNavController.navigate(InternalNavRoutes.DELETE_CONFIRM)
-                                    }, modifier = Modifier.fillMaxWidth(), icon = {
-                                        Icon(
-                                            imageVector = Icons.Default.Delete,
-                                            contentDescription = null
+                                }, modifier = Modifier.fillMaxWidth(), icon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = null
                                     )
-                                    }, colors = ButtonDefaults.filledTonalButtonColors(
-                                        containerColor = MaterialTheme.colorScheme.errorContainer,
-                                        iconColor = MaterialTheme.colorScheme.onErrorContainer,
-                                        contentColor = MaterialTheme.colorScheme.onErrorContainer
-                                    )
-                                ) {
-                                    Text("删除此课表")
-                                }
+                                }, colors = ButtonDefaults.filledTonalButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                                    iconColor = MaterialTheme.colorScheme.onErrorContainer,
+                                    contentColor = MaterialTheme.colorScheme.onErrorContainer
+                                )
+                            ) {
+                                Text("删除此课表")
                             }
                         }
                     }
+
                 }
             }
         }

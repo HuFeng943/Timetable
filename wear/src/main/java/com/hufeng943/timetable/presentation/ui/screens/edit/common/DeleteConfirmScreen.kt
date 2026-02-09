@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -26,11 +25,11 @@ fun DeleteConfirmScreen(
     detail: String, onConfirm: () -> Unit, onCancel: () -> Unit
 ) {
     val scrollState = rememberScalingLazyListState()
-    ScreenScaffold(scrollState = scrollState) {
+    ScreenScaffold(scrollState = scrollState) { contentPadding ->
         ScalingLazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = scrollState,
-            horizontalAlignment = Alignment.CenterHorizontally
+            contentPadding = contentPadding
         ) {
             item {
                 ListHeader {
@@ -58,8 +57,7 @@ fun DeleteConfirmScreen(
                     onClick = onCancel, modifier = Modifier.fillMaxWidth(),
                     icon = {
                         Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = null
+                            imageVector = Icons.Default.Close, contentDescription = null
                         )
                     },
                 ) {
@@ -78,8 +76,7 @@ fun DeleteConfirmScreen(
                     ),
                     icon = {
                         Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = null
+                            imageVector = Icons.Default.Check, contentDescription = null
                         )
                     },
                 ) {
