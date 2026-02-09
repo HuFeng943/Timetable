@@ -17,13 +17,12 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class TimetableViewModel @Inject constructor(
-    private val repository: TimetableRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val repository: TimetableRepository, private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     companion object {
-        const val FLOW_STOP_TIMEOUT = 5000L
         const val KEY_SELECTED_TABLE_ID = "selected_timetable_id"
     }
+
     // Flow -> Compose state
     val timetables: StateFlow<List<Timetable>?> =
         repository.getAllTimetables().stateIn(viewModelScope, SharingStarted.Lazily, null)
@@ -42,7 +41,11 @@ class TimetableViewModel @Inject constructor(
                 UiState.Success(table to table.toCourseWithSlots())
             }
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(FLOW_STOP_TIMEOUT), UiState.Loading)
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(DEFAULT_FLOW_STOP_TIMEOUT),
+        UiState.Loading
+    )
 
     // 交互：切换课表
     fun selectTimetable(id: Long) {
@@ -54,6 +57,7 @@ class TimetableViewModel @Inject constructor(
             is TableAction.Upsert -> viewModelScope.launch {
                 repository.upsertTimetable(action.table)
             }
+
             is TableAction.Delete -> viewModelScope.launch {
                 repository.deleteTimetable(action.timetableId)
             }
