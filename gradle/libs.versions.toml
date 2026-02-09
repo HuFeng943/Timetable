@@ -37,7 +37,7 @@ serialization = "1.10.0"
 kotlinxDatetime = "0.7.1"
 
 # Hilt
-hilt = "2.59"
+hilt = "2.59.1"
 androidxHilt = "1.3.0"
 
 # 测试依赖
