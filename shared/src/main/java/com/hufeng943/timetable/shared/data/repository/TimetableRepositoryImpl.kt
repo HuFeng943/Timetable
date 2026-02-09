@@ -1,7 +1,9 @@
 package com.hufeng943.timetable.shared.data.repository
 
 import com.hufeng943.timetable.shared.data.dao.TimetableDao
+import com.hufeng943.timetable.shared.data.mappers.toCourse
 import com.hufeng943.timetable.shared.data.mappers.toCourseEntity
+import com.hufeng943.timetable.shared.data.mappers.toTimeSlot
 import com.hufeng943.timetable.shared.data.mappers.toTimeSlotEntity
 import com.hufeng943.timetable.shared.data.mappers.toTimetable
 import com.hufeng943.timetable.shared.data.mappers.toTimetableEntity
@@ -40,11 +42,20 @@ class TimetableRepositoryImpl(private val dao: TimetableDao) : TimetableReposito
     }
 
     override fun getAllTimetables(): Flow<List<Timetable>> {
-        return dao.getAllTimetablesWithCourses()
-            .map { relationsList ->
-                relationsList.map { relation ->
-                    relation.toTimetable()
-                }
-            }
+        return dao.getTimetables().map { entities ->
+            entities.map { it.toTimetable() }
+        }
+    }
+
+    override fun getTimetableById(timetableId: Long): Flow<Timetable?> {
+        return dao.getTimetableById(timetableId).map { it?.toTimetable() }
+    }
+
+    override fun getCourseById(courseId: Long): Flow<Course?> {
+        return dao.getCourseById(courseId).map { it?.toCourse() }
+    }
+
+    override fun getTimeSlotById(timeSlotId: Long): Flow<TimeSlot?> {
+        return dao.getTimeSlotById(timeSlotId).map { it?.toTimeSlot() }
     }
 }

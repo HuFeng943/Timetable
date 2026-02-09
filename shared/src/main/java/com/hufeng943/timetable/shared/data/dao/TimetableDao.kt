@@ -8,6 +8,7 @@ import androidx.room.Upsert
 import com.hufeng943.timetable.shared.data.entities.CourseEntity
 import com.hufeng943.timetable.shared.data.entities.TimeSlotEntity
 import com.hufeng943.timetable.shared.data.entities.TimetableEntity
+import com.hufeng943.timetable.shared.data.relations.CourseWithSlots
 import com.hufeng943.timetable.shared.data.relations.TimetableWithCourses
 import kotlinx.coroutines.flow.Flow
 
@@ -48,6 +49,17 @@ interface TimetableDao {
     // 查询所有课表
     @Transaction
     @Query("SELECT * FROM time_tables")
-    fun getAllTimetablesWithCourses(): Flow<List<TimetableWithCourses>>
+    fun getTimetables(): Flow<List<TimetableWithCourses>>
 
+    @Transaction
+    @Query("SELECT * FROM time_tables WHERE id = :id")
+    fun getTimetableById(id: Long): Flow<TimetableWithCourses?>
+
+    @Transaction
+    @Query("SELECT * FROM courses WHERE id = :courseId")
+    fun getCourseById(courseId: Long): Flow<CourseWithSlots?>
+
+    @Transaction
+    @Query("SELECT * FROM time_slots WHERE id = :slotId")
+    fun getTimeSlotById(slotId: Long): Flow<TimeSlotEntity?>
 }

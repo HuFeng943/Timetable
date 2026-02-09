@@ -18,4 +18,8 @@ interface TimetableRepository {
 
     // 获取所有课表
     fun getAllTimetables(): Flow<List<Timetable>>
+    fun getTimetableById(timetableId: Long): Flow<Timetable?>
+    fun getCourseById(courseId: Long): Flow<Course?>
+    fun getTimeSlotById(timeSlotId: Long): Flow<TimeSlot?>
+
 }
