@@ -4,13 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
-import com.hufeng943.timetable.shared.model.Timetable
 import com.hufeng943.timetable.shared.ui.mappers.toCourseWithSlots
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -23,23 +22,32 @@ class TimetableViewModel @Inject constructor(
         const val KEY_SELECTED_TABLE_ID = "selected_timetable_id"
     }
 
-    // Flow -> Compose state
-    val timetables: StateFlow<List<Timetable>?> =
-        repository.getAllTimetables().stateIn(viewModelScope, SharingStarted.Lazily, null)
+    // 全部课表
+    val allTimetables = repository.getAllTimetables().map { list ->
+        if (list.isEmpty()) UiState.Empty
+        else UiState.Success(list)
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(DEFAULT_FLOW_STOP_TIMEOUT),
+        UiState.Loading
+    )
+
 
     // 当前选中的课表 ID
     private val _selectedTableId = savedStateHandle.getStateFlow<Long?>(KEY_SELECTED_TABLE_ID, null)
 
     // 当前选中的课表 UI 数据
-    val currentTableUi = combine(timetables, _selectedTableId) { tables, selectedId ->
-        when {
-            tables == null -> UiState.Loading
-            tables.isEmpty() -> UiState.Empty
-            else -> {
-                val activeId = selectedId ?: tables.first().timetableId
-                val table = tables.find { it.timetableId == activeId } ?: tables.first()
-                UiState.Success(table to table.toCourseWithSlots())
+    val currentTableUi = combine(allTimetables, _selectedTableId) { state, selectedId ->
+        when (state) {
+            is UiState.Success -> {
+                val tables = state.data
+                // 找选中的 ID，找不到就默认第一个
+                val activeTable = tables.find { it.timetableId == selectedId } ?: tables.first()
+                UiState.Success(activeTable to activeTable.toCourseWithSlots())
             }
+
+            is UiState.Loading -> UiState.Loading
+            is UiState.Empty -> UiState.Empty
         }
     }.stateIn(
         viewModelScope,
