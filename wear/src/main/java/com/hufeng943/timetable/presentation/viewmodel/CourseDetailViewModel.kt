@@ -18,9 +18,7 @@ import kotlinx.coroutines.flow.stateIn
 class CourseDetailViewModel @Inject constructor(
     private val repository: TimetableRepository, savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val sId: Long =
-        savedStateHandle.get<Long>("timeSlotId") ?: savedStateHandle.get<String>("timeSlotId")
-            ?.toLongOrNull() ?: -1L
+    private val sId: Long = savedStateHandle.get<String>("timeSlotId")?.toLongOrNull() ?: -1L
     val detailState = repository.getCourseByTimeSlotId(sId).map { course ->
         if (course == null) return@map UiState.Empty
 
