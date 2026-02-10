@@ -33,8 +33,8 @@ fun TimetablePager(
     // EmptyPager() 没有课表才
     val navController = LocalNavController.current
     when (val state = uiState) {
-        UiState.Loading -> LoadingScreen()
-        UiState.Empty -> EmptyPager()
+        is UiState.Loading -> LoadingScreen()
+        is UiState.Empty -> EmptyPager()
         is UiState.Success -> {
             val coursesUi = state.data
             if (coursesUi.isEmpty()) {

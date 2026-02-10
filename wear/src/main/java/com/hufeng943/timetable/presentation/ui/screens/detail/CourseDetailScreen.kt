@@ -23,8 +23,8 @@ fun CourseDetailScreen(
     val uiDetailState by viewModel.detailState.collectAsStateWithLifecycle()
 
     when (val state = uiDetailState) {
-        UiState.Loading -> LoadingScreen()
-        UiState.Empty -> {
+        is UiState.Loading -> LoadingScreen()
+        is UiState.Empty -> {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(text = "未找到课程数据", color = Color.Red)
             }
