@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
 import com.hufeng943.timetable.shared.ui.mappers.getWeekIndexForDate
-import com.hufeng943.timetable.shared.ui.mappers.toDayCourseUi
+import com.hufeng943.timetable.shared.ui.mappers.toDayCoursesUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
@@ -43,7 +43,7 @@ class TimetableViewModel @Inject constructor(
     )
 
     // 当前选中的课表要展示 UI 数据
-    val currentTableUi = combine(allTimetables, _selectedDate) { state, selectedDate ->
+    val dateCoursesUi = combine(allTimetables, _selectedDate) { state, selectedDate ->
         when (state) {
             is UiState.Loading -> UiState.Loading
             is UiState.Empty -> UiState.Empty
@@ -53,20 +53,23 @@ class TimetableViewModel @Inject constructor(
                     val weekIndex = table.getWeekIndexForDate(selectedDate)
                     Log.d("weekIndex", weekIndex.toString())
                     Log.d("selectedDate.dayOfWeek", selectedDate.dayOfWeek.toString())
-                    table.toDayCourseUi(selectedDate.dayOfWeek, weekIndex)
+                    table.toDayCoursesUi(selectedDate.dayOfWeek, weekIndex)
                 }
                 // 统一排序并重新编号
-                val sortedCourses =
+                val sortedCoursesUi =
                     allDailyCourses.sortedBy { it.timeSlot.startTime }.mapIndexed { index, course ->
                         course.copy(dailyOrder = index + 1)
                     }
-                UiState.Success(sortedCourses)
+                UiState.Success(sortedCoursesUi)
             }
         }
     }.stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(DEFAULT_FLOW_STOP_TIMEOUT), UiState.Loading
     )
 
+    fun selectedDate(localDate: LocalDate) {
+        savedStateHandle[KEY_SELECTED_DATE] = localDate
+    }
 
     fun onAction(action: TableAction) {
         when (action) {

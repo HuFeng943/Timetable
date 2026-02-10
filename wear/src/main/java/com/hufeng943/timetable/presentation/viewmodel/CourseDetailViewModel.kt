@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.presentation.ui.screens.detail.DetailPageData
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
 import com.hufeng943.timetable.shared.ui.mappers.toCourseUi
-import com.hufeng943.timetable.shared.ui.mappers.toListCourseUi
+import com.hufeng943.timetable.shared.ui.mappers.toListCoursesUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
@@ -28,7 +28,7 @@ class CourseDetailViewModel @Inject constructor(
             UiState.Empty
         } else {
             val currentCourseUi = course.toCourseUi(currentSlot)
-            val listCourseUi = course.toListCourseUi()
+            val listCourseUi = course.toListCoursesUi()
 
             UiState.Success(DetailPageData(currentCourseUi, listCourseUi))
         }

@@ -29,7 +29,7 @@ import com.hufeng943.timetable.presentation.viewmodel.UiState
 fun TimetablePager(
     viewModel: TimetableViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.currentTableUi.collectAsState()
+    val uiState by viewModel.dateCoursesUi.collectAsState()
     // EmptyPager() 没有课表才
     val navController = LocalNavController.current
     when (val state = uiState) {
