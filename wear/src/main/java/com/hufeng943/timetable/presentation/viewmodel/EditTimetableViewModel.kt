@@ -25,7 +25,6 @@ class EditTimetableViewModel @Inject constructor(
     private val tId: Long? = savedStateHandle.get<String>("timetableId")?.toLongOrNull()
     private val _uiState = MutableStateFlow<UiState<Timetable>>(UiState.Loading)
     val uiState = _uiState.asStateFlow()
-    private val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
 
     init {
         viewModelScope.launch {
@@ -33,7 +32,7 @@ class EditTimetableViewModel @Inject constructor(
             val data = tId?.let { repository.getTimetableById(it).firstOrNull() } ?: Timetable(
                 semesterName = "课表",
                 createdAt = Clock.System.now(),
-                semesterStart = today,
+                semesterStart = Clock.System.todayIn(TimeZone.currentSystemDefault()),
                 color = 0xFFE57373
             )
             _uiState.value = UiState.Success(data)
@@ -99,7 +98,7 @@ class EditTimetableViewModel @Inject constructor(
 sealed class EditTimetableAction {
     data class UpdateName(val name: String) : EditTimetableAction()
     data class UpdateStartDate(val date: LocalDate) : EditTimetableAction()
-    data class UpdateEndDate(val date: LocalDate?) : EditTimetableAction()
+    data class UpdateEndDate(val date: LocalDate? = null) : EditTimetableAction()
     data class UpdateColor(val color: Color) : EditTimetableAction()
     object Upsert : EditTimetableAction()
     object Delete : EditTimetableAction()
