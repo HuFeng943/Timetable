@@ -12,7 +12,7 @@ import com.hufeng943.timetable.presentation.viewmodel.edit.timetable.TimetableLi
 fun TimetableListScreen(
     viewModel: TimetableListViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.timetables.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     when (val state = uiState) {
         UiState.Loading -> LoadingScreen()
         else -> {

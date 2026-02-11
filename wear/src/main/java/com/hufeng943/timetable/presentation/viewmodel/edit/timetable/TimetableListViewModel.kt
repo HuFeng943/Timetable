@@ -15,7 +15,7 @@ import javax.inject.Inject
 class TimetableListViewModel @Inject constructor(
     repository: TimetableRepository
 ) : ViewModel() {
-    val timetables = repository.getAllTimetables().map { list ->
+    val uiState = repository.getAllTimetables().map { list ->
         if (list.isEmpty()) UiState.Empty
         else UiState.Success(list)
     }.stateIn(
