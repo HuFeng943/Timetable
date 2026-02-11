@@ -1,9 +1,11 @@
-package com.hufeng943.timetable.presentation.viewmodel
+package com.hufeng943.timetable.presentation.viewmodel.home
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hufeng943.timetable.presentation.viewmodel.DEFAULT_FLOW_STOP_TIMEOUT
+import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
 import com.hufeng943.timetable.shared.ui.mappers.getWeekIndexForDate
 import com.hufeng943.timetable.shared.ui.mappers.toDayCoursesUi
@@ -13,16 +15,14 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import kotlin.time.Clock
 
-
 @HiltViewModel
 class TimetableViewModel @Inject constructor(
-    private val repository: TimetableRepository, private val savedStateHandle: SavedStateHandle
+    repository: TimetableRepository, savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     companion object {
         const val KEY_SELECTED_DATE = "selected_date"
@@ -33,7 +33,9 @@ class TimetableViewModel @Inject constructor(
         if (list.isEmpty()) UiState.Empty
         else UiState.Success(list)
     }.stateIn(
-        viewModelScope, SharingStarted.WhileSubscribed(DEFAULT_FLOW_STOP_TIMEOUT), UiState.Loading
+        viewModelScope,
+        SharingStarted.WhileSubscribed(DEFAULT_FLOW_STOP_TIMEOUT),
+        UiState.Loading
     )
 
     // TODO 在 room 保存是否要显示的课表
@@ -64,22 +66,8 @@ class TimetableViewModel @Inject constructor(
             }
         }
     }.stateIn(
-        viewModelScope, SharingStarted.WhileSubscribed(DEFAULT_FLOW_STOP_TIMEOUT), UiState.Loading
+        viewModelScope,
+        SharingStarted.WhileSubscribed(DEFAULT_FLOW_STOP_TIMEOUT),
+        UiState.Loading
     )
-
-    fun selectedDate(localDate: LocalDate) {
-        savedStateHandle[KEY_SELECTED_DATE] = localDate
-    }
-
-    fun onAction(action: TableAction) {
-        when (action) {
-            is TableAction.Upsert -> viewModelScope.launch {
-                repository.upsertTimetable(action.table)
-            }
-
-            is TableAction.Delete -> viewModelScope.launch {
-                repository.deleteTimetable(action.timetableId)
-            }
-        }
-    }
 }

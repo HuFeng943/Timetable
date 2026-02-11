@@ -1,10 +1,10 @@
-package com.hufeng943.timetable.presentation.viewmodel
+package com.hufeng943.timetable.presentation.viewmodel.edit
 
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
 import com.hufeng943.timetable.shared.model.Timetable
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import javax.inject.Inject
@@ -95,11 +94,3 @@ class EditTimetableViewModel @Inject constructor(
     }
 }
 
-sealed class EditTimetableAction {
-    data class UpdateName(val name: String) : EditTimetableAction()
-    data class UpdateStartDate(val date: LocalDate) : EditTimetableAction()
-    data class UpdateEndDate(val date: LocalDate? = null) : EditTimetableAction()
-    data class UpdateColor(val color: Color) : EditTimetableAction()
-    object Upsert : EditTimetableAction()
-    object Delete : EditTimetableAction()
-}

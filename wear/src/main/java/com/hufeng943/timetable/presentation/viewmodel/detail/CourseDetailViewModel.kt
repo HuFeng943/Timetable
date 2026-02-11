@@ -1,9 +1,11 @@
-package com.hufeng943.timetable.presentation.viewmodel
+package com.hufeng943.timetable.presentation.viewmodel.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.presentation.ui.screens.detail.DetailPageData
+import com.hufeng943.timetable.presentation.viewmodel.DEFAULT_FLOW_STOP_TIMEOUT
+import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
 import com.hufeng943.timetable.shared.ui.mappers.toCourseUi
 import com.hufeng943.timetable.shared.ui.mappers.toListCoursesUi
@@ -12,7 +14,6 @@ import jakarta.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-
 
 @HiltViewModel
 class CourseDetailViewModel @Inject constructor(
@@ -33,6 +34,8 @@ class CourseDetailViewModel @Inject constructor(
             UiState.Success(DetailPageData(currentCourseUi, listCourseUi))
         }
     }.stateIn(
-        viewModelScope, SharingStarted.WhileSubscribed(DEFAULT_FLOW_STOP_TIMEOUT), UiState.Loading
+        viewModelScope,
+        SharingStarted.WhileSubscribed(DEFAULT_FLOW_STOP_TIMEOUT),
+        UiState.Loading
     )
 }

@@ -38,9 +38,9 @@ import com.hufeng943.timetable.presentation.ui.screens.edit.common.ColorSelectio
 import com.hufeng943.timetable.presentation.ui.screens.edit.common.DeleteConfirmScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.common.NameEditScreen
 import com.hufeng943.timetable.presentation.ui.screens.loading.LoadingScreen
-import com.hufeng943.timetable.presentation.viewmodel.EditTimetableAction
-import com.hufeng943.timetable.presentation.viewmodel.EditTimetableViewModel
 import com.hufeng943.timetable.presentation.viewmodel.UiState
+import com.hufeng943.timetable.presentation.viewmodel.edit.EditTimetableAction
+import com.hufeng943.timetable.presentation.viewmodel.edit.EditTimetableViewModel
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDate
