@@ -28,7 +28,6 @@ class EditTimetableViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            // 这里的 _uiState 是 Mutable 的，所以可以随意赋值
             val data = tId?.let { repository.getTimetableById(it).firstOrNull() } ?: Timetable(
                 semesterName = "课表",
                 createdAt = Clock.System.now(),
