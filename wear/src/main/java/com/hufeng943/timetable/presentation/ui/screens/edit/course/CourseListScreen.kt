@@ -15,7 +15,7 @@ fun CourseListScreen(
     val uiState by viewModel.uiState.collectAsState()
     when (val state = uiState) {
         is UiState.Loading -> LoadingScreen()
-        is UiState.Empty -> LoadingScreen()
+        is UiState.Empty -> LoadingScreen()// TODO timetable == null
         is UiState.Success -> CourseListPager(state.data)
     }
 }

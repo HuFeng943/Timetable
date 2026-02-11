@@ -20,14 +20,20 @@ import com.hufeng943.timetable.presentation.ui.NavRoutes.editCourse
 import com.hufeng943.timetable.shared.model.Timetable
 
 @Composable
-fun CourseListPager(//TODO
+fun CourseListPager(
     timetable: Timetable
 ) {
     val navController = LocalNavController.current
     val scrollState = rememberScalingLazyListState()
     ScreenScaffold(scrollState = scrollState, edgeButton = {
         EdgeButton(
-            onClick = { }) {
+            onClick = {
+                navController.navigate(
+                    editCourse(
+                        timetable.timetableId
+                    )
+                )
+            }) {
             Icon(
                 imageVector = Icons.Default.Add, contentDescription = "新增课程"
             )
@@ -48,20 +54,15 @@ fun CourseListPager(//TODO
             } else {
                 items(timetable.allCourses, key = { it.id }) { course ->
                     TitleCard(
-                        onClick = { },
-                        onLongClick = {
+                        onClick = { }, onLongClick = {
                             navController.navigate(
                                 editCourse(
-                                    timetable.timetableId,
-                                    course.id
+                                    timetable.timetableId, course.id
                                 )
                             )
-                        },
-                        title = { Text(course.name) },
-                        subtitle = {
+                        }, title = { Text(course.name) }, subtitle = {
                             Text("${course.timeSlots.size} 个时间段")
-                        },
-                        modifier = Modifier.fillMaxWidth()
+                        }, modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
