@@ -66,7 +66,7 @@ class EditTimetableViewModel @Inject constructor(
         }
     }
 
-    // 辅助函数：专门用来更新 Success 状态下的 Timetable
+    // 用来更新 Success 状态
     private inline fun updateSuccessState(crossinline transform: (Timetable) -> Timetable) {
         val current = _uiState.value
         if (current is UiState.Success) {

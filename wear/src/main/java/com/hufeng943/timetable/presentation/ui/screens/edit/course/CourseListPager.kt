@@ -16,11 +16,11 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.presentation.ui.LocalNavController
-import com.hufeng943.timetable.shared.model.Timetable
+import com.hufeng943.timetable.shared.model.Course
 
 @Composable
 fun CourseListPager(//TODO
-    timetable: Timetable
+    courses: List<Course>
 ) {
     LocalNavController.current
     val scrollState = rememberScalingLazyListState()
@@ -40,18 +40,18 @@ fun CourseListPager(//TODO
                     Text("课程列表")
                 }
             }
-            if (timetable.allCourses.isEmpty()) {
+            if (courses.isEmpty()) {
                 item {
                     Text("暂无课程")
                 }
             } else {
-                items(timetable.allCourses, key = { it.id }) { course ->
+                items(courses, key = { it.id }) { course ->
                     TitleCard(
                         onClick = { },
                         onLongClick = { },
                         title = { Text(course.name) },
                         subtitle = {
-                            //TODO
+                            Text("${course.timeSlots.size} 个时间段")
                         },
                         modifier = Modifier.fillMaxWidth()
                     )
