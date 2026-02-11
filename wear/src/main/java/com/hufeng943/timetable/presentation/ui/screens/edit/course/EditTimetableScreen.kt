@@ -1,11 +1,10 @@
-package com.hufeng943.timetable.presentation.ui.screens.edit.timetable
+package com.hufeng943.timetable.presentation.ui.screens.edit.course
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
@@ -20,7 +19,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.ButtonDefaults
-import androidx.wear.compose.material3.DatePicker
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.Icon
@@ -40,17 +38,12 @@ import com.hufeng943.timetable.presentation.ui.screens.edit.common.DeleteConfirm
 import com.hufeng943.timetable.presentation.ui.screens.edit.common.NameEditScreen
 import com.hufeng943.timetable.presentation.ui.screens.loading.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
-import com.hufeng943.timetable.presentation.viewmodel.edit.timetable.EditTimetableAction
-import com.hufeng943.timetable.presentation.viewmodel.edit.timetable.EditTimetableViewModel
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toJavaLocalDate
-import kotlinx.datetime.toKotlinLocalDate
-import kotlinx.datetime.todayIn
-import kotlin.time.Clock
+import com.hufeng943.timetable.presentation.viewmodel.edit.course.EditCourseAction
+import com.hufeng943.timetable.presentation.viewmodel.edit.course.EditCourseViewModel
 
 @Composable
-fun EditTimetableScreen(
-    viewModel: EditTimetableViewModel = hiltViewModel()
+fun EditCourseScreen(
+    viewModel: EditCourseViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScalingLazyListState()
     val state by viewModel.uiState.collectAsState()
@@ -59,18 +52,16 @@ fun EditTimetableScreen(
 
     when (val uiState = state) {
         is UiState.Success -> {
-            val timetable = uiState.data
-            val toDay = Clock.System.todayIn(TimeZone.currentSystemDefault())
+            val course = uiState.data
 
             SwipeDismissableNavHost(
                 navController = internalNavController, startDestination = InternalNavRoutes.MAIN
             ) {
                 composable(InternalNavRoutes.MAIN) {
-
                     ScreenScaffold(scrollState = scrollState, edgeButton = {
                         EdgeButton(
                             onClick = {
-                                viewModel.onAction(EditTimetableAction.Upsert)
+                                viewModel.onAction(EditCourseAction.Upsert)
                                 navController.popBackStack()
                             }) {
                             Icon(
@@ -85,97 +76,100 @@ fun EditTimetableScreen(
                             item {
                                 ListHeader {
                                     Text(
-                                        if (timetable.timetableId == 0L) stringResource(R.string.edit_timetable_add)
-                                        else "编辑课表"
+                                        if (course.id == 0L) "添加课程"
+                                        else "编辑课程"
                                     )
                                 }
                             }
 
-                            item {// 修改名称
+                            item { // 课程名称
                                 TitleCard(
                                     onClick = { internalNavController.navigate(InternalNavRoutes.NAME) },
                                     title = {
                                         Text(
-                                            stringResource(R.string.edit_timetable_name),
+                                            "课程名称",
+                                            style = MaterialTheme.typography.labelLarge
+                                        )
+                                    },
+                                ) {
+                                    Text(course.name, style = MaterialTheme.typography.labelLarge)
+                                }
+                            }
+
+                            item { // 上课地点
+                                TitleCard(
+                                    onClick = { internalNavController.navigate(InternalNavRoutes.LOCATION) },
+                                    title = {
+                                        Text(
+                                            "上课地点",
                                             style = MaterialTheme.typography.labelLarge
                                         )
                                     },
                                 ) {
                                     Text(
-                                        timetable.semesterName,
+                                        course.location ?: "未设置",
                                         style = MaterialTheme.typography.labelLarge
                                     )
                                 }
                             }
 
-                            item {// 开始日期
+                            item { // 授课教师
                                 TitleCard(
-                                    onClick = { internalNavController.navigate(InternalNavRoutes.START_DATE) },
-                                    onLongClick = {
-                                        viewModel.onAction(
-                                            EditTimetableAction.UpdateStartDate(toDay)
+                                    onClick = { internalNavController.navigate(InternalNavRoutes.TEACHER) },
+                                    title = {
+                                        Text(
+                                            "授课教师",
+                                            style = MaterialTheme.typography.labelLarge
                                         )
-                                    }, // 默认重置为今天
-                                    subtitle = { if (timetable.semesterStart != toDay) Text("长按设置为当前日期") },
-                                    title = { Text(stringResource(R.string.edit_timetable_start)) },
+                                    },
                                 ) {
                                     Text(
-                                        timetable.semesterStart.toString(),
+                                        course.teacher ?: "未设置",
                                         style = MaterialTheme.typography.labelLarge
                                     )
                                 }
                             }
 
-                            item {// 结束日期
-                                TitleCard(
-                                    onClick = { internalNavController.navigate(InternalNavRoutes.END_DATE) },
-                                    onLongClick = { viewModel.onAction(EditTimetableAction.UpdateEndDate()) },
-                                    subtitle = { if (timetable.semesterEnd != null) Text("长按设置为永不结束") },
-                                    title = { Text(stringResource(R.string.edit_timetable_end)) },
-                                ) {
-                                    Text(
-                                        timetable.semesterEnd?.toString() ?: "永不结束",
-                                        style = MaterialTheme.typography.labelLarge
-                                    )
-                                }
-                            }
-
-                            item {// 颜色
+                            item { // 颜色
                                 TitleCard(
                                     onClick = { internalNavController.navigate(InternalNavRoutes.COLOR) },
-                                    title = { Text(stringResource(R.string.edit_timetable_color)) },
+                                    title = {
+                                        Text(
+                                            "课程颜色",
+                                            style = MaterialTheme.typography.labelLarge
+                                        )
+                                    },
                                 ) {
                                     Spacer(modifier = Modifier.height(6.dp))
-                                    Box(// 圆形效果
+                                    Box(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .size(
-                                                40.dp
-                                            )
+                                            .height(40.dp)
                                             .background(
-                                                Color(timetable.color), MaterialTheme.shapes.medium
+                                                Color(course.color),
+                                                MaterialTheme.shapes.medium
                                             )
                                     )
                                 }
                             }
 
-                            if (timetable.timetableId != 0L) { // 只有编辑时才显示
+                            if (course.id != 0L) {
                                 item {
                                     FilledTonalButton(
-                                        onClick = {
-                                            internalNavController.navigate(InternalNavRoutes.DELETE_CONFIRM)
-                                        }, modifier = Modifier.fillMaxWidth(), icon = {
+                                        onClick = { internalNavController.navigate(InternalNavRoutes.DELETE_CONFIRM) },
+                                        modifier = Modifier.fillMaxWidth(),
+                                        icon = {
                                             Icon(
-                                                imageVector = Icons.Default.Delete,
+                                                Icons.Default.Delete,
                                                 contentDescription = null
                                             )
-                                        }, colors = ButtonDefaults.filledTonalButtonColors(
+                                        },
+                                        colors = ButtonDefaults.filledTonalButtonColors(
                                             containerColor = MaterialTheme.colorScheme.errorContainer,
-                                            iconColor = MaterialTheme.colorScheme.onErrorContainer,
                                             contentColor = MaterialTheme.colorScheme.onErrorContainer
                                         )
                                     ) {
-                                        Text("删除此课表")
+                                        Text("删除此课程")
                                     }
                                 }
                             }
@@ -183,58 +177,39 @@ fun EditTimetableScreen(
                     }
                 }
 
-                composable(InternalNavRoutes.START_DATE) {
-                    DatePicker(
-                        onDatePicked = { newDate ->
-                            viewModel.onAction(
-                                EditTimetableAction.UpdateStartDate(
-                                    newDate.toKotlinLocalDate()
-                                )
-                            )
-                            internalNavController.popBackStack()
-                        },
-                        initialDate = timetable.semesterStart.toJavaLocalDate(),
-                    )
-                }
-
-                composable(InternalNavRoutes.END_DATE) {
-                    DatePicker(
-                        onDatePicked = { newDate ->
-                            viewModel.onAction(
-                                EditTimetableAction.UpdateEndDate(
-                                    newDate.toKotlinLocalDate()
-                                )
-                            )
-                            internalNavController.popBackStack()
-                        },
-                        initialDate = (timetable.semesterEnd
-                            ?: timetable.semesterStart).toJavaLocalDate()
-                    )
-                }
-
                 composable(InternalNavRoutes.NAME) {
-                    NameEditScreen(
-                        label = "输入课表名称", initialText = timetable.semesterName
-                    ) { newValue ->
-                        viewModel.onAction(EditTimetableAction.UpdateName(newValue))
-                        internalNavController.popBackStack() // 保存后退出
+                    NameEditScreen(label = "输入课程名称", initialText = course.name) {
+                        viewModel.onAction(EditCourseAction.UpdateName(it))
+                        internalNavController.popBackStack()
+                    }
+                }
+
+                composable(InternalNavRoutes.LOCATION) {
+                    NameEditScreen(label = "输入上课地点", initialText = course.location ?: "") {
+                        viewModel.onAction(EditCourseAction.UpdateLocation(it))
+                        internalNavController.popBackStack()
+                    }
+                }
+
+                composable(InternalNavRoutes.TEACHER) {
+                    NameEditScreen(label = "输入教师姓名", initialText = course.teacher ?: "") {
+                        viewModel.onAction(EditCourseAction.UpdateTeacher(it))
+                        internalNavController.popBackStack()
                     }
                 }
 
                 composable(InternalNavRoutes.COLOR) {
                     ColorSelectionScreen { color ->
-                        viewModel.onAction(EditTimetableAction.UpdateColor(color))
+                        viewModel.onAction(EditCourseAction.UpdateColor(color))
                         internalNavController.popBackStack()
                     }
                 }
 
                 composable(InternalNavRoutes.DELETE_CONFIRM) {
-                    DeleteConfirmScreen(detail = "课表 “${timetable.semesterName}”", onConfirm = {
-                        viewModel.onAction(EditTimetableAction.Delete)
+                    DeleteConfirmScreen(detail = "课程 “${course.name}”", onConfirm = {
+                        viewModel.onAction(EditCourseAction.Delete)
                         navController.popBackStack()
-                    }, onCancel = {
-                        internalNavController.popBackStack() // 只是关掉确认页，回到编辑页
-                    })
+                    }, onCancel = { internalNavController.popBackStack() })
                 }
             }
         }

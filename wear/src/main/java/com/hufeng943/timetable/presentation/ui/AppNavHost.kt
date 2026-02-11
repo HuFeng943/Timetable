@@ -31,7 +31,7 @@ fun AppNavHost() {
 
                 composable(NavRoutes.LIST_COURSE) { CourseListScreen() }
 
-                composable(NavRoutes.EDIT_TIMETABLE) { EditCourseScreen() }
+                composable(NavRoutes.EDIT_COURSE) { EditCourseScreen() }
             }
         }
     }
