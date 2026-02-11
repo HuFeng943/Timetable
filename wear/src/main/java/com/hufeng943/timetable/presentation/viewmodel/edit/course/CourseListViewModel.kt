@@ -19,8 +19,13 @@ class CourseListViewModel @Inject constructor(
     private val repository: TimetableRepository, savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val tId: Long? = savedStateHandle.get<String>(tableId)?.toLongOrNull()
-    val uiState = (tId?.let { repository.getTimetableById(it) }
-        ?: emptyFlow()).map { timetable -> UiState.Success(timetable) }.stateIn(
+    val uiState = (tId?.let { repository.getTimetableById(it) } ?: emptyFlow()).map { timetable ->
+        if (timetable == null) {
+            UiState.Empty
+        } else {
+            UiState.Success(timetable)
+        }
+    }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(DEFAULT_FLOW_STOP_TIMEOUT),
         initialValue = UiState.Loading
