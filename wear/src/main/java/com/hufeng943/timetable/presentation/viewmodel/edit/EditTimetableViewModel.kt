@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.presentation.viewmodel.UiState
+import com.hufeng943.timetable.presentation.viewmodel.tableId
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
 import com.hufeng943.timetable.shared.model.Timetable
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,7 @@ import kotlin.time.Clock
 class EditTimetableViewModel @Inject constructor(
     private val repository: TimetableRepository, savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val tId: Long? = savedStateHandle.get<String>("timetableId")?.toLongOrNull()
+    private val tId: Long? = savedStateHandle.get<String>(tableId)?.toLongOrNull()
     private val _uiState = MutableStateFlow<UiState<Timetable>>(UiState.Loading)
     val uiState = _uiState.asStateFlow()
 
