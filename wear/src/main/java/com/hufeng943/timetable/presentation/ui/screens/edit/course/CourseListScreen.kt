@@ -16,6 +16,6 @@ fun CourseListScreen(
     when (val state = uiState) {
         is UiState.Loading -> LoadingScreen()
         is UiState.Empty -> LoadingScreen()
-        is UiState.Success -> CourseListPager(state.data.allCourses)
+        is UiState.Success -> CourseListPager(state.data)
     }
 }
