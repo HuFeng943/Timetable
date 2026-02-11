@@ -20,6 +20,7 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.NavRoutes
 import com.hufeng943.timetable.presentation.ui.NavRoutes.editTimetable
+import com.hufeng943.timetable.presentation.ui.NavRoutes.listCourse
 import com.hufeng943.timetable.shared.model.Timetable
 
 @Composable
@@ -52,7 +53,7 @@ fun TimetableListPager(
             } else {
                 items(timetables, key = { it.timetableId }) { timetable ->
                     TitleCard(// TODO 课表未开始/正进行/已结束状态显示
-                        onClick = {},
+                        onClick = { navController.navigate(listCourse(timetable.timetableId)) },
                         onLongClick = { navController.navigate(editTimetable(timetable.timetableId)) },
                         title = { Text(timetable.semesterName) },
                         subtitle = {
