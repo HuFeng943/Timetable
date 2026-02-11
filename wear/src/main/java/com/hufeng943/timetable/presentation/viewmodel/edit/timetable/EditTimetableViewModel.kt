@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.viewmodel.edit
+package com.hufeng943.timetable.presentation.viewmodel.edit.timetable
 
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle

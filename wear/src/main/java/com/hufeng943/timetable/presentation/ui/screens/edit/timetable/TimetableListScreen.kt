@@ -6,13 +6,13 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.hufeng943.timetable.presentation.ui.screens.loading.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
-import com.hufeng943.timetable.presentation.viewmodel.home.TimetableViewModel
+import com.hufeng943.timetable.presentation.viewmodel.edit.timetable.TimetableListViewModel
 
 @Composable
 fun TimetableListScreen(
-    viewModel: TimetableViewModel = hiltViewModel()
+    viewModel: TimetableListViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.allTimetables.collectAsState()
+    val uiState by viewModel.timetables.collectAsState()
     when (val state = uiState) {
         UiState.Loading -> LoadingScreen()
         else -> {

@@ -39,8 +39,8 @@ import com.hufeng943.timetable.presentation.ui.screens.edit.common.DeleteConfirm
 import com.hufeng943.timetable.presentation.ui.screens.edit.common.NameEditScreen
 import com.hufeng943.timetable.presentation.ui.screens.loading.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
-import com.hufeng943.timetable.presentation.viewmodel.edit.EditTimetableAction
-import com.hufeng943.timetable.presentation.viewmodel.edit.EditTimetableViewModel
+import com.hufeng943.timetable.presentation.viewmodel.edit.timetable.EditTimetableAction
+import com.hufeng943.timetable.presentation.viewmodel.edit.timetable.EditTimetableViewModel
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDate
@@ -240,14 +240,4 @@ fun EditTimetableScreen(
 
         else -> LoadingScreen()
     }
-}
-
-
-object InternalNavRoutes {
-    const val MAIN = "main"
-    const val START_DATE = "start_date"
-    const val END_DATE = "end_date"
-    const val SEMESTER_NAME = "semester_name"
-    const val COLOR = "color"
-    const val DELETE_CONFIRM = "delete_confirm"
 }
