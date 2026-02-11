@@ -9,7 +9,7 @@ object NavRoutes {
     fun editTimetable(timetableId: Long? = null) = "edit_timetable/$timetableId"
     const val LIST_COURSE = "list_course/{timetableId}"
     fun listCourse(timetableId: Long) = "list_course/$timetableId"
-    const val EDIT_COURSE = "edit_course/{courseId}"
-    fun editCourse(courseId: Long? = null) = "edit_course/$courseId"
+    const val EDIT_COURSE = "edit_course/{timetableId}/{courseId}"
+    fun editCourse(timetableId: Long, courseId: Long? = null) = "edit_course/$timetableId/$courseId"
 
 }
