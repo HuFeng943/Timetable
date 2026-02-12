@@ -34,11 +34,11 @@ import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
+import com.hufeng943.timetable.presentation.ui.screens.common.ColorSelectionScreen
+import com.hufeng943.timetable.presentation.ui.screens.common.DeleteConfirmScreen
+import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
+import com.hufeng943.timetable.presentation.ui.screens.common.NameEditScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.InternalNavRoutes
-import com.hufeng943.timetable.presentation.ui.screens.edit.common.ColorSelectionScreen
-import com.hufeng943.timetable.presentation.ui.screens.edit.common.DeleteConfirmScreen
-import com.hufeng943.timetable.presentation.ui.screens.edit.common.NameEditScreen
-import com.hufeng943.timetable.presentation.ui.screens.loading.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.edit.timetable.EditTimetableAction
 import com.hufeng943.timetable.presentation.viewmodel.edit.timetable.EditTimetableViewModel

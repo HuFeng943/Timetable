@@ -20,7 +20,7 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.NavRoutes.courseDetail
 import com.hufeng943.timetable.presentation.ui.components.TimetableCard
-import com.hufeng943.timetable.presentation.ui.screens.loading.LoadingScreen
+import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.home.TimetableViewModel
 
