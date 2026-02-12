@@ -1,28 +1,16 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit.timetable
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
-import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.DatePicker
 import androidx.wear.compose.material3.EdgeButton
-import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
@@ -34,7 +22,9 @@ import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
+import com.hufeng943.timetable.presentation.ui.screens.common.ColorPickerCard
 import com.hufeng943.timetable.presentation.ui.screens.common.ColorSelectionScreen
+import com.hufeng943.timetable.presentation.ui.screens.common.DeleteButton
 import com.hufeng943.timetable.presentation.ui.screens.common.DeleteConfirmScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.NameEditScreen
@@ -141,42 +131,19 @@ fun EditTimetableScreen(
                             }
 
                             item {// 颜色
-                                TitleCard(
-                                    onClick = { internalNavController.navigate(InternalNavRoutes.COLOR) },
-                                    title = { Text(stringResource(R.string.edit_timetable_color)) },
-                                ) {
-                                    Spacer(modifier = Modifier.height(6.dp))
-                                    Box(// 圆形效果
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .size(
-                                                40.dp
-                                            )
-                                            .background(
-                                                Color(timetable.color), MaterialTheme.shapes.medium
-                                            )
-                                    )
-                                }
+                                ColorPickerCard(
+                                    label = stringResource(R.string.edit_timetable_color),
+                                    color = timetable.color,
+                                    onClick = { internalNavController.navigate(InternalNavRoutes.COLOR) }
+                                )
                             }
 
                             if (timetable.timetableId != 0L) { // 只有编辑时才显示
                                 item {
-                                    FilledTonalButton(
-                                        onClick = {
-                                            internalNavController.navigate(InternalNavRoutes.DELETE_CONFIRM)
-                                        }, modifier = Modifier.fillMaxWidth(), icon = {
-                                            Icon(
-                                                imageVector = Icons.Default.Delete,
-                                                contentDescription = null
-                                            )
-                                        }, colors = ButtonDefaults.filledTonalButtonColors(
-                                            containerColor = MaterialTheme.colorScheme.errorContainer,
-                                            iconColor = MaterialTheme.colorScheme.onErrorContainer,
-                                            contentColor = MaterialTheme.colorScheme.onErrorContainer
-                                        )
-                                    ) {
-                                        Text("删除此课表")
-                                    }
+                                    DeleteButton(
+                                        label = "删除此课表",
+                                        onClick = { internalNavController.navigate(InternalNavRoutes.DELETE_CONFIRM) }
+                                    )
                                 }
                             }
                         }
