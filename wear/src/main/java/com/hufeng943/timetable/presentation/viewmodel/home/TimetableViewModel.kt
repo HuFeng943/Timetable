@@ -20,7 +20,7 @@ import kotlin.time.Clock
 
 @HiltViewModel
 class TimetableViewModel @Inject constructor(
-    repository: TimetableRepository, savedStateHandle: SavedStateHandle
+    repository: TimetableRepository, private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     companion object {
         const val KEY_SELECTED_DATE = "selected_date"
@@ -61,4 +61,8 @@ class TimetableViewModel @Inject constructor(
             }
         }
     }.toSafeStateFlow(viewModelScope)
+
+    fun updateSelectedDate(date: LocalDate) {
+        savedStateHandle[KEY_SELECTED_DATE] = date
+    }
 }
