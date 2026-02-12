@@ -12,6 +12,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
 import androidx.wear.compose.material3.Text
+import com.hufeng943.timetable.presentation.ui.screens.common.ErrorScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.detail.CourseDetailViewModel
@@ -24,6 +25,7 @@ fun CourseDetailScreen(
 
     when (val state = uiDetailState) {
         is UiState.Loading -> LoadingScreen()
+        is UiState.Error -> ErrorScreen(state.throwable)
         is UiState.Empty -> {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(text = "未找到课程数据", color = Color.Red)
