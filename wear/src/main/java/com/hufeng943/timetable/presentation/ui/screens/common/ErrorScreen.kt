@@ -26,6 +26,7 @@ fun Throwable.asMessage(): String = when (this) {
     is AppError.CourseNotFound -> "找不到这节课 (ID: $id)"
     is AppError.TimeSlotNotFound -> "找不到这个时间段 (ID: $id)"
     is AppError.InvalidParameter -> "跳转参数错误：$navArgs"
+    AppError.UnexpectedEmpty() -> "意外的空状态"
     is AppError.Unknown -> "发生了未知的错误：${original.message}"
     else -> "发生了未知的错误"
 }
