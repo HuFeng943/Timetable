@@ -4,17 +4,15 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hufeng943.timetable.presentation.viewmodel.DEFAULT_FLOW_STOP_TIMEOUT
 import com.hufeng943.timetable.presentation.viewmodel.UiState
+import com.hufeng943.timetable.presentation.viewmodel.toSafeStateFlow
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
 import com.hufeng943.timetable.shared.ui.mappers.getWeekIndexForDate
 import com.hufeng943.timetable.shared.ui.mappers.toDayCoursesUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
@@ -32,11 +30,7 @@ class TimetableViewModel @Inject constructor(
     val allTimetables = repository.getAllTimetables().map { list ->
         if (list.isEmpty()) UiState.Empty
         else UiState.Success(list)
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(DEFAULT_FLOW_STOP_TIMEOUT),
-        UiState.Loading
-    )
+    }.toSafeStateFlow(viewModelScope)
 
     // TODO 在 room 保存是否要显示的课表
 
@@ -49,6 +43,7 @@ class TimetableViewModel @Inject constructor(
         when (state) {
             is UiState.Loading -> UiState.Loading
             is UiState.Empty -> UiState.Empty
+            is UiState.Error -> UiState.Error(state.throwable)
             is UiState.Success -> {
                 val allTables = state.data
                 val allDailyCourses = allTables.flatMap { table ->
@@ -65,9 +60,5 @@ class TimetableViewModel @Inject constructor(
                 UiState.Success(sortedCoursesUi)
             }
         }
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(DEFAULT_FLOW_STOP_TIMEOUT),
-        UiState.Loading
-    )
+    }.toSafeStateFlow(viewModelScope)
 }
