@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.ui.screens.common
+package com.hufeng943.timetable.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
