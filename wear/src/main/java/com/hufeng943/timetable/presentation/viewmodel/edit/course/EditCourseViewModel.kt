@@ -4,9 +4,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hufeng943.timetable.presentation.ui.NavArgs
+import com.hufeng943.timetable.presentation.viewmodel.AppError
 import com.hufeng943.timetable.presentation.viewmodel.UiState
-import com.hufeng943.timetable.presentation.viewmodel.courseId
-import com.hufeng943.timetable.presentation.viewmodel.tableId
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
 import com.hufeng943.timetable.shared.model.Course
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,17 +20,21 @@ import javax.inject.Inject
 class EditCourseViewModel @Inject constructor(
     private val repository: TimetableRepository, savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val cId: Long? = savedStateHandle.get<String>(courseId)?.toLongOrNull()
-    private val tId: Long? = savedStateHandle.get<String>(tableId)?.toLongOrNull()
+    private val cId: Long? = savedStateHandle.get<String>(NavArgs.COURSE_ID)?.toLongOrNull()
+    private val tId: Long? = savedStateHandle.get<String>(NavArgs.TABLE_ID)?.toLongOrNull()
     private val _uiState = MutableStateFlow<UiState<Course>>(UiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            val data = cId?.let { repository.getCourseById(it).firstOrNull() } ?: Course(
-                name = "课程", color = 0xFFE57373
-            )
-            _uiState.value = UiState.Success(data)
+            try {
+                val tableId = tId ?: throw AppError.InvalidParameter(NavArgs.TABLE_ID)
+                val data = cId?.let { repository.getCourseById(it).firstOrNull() }
+                    ?: Course(name = "课程", color = 0xFFE57373)
+                _uiState.value = UiState.Success(data)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e)
+            }
         }
     }
 
@@ -58,20 +62,26 @@ class EditCourseViewModel @Inject constructor(
 
     private fun upsertCourse() {
         viewModelScope.launch {
-            (uiState.value as? UiState.Success)?.data?.let { course ->
-                tId?.let { id ->
-                    repository.upsertCourse(course, id)
-                } ?: error("tableId呢？")
+            try {
+                val current = (uiState.value as? UiState.Success)?.data ?: return@launch
+                val tableId = tId ?: throw AppError.InvalidParameter(NavArgs.TABLE_ID)
+
+                repository.upsertCourse(current, tableId)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e)
             }
         }
     }
 
     private fun deleteCourse() {
         viewModelScope.launch {
-            (uiState.value as? UiState.Success)?.data?.let { course ->
-                if (course.id != 0L) {
-                    repository.deleteCourse(course.id)
+            try {
+                val courseId = (uiState.value as? UiState.Success)?.data?.id ?: return@launch
+                if (courseId != 0L) {
+                    repository.deleteCourse(courseId)
                 }
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e)
             }
         }
     }

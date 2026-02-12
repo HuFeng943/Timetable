@@ -4,8 +4,8 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hufeng943.timetable.presentation.ui.NavArgs
 import com.hufeng943.timetable.presentation.viewmodel.UiState
-import com.hufeng943.timetable.presentation.viewmodel.tableId
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
 import com.hufeng943.timetable.shared.model.Timetable
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,19 +22,23 @@ import kotlin.time.Clock
 class EditTimetableViewModel @Inject constructor(
     private val repository: TimetableRepository, savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val tId: Long? = savedStateHandle.get<String>(tableId)?.toLongOrNull()
+    private val tId: Long? = savedStateHandle.get<String>(NavArgs.TABLE_ID)?.toLongOrNull()
     private val _uiState = MutableStateFlow<UiState<Timetable>>(UiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            val data = tId?.let { repository.getTimetableById(it).firstOrNull() } ?: Timetable(
-                semesterName = "课表",
-                createdAt = Clock.System.now(),
-                semesterStart = Clock.System.todayIn(TimeZone.currentSystemDefault()),
-                color = 0xFFE57373
-            )
-            _uiState.value = UiState.Success(data)
+            try {
+                val data = tId?.let { repository.getTimetableById(it).firstOrNull() } ?: Timetable(
+                    semesterName = "课表",
+                    createdAt = Clock.System.now(),
+                    semesterStart = Clock.System.todayIn(TimeZone.currentSystemDefault()),
+                    color = 0xFFE57373
+                )
+                _uiState.value = UiState.Success(data)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e)
+            }
         }
     }
 
@@ -44,8 +48,8 @@ class EditTimetableViewModel @Inject constructor(
 
             // 确保 semesterEnd semesterStart 别出错
             is EditTimetableAction.UpdateStartDate -> updateSuccessState { current ->
-                val newEndDate = current.semesterEnd?.let { End ->
-                    if (action.date > End) action.date else End
+                val newEndDate = current.semesterEnd?.let { end ->
+                    if (action.date > end) action.date else end
                 }
                 current.copy(semesterStart = action.date, semesterEnd = newEndDate)
             }
@@ -77,18 +81,25 @@ class EditTimetableViewModel @Inject constructor(
 
     private fun upsertTimetable() {
         viewModelScope.launch {
-            (uiState.value as? UiState.Success)?.data?.let {
-                repository.upsertTimetable(it)
+            try {
+                val current = (uiState.value as? UiState.Success)?.data ?: return@launch
+                repository.upsertTimetable(current)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e)
             }
         }
     }
 
     private fun deleteTimetable() {
         viewModelScope.launch {
-            (uiState.value as? UiState.Success)?.data?.let { timetable ->
-                if (timetable.timetableId != 0L) {
-                    repository.deleteTimetable(timetable.timetableId)
+            try {
+                val timetableId =
+                    (uiState.value as? UiState.Success)?.data?.timetableId ?: return@launch
+                if (timetableId != 0L) {
+                    repository.deleteTimetable(timetableId)
                 }
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e)
             }
         }
     }

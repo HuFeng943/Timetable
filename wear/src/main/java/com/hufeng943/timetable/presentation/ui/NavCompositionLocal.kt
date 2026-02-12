@@ -6,4 +6,3 @@ import androidx.navigation.NavHostController
 val LocalNavController = staticCompositionLocalOf<NavHostController> {
     error("未提供 NavController！")
 }
-

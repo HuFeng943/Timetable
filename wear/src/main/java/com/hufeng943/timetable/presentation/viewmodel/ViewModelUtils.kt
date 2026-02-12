@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.stateIn
 
+const val DEFAULT_FLOW_STOP_TIMEOUT = 5000L
+
 fun <T> Flow<UiState<T>>.toSafeStateFlow(
     scope: CoroutineScope
 ): StateFlow<UiState<T>> = this.catch { e ->
