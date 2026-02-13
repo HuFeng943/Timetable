@@ -23,6 +23,8 @@ class EditTimetableViewModel @Inject constructor(
     private val repository: TimetableRepository, savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val tId: Long? = savedStateHandle.get<String>(NavArgs.TABLE_ID)?.toLongOrNull()
+    val toDay = Clock.System.todayIn(TimeZone.currentSystemDefault())
+
     private val _uiState = MutableStateFlow<UiState<Timetable>>(UiState.Loading)
     val uiState = _uiState.asStateFlow()
 
@@ -49,9 +51,9 @@ class EditTimetableViewModel @Inject constructor(
             // 确保 semesterEnd semesterStart 别出错
             is EditTimetableAction.UpdateStartDate -> updateSuccessState { current ->
                 val newEndDate = current.semesterEnd?.let { end ->
-                    if (action.date > end) action.date else end
+                    if ((action.date ?: toDay) > end) action.date else end
                 }
-                current.copy(semesterStart = action.date, semesterEnd = newEndDate)
+                current.copy(semesterStart = action.date ?: toDay, semesterEnd = newEndDate)
             }
 
             is EditTimetableAction.UpdateEndDate -> updateSuccessState { current ->
