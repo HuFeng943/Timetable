@@ -15,25 +15,15 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
-import com.hufeng943.timetable.presentation.ui.LocalNavController
-import com.hufeng943.timetable.presentation.ui.NavRoutes.editCourse
-import com.hufeng943.timetable.shared.model.Timetable
+import com.hufeng943.timetable.shared.model.Course
 
 @Composable
 fun CourseListPager(
-    timetable: Timetable
+    courses: List<Course>, onAddCourse: () -> Unit, onEditCourse: (courseId: Long) -> Unit
 ) {
-    val navController = LocalNavController.current
     val scrollState = rememberScalingLazyListState()
     ScreenScaffold(scrollState = scrollState, edgeButton = {
-        EdgeButton(
-            onClick = {
-                navController.navigate(
-                    editCourse(
-                        timetable.timetableId
-                    )
-                )
-            }) {
+        EdgeButton(onClick = onAddCourse) {
             Icon(
                 imageVector = Icons.Default.Add, contentDescription = "新增课程"
             )
@@ -47,22 +37,20 @@ fun CourseListPager(
                     Text("课程列表")
                 }
             }
-            if (timetable.allCourses.isEmpty()) {
+            if (courses.isEmpty()) {
                 item {
                     Text("暂无课程")
                 }
             } else {
-                items(timetable.allCourses, key = { it.id }) { course ->
+                items(courses, key = { it.id }) { course ->
                     TitleCard(
-                        onClick = { }, onLongClick = {
-                            navController.navigate(
-                                editCourse(
-                                    timetable.timetableId, course.id
-                                )
-                            )
-                        }, title = { Text(course.name) }, subtitle = {
+                        onClick = {/* TODO */ },
+                        onLongClick = { onEditCourse(course.id) },
+                        title = { Text(course.name) },
+                        subtitle = {
                             Text("${course.timeSlots.size} 个时间段")
-                        }, modifier = Modifier.fillMaxWidth()
+                        },
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
