@@ -14,6 +14,6 @@ data class TimeSlot(
     val remark: String? = null
 ) {
     init {
-        require(endTime > startTime) { "End time must be after start time." }
+        require(endTime >= startTime) { "End time must be after start time." }
     }
 }

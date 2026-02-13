@@ -27,9 +27,7 @@ data class Timetable(
     init {
         require(semesterName.isNotBlank()) { "Semester name cannot be blank." }
         require(
-            semesterStart < (semesterEnd ?: LocalDate(
-                9999, 12, 31
-            ))
+            semesterEnd == null || semesterStart <= semesterEnd
         ) { "Invalid semester dates." }
     }
 
