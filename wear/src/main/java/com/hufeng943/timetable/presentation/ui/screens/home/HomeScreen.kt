@@ -21,7 +21,6 @@ fun HomeScreen() {
             when (page) {
                 0 -> TimetablePager()
                 1 -> MorePager()
-
             }
         }
         // 页面指示器

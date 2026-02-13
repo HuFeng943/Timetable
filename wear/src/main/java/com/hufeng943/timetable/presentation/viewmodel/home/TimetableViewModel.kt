@@ -19,7 +19,7 @@ import kotlinx.datetime.todayIn
 import kotlin.time.Clock
 
 @HiltViewModel
-class TimetableViewModel @Inject constructor(
+class TimetableViewModel @Inject constructor(// TODO 待重构
     repository: TimetableRepository, private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     companion object {

@@ -26,9 +26,11 @@ import com.hufeng943.timetable.presentation.ui.components.ColorPickerCard
 import com.hufeng943.timetable.presentation.ui.components.DeleteButton
 import com.hufeng943.timetable.presentation.ui.screens.common.ColorSelectionScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.DeleteConfirmScreen
+import com.hufeng943.timetable.presentation.ui.screens.common.ErrorScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.NameEditScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.InternalNavRoutes
+import com.hufeng943.timetable.presentation.viewmodel.AppError
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.edit.timetable.EditTimetableAction
 import com.hufeng943.timetable.presentation.viewmodel.edit.timetable.EditTimetableViewModel
@@ -43,13 +45,16 @@ fun EditTimetableScreen(
     viewModel: EditTimetableViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScalingLazyListState()
-    val state by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val navController = LocalNavController.current
     val internalNavController = rememberSwipeDismissableNavController()
 
-    when (val uiState = state) {
+    when (val state = uiState) {
+        is UiState.Loading -> LoadingScreen()
+        is UiState.Error -> ErrorScreen(state.throwable)
+        is UiState.Empty -> ErrorScreen(AppError.UnexpectedEmpty())
         is UiState.Success -> {
-            val timetable = uiState.data
+            val timetable = state.data
             val toDay = Clock.System.todayIn(TimeZone.currentSystemDefault())
 
             SwipeDismissableNavHost(
@@ -205,7 +210,5 @@ fun EditTimetableScreen(
                 }
             }
         }
-
-        else -> LoadingScreen()
     }
 }
