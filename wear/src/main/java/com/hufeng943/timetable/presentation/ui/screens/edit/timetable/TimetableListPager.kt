@@ -17,21 +17,20 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.ui.LocalNavController
-import com.hufeng943.timetable.presentation.ui.NavRoutes
-import com.hufeng943.timetable.presentation.ui.NavRoutes.editTimetable
-import com.hufeng943.timetable.presentation.ui.NavRoutes.listCourse
 import com.hufeng943.timetable.shared.model.Timetable
 
 @Composable
 fun TimetableListPager(
-    timetables: List<Timetable>
+    timetables: List<Timetable>,
+    onAddTimetable: () -> Unit,
+    onTimetableClick: (Long) -> Unit,
+    onTimetableLongClick: (Long) -> Unit
 ) {
-    val navController = LocalNavController.current
     val scrollState = rememberScalingLazyListState()
     ScreenScaffold(scrollState = scrollState, edgeButton = {
         EdgeButton(
-            onClick = { navController.navigate(NavRoutes.EDIT_TIMETABLE) }) {
+            onClick = onAddTimetable
+        ) {
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = stringResource(R.string.edit_timetable_add)
@@ -53,8 +52,8 @@ fun TimetableListPager(
             } else {
                 items(timetables, key = { it.timetableId }) { timetable ->
                     TitleCard(// TODO 课表未开始/正进行/已结束状态显示
-                        onClick = { navController.navigate(listCourse(timetable.timetableId)) },
-                        onLongClick = { navController.navigate(editTimetable(timetable.timetableId)) },
+                        onClick = { onTimetableClick(timetable.timetableId) },
+                        onLongClick = { onTimetableLongClick(timetable.timetableId) },
                         title = { Text(timetable.semesterName) },
                         subtitle = {
                             Text(
