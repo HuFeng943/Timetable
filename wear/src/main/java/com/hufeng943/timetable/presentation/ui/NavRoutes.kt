@@ -26,5 +26,5 @@ object NavRoutes {
 
     //----------------------------------
     const val LIST_TIMESLOT = "list_timeslot/{${NavArgs.COURSE_ID}}"
-    fun listTimeSlot(courseId: Long) = "list_timeslot/{${NavArgs.COURSE_ID}}"
+    fun listTimeSlot(courseId: Long) = "list_timeslot/$courseId"
 }

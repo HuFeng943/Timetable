@@ -9,6 +9,7 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.presentation.ui.screens.detail.CourseDetailScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.course.CourseListScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.course.EditCourseScreen
+import com.hufeng943.timetable.presentation.ui.screens.edit.timeslot.TimeSlotListScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.EditTimetableScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.TimetableListScreen
 import com.hufeng943.timetable.presentation.ui.screens.home.HomeScreen
@@ -32,6 +33,8 @@ fun AppNavHost() {
                 composable(NavRoutes.LIST_COURSE) { CourseListScreen() }
 
                 composable(NavRoutes.EDIT_COURSE) { EditCourseScreen() }
+
+                composable(NavRoutes.LIST_TIMESLOT) { TimeSlotListScreen() }
             }
         }
     }
