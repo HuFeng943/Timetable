@@ -19,7 +19,10 @@ import com.hufeng943.timetable.shared.model.Course
 
 @Composable
 fun CourseListPager(
-    courses: List<Course>, onAddCourse: () -> Unit, onEditCourse: (courseId: Long) -> Unit
+    courses: List<Course>,
+    onAddCourse: () -> Unit,
+    onCourseClick: (courseId: Long) -> Unit,
+    onCourseLongClick: (courseId: Long) -> Unit
 ) {
     val scrollState = rememberScalingLazyListState()
     ScreenScaffold(scrollState = scrollState, edgeButton = {
@@ -44,8 +47,8 @@ fun CourseListPager(
             } else {
                 items(courses, key = { it.id }) { course ->
                     TitleCard(
-                        onClick = {/* TODO */ },
-                        onLongClick = { onEditCourse(course.id) },
+                        onClick = { onCourseClick(course.id) },
+                        onLongClick = { onCourseLongClick(course.id) },
                         title = { Text(course.name) },
                         subtitle = {
                             Text("${course.timeSlots.size} 个时间段")

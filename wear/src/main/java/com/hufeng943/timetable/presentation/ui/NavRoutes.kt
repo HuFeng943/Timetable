@@ -23,4 +23,8 @@ object NavRoutes {
     fun listCourse(timetableId: Long) = "list_course/$timetableId"
     const val EDIT_COURSE = "edit_course/{${NavArgs.TABLE_ID}}/{${NavArgs.COURSE_ID}}"
     fun editCourse(timetableId: Long, courseId: Long? = null) = "edit_course/$timetableId/$courseId"
+
+    //----------------------------------
+    const val LIST_TIMESLOT = "list_timeslot/{${NavArgs.COURSE_ID}}"
+    fun listTimeSlot(courseId: Long) = "list_timeslot/{${NavArgs.COURSE_ID}}"
 }
