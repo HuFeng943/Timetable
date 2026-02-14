@@ -22,21 +22,21 @@ import com.hufeng943.timetable.shared.model.Timetable
 @Composable
 fun EditTimetableMainPager(
     timetable: Timetable,
-    onClickSave: () -> Unit,
-    onClickName: () -> Unit,
-    onClickStartDate: () -> Unit,
-    onLongClickStartDate: () -> Unit,
-    onClickEndDate: () -> Unit,
-    onLongClickEndDate: () -> Unit,
-    onClickColor: () -> Unit,
-    onClickDelete: () -> Unit,
+    onSave: () -> Unit,
+    onNameClick: () -> Unit,
+    onStartDateClick: () -> Unit,
+    onStartDateLongClick: () -> Unit,
+    onEndDateClick: () -> Unit,
+    onEndDateLongClick: () -> Unit,
+    onColorClick: () -> Unit,
+    onDelete: () -> Unit,
     startDateIsToday: Boolean
 ) {
     val scrollState = rememberScalingLazyListState()
 
     ScreenScaffold(
         scrollState = scrollState, edgeButton = {
-            EdgeButton(onClick = onClickSave) {
+            EdgeButton(onClick = onSave) {
                 Icon(Icons.Default.Check, contentDescription = stringResource(R.string.check))
             }
         }) { contentPadding ->
@@ -49,7 +49,7 @@ fun EditTimetableMainPager(
 
             item { // 修改名称
                 TitleCard(
-                    onClick = onClickName,
+                    onClick = onNameClick,
                     title = {
                         Text(
                             stringResource(R.string.edit_timetable_name),
@@ -63,8 +63,8 @@ fun EditTimetableMainPager(
 
             item { // 开始日期
                 TitleCard(
-                    onClick = onClickStartDate,
-                    onLongClick = onLongClickStartDate,
+                    onClick = onStartDateClick,
+                    onLongClick = onStartDateLongClick,
                     subtitle = { if (!startDateIsToday) Text("长按设置为当前日期") },
                     title = { Text(stringResource(R.string.edit_timetable_start)) },
                 ) {
@@ -77,8 +77,8 @@ fun EditTimetableMainPager(
 
             item { // 结束日期
                 TitleCard(
-                    onClick = onClickEndDate,
-                    onLongClick = onLongClickEndDate,
+                    onClick = onEndDateClick,
+                    onLongClick = onEndDateLongClick,
                     subtitle = { if (timetable.semesterEnd != null) Text("长按设置为永不结束") },
                     title = { Text(stringResource(R.string.edit_timetable_end)) },
                 ) {
@@ -93,13 +93,13 @@ fun EditTimetableMainPager(
                 ColorPickerCard(
                     label = stringResource(R.string.edit_timetable_color),
                     color = timetable.color,
-                    onClick = onClickColor
+                    onClick = onColorClick
                 )
             }
 
             if (timetable.timetableId != 0L) { // 只有编辑时才显示
                 item {
-                    DeleteButton(label = "删除此课表", onClick = onClickDelete)
+                    DeleteButton(label = "删除此课表", onClick = onDelete)
                 }
             }
         }

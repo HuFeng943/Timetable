@@ -23,18 +23,13 @@ fun TimetableListScreen(
         UiState.Loading -> LoadingScreen()
         else -> {
             val data = (state as? UiState.Success)?.data ?: emptyList()
-            TimetableListPager(
-                timetables = data,
-                onAddTimetable = {
-                    navController.navigate(NavRoutes.EDIT_TIMETABLE)
-                },
-                onTimetableClick = { id ->
-                    navController.navigate(listCourse(id))
-                },
-                onTimetableLongClick = { id ->
-                    navController.navigate(editTimetable(id))
-                }
-            )
+            TimetableListPager(timetables = data, onAddTimetable = {
+                navController.navigate(NavRoutes.EDIT_TIMETABLE)
+            }, onTimetableClick = { id ->
+                navController.navigate(listCourse(id))
+            }, onTimetableLongClick = { id ->
+                navController.navigate(editTimetable(id))
+            })
         }
     }
 }

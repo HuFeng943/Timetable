@@ -31,18 +31,17 @@ fun EditCourseScreen(
             HandleEditUiState(uiState) { course ->
                 EditCourseMainPager(
                     course = course,
-                    onClickSave = {
+                    onSave = {
                         viewModel.onAction(EditCourseAction.Upsert)
                         navController.popBackStack()
                     },
-                    onClickName = { internalNavController.navigate(InternalNavRoutes.NAME) },
-                    onClickLocation = { internalNavController.navigate(InternalNavRoutes.LOCATION) },
-                    onLongClickLocation = { viewModel.onAction(EditCourseAction.UpdateLocation()) },
-                    onClickTeacher = { internalNavController.navigate(InternalNavRoutes.TEACHER) },
-                    onLongClickTeacher = { viewModel.onAction(EditCourseAction.UpdateTeacher()) },
-                    onClickColor = { internalNavController.navigate(InternalNavRoutes.COLOR) },
-                    onClickDelete = { internalNavController.navigate(InternalNavRoutes.DELETE_CONFIRM) }
-                )
+                    onNameClick = { internalNavController.navigate(InternalNavRoutes.NAME) },
+                    onLocationClick = { internalNavController.navigate(InternalNavRoutes.LOCATION) },
+                    onLocationLongClick = { viewModel.onAction(EditCourseAction.UpdateLocation()) },
+                    onTeacherClick = { internalNavController.navigate(InternalNavRoutes.TEACHER) },
+                    onTeacherLongClick = { viewModel.onAction(EditCourseAction.UpdateTeacher()) },
+                    onColorClick = { internalNavController.navigate(InternalNavRoutes.COLOR) },
+                    onDelete = { internalNavController.navigate(InternalNavRoutes.DELETE_CONFIRM) })
             }
         }
 

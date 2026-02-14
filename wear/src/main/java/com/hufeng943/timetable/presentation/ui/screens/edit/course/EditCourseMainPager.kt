@@ -21,19 +21,19 @@ import com.hufeng943.timetable.shared.model.Course
 @Composable
 fun EditCourseMainPager(
     course: Course,
-    onClickSave: () -> Unit,
-    onClickName: () -> Unit,
-    onClickLocation: () -> Unit,
-    onLongClickLocation: () -> Unit,
-    onClickTeacher: () -> Unit,
-    onLongClickTeacher: () -> Unit,
-    onClickColor: () -> Unit,
-    onClickDelete: () -> Unit,
+    onSave: () -> Unit,
+    onNameClick: () -> Unit,
+    onLocationClick: () -> Unit,
+    onLocationLongClick: () -> Unit,
+    onTeacherClick: () -> Unit,
+    onTeacherLongClick: () -> Unit,
+    onColorClick: () -> Unit,
+    onDelete: () -> Unit,
 ) {
     val scrollState = rememberScalingLazyListState()
     ScreenScaffold(scrollState = scrollState, edgeButton = {
         EdgeButton(
-            onClick = onClickSave
+            onClick = onSave
         ) {
             Icon(
                 Icons.Default.Check, contentDescription = stringResource(R.string.check)
@@ -54,7 +54,7 @@ fun EditCourseMainPager(
 
             item { // 课程名称
                 TitleCard(
-                    onClick = onClickName,
+                    onClick = onNameClick,
                     title = {
                         Text(
                             "课程名称", style = MaterialTheme.typography.labelLarge
@@ -67,8 +67,8 @@ fun EditCourseMainPager(
 
             item { // 上课地点
                 TitleCard(
-                    onClick = onClickLocation,
-                    onLongClick = onLongClickLocation,
+                    onClick = onLocationClick,
+                    onLongClick = onLocationLongClick,
                     subtitle = { if (course.location != null) Text("长按清除设置") },
                     title = {
                         Text(
@@ -84,8 +84,8 @@ fun EditCourseMainPager(
 
             item { // 授课教师
                 TitleCard(
-                    onClick = onClickTeacher,
-                    onLongClick = onLongClickTeacher,
+                    onClick = onTeacherClick,
+                    onLongClick = onTeacherLongClick,
                     subtitle = { if (course.teacher != null) Text("长按清除设置") },
                     title = {
                         Text(
@@ -101,14 +101,14 @@ fun EditCourseMainPager(
 
             item { // 颜色
                 ColorPickerCard(
-                    label = "课程颜色", color = course.color, onClick = onClickColor
+                    label = "课程颜色", color = course.color, onClick = onColorClick
                 )
             }
 
             if (course.id != 0L) {
                 item {
                     DeleteButton(
-                        label = "删除此课程", onClick = onClickDelete
+                        label = "删除此课程", onClick = onDelete
                     )
                 }
             }

@@ -34,17 +34,17 @@ fun EditTimetableScreen(
             HandleEditUiState(uiState) { timetable ->
                 EditTimetableMainPager(
                     timetable = timetable,
-                    onClickSave = {
+                    onSave = {
                         viewModel.onAction(EditTimetableAction.Upsert)
                         navController.popBackStack()
                     },
-                    onClickName = { internalNavController.navigate(InternalNavRoutes.NAME) },
-                    onClickStartDate = { internalNavController.navigate(InternalNavRoutes.START_DATE) },
-                    onLongClickStartDate = { viewModel.onAction(EditTimetableAction.UpdateStartDate()) },
-                    onClickEndDate = { internalNavController.navigate(InternalNavRoutes.END_DATE) },
-                    onLongClickEndDate = { viewModel.onAction(EditTimetableAction.UpdateEndDate()) },
-                    onClickColor = { internalNavController.navigate(InternalNavRoutes.COLOR) },
-                    onClickDelete = { internalNavController.navigate(InternalNavRoutes.DELETE_CONFIRM) },
+                    onNameClick = { internalNavController.navigate(InternalNavRoutes.NAME) },
+                    onStartDateClick = { internalNavController.navigate(InternalNavRoutes.START_DATE) },
+                    onStartDateLongClick = { viewModel.onAction(EditTimetableAction.UpdateStartDate()) },
+                    onEndDateClick = { internalNavController.navigate(InternalNavRoutes.END_DATE) },
+                    onEndDateLongClick = { viewModel.onAction(EditTimetableAction.UpdateEndDate()) },
+                    onColorClick = { internalNavController.navigate(InternalNavRoutes.COLOR) },
+                    onDelete = { internalNavController.navigate(InternalNavRoutes.DELETE_CONFIRM) },
                     startDateIsToday = viewModel.toDay == timetable.semesterStart
                 )
             }
