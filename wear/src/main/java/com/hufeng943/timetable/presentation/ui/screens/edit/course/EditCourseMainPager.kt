@@ -41,7 +41,9 @@ fun EditCourseMainPager(
         }
     }) { contentPadding ->
         ScalingLazyColumn(
-            state = scrollState, contentPadding = contentPadding
+            autoCentering = null,
+            state = scrollState,
+            contentPadding = contentPadding
         ) {
             item {
                 ListHeader {

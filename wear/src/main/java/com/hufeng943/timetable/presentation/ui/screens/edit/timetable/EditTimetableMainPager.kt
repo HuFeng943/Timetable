@@ -40,7 +40,11 @@ fun EditTimetableMainPager(
                 Icon(Icons.Default.Check, contentDescription = stringResource(R.string.check))
             }
         }) { contentPadding ->
-        ScalingLazyColumn(state = scrollState, contentPadding = contentPadding) {
+        ScalingLazyColumn(
+            autoCentering = null,
+            state = scrollState,
+            contentPadding = contentPadding
+        ) {
             item {
                 ListHeader {
                     Text(if (timetable.timetableId == 0L) stringResource(R.string.edit_timetable_add) else "编辑课表")
