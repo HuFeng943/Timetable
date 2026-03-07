@@ -8,6 +8,7 @@ import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.NavRoutes
 import com.hufeng943.timetable.presentation.ui.NavRoutes.editTimetable
 import com.hufeng943.timetable.presentation.ui.NavRoutes.listCourse
+import com.hufeng943.timetable.presentation.ui.navigateSingle
 import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.edit.timetable.TimetableListViewModel
@@ -24,11 +25,11 @@ fun TimetableListScreen(
         else -> {
             val data = (state as? UiState.Success)?.data ?: emptyList()
             TimetableListPager(timetables = data, onAddTimetable = {
-                navController.navigate(NavRoutes.EDIT_TIMETABLE)
+                navController.navigateSingle(NavRoutes.EDIT_TIMETABLE)
             }, onTimetableClick = { id ->
-                navController.navigate(listCourse(id))
+                navController.navigateSingle(listCourse(id))
             }, onTimetableLongClick = { id ->
-                navController.navigate(editTimetable(id))
+                navController.navigateSingle(editTimetable(id))
             })
         }
     }

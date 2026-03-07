@@ -10,6 +10,7 @@ import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState
+import com.hufeng943.timetable.presentation.ui.navigateSingle
 import com.hufeng943.timetable.presentation.ui.screens.common.ColorSelectionScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.DeleteConfirmScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.NameEditScreen
@@ -38,13 +39,13 @@ fun EditTimetableScreen(
                         viewModel.onAction(EditTimetableAction.Upsert)
                         navController.popBackStack()
                     },
-                    onNameClick = { internalNavController.navigate(InternalNavRoutes.NAME) },
-                    onStartDateClick = { internalNavController.navigate(InternalNavRoutes.START_DATE) },
+                    onNameClick = { internalNavController.navigateSingle(InternalNavRoutes.NAME) },
+                    onStartDateClick = { internalNavController.navigateSingle(InternalNavRoutes.START_DATE) },
                     onStartDateLongClick = { viewModel.onAction(EditTimetableAction.UpdateStartDate()) },
-                    onEndDateClick = { internalNavController.navigate(InternalNavRoutes.END_DATE) },
+                    onEndDateClick = { internalNavController.navigateSingle(InternalNavRoutes.END_DATE) },
                     onEndDateLongClick = { viewModel.onAction(EditTimetableAction.UpdateEndDate()) },
-                    onColorClick = { internalNavController.navigate(InternalNavRoutes.COLOR) },
-                    onDelete = { internalNavController.navigate(InternalNavRoutes.DELETE_CONFIRM) },
+                    onColorClick = { internalNavController.navigateSingle(InternalNavRoutes.COLOR) },
+                    onDelete = { internalNavController.navigateSingle(InternalNavRoutes.DELETE_CONFIRM) },
                     startDateIsToday = viewModel.toDay == timetable.semesterStart
                 )
             }

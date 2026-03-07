@@ -20,6 +20,7 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.NavRoutes.courseDetail
 import com.hufeng943.timetable.presentation.ui.components.TimetableCard
+import com.hufeng943.timetable.presentation.ui.navigateSingle
 import com.hufeng943.timetable.presentation.ui.screens.common.ErrorScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
@@ -72,7 +73,7 @@ fun TimetablePager(
                             key = { _, courseUi -> courseUi.timeSlot.id } // 唯一 key
                         ) { _, courseUi ->
                             TimetableCard(courseUi) {
-                                navController.navigate(courseDetail(courseUi.timeSlot.id))
+                                navController.navigateSingle(courseDetail(courseUi.timeSlot.id))
                             }
                         }
                     }

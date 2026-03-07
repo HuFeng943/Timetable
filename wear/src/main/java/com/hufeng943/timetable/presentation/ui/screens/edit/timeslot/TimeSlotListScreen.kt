@@ -24,9 +24,9 @@ fun TimeSlotListScreen(
         is UiState.Empty -> ErrorScreen(AppError.UnexpectedEmpty())
         is UiState.Success -> {
             TimeSlotListPager(timeSlots = state.data.timeSlots, onAddTimeSlot = {
-                // TODO navController.navigate(NavRoutes.editCourse(state.data.timetableId))
+                // TODO navController.navigateSingle(NavRoutes.editCourse(state.data.timetableId))
             }, onTimeSlotClick = { timeSlotId ->
-                // TODO navController.navigate(NavRoutes.editCourse(state.data.timetableId))
+                // TODO navController.navigateSingle(NavRoutes.editCourse(state.data.timetableId))
             })
         }
     }

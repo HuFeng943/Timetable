@@ -19,6 +19,7 @@ import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.NavRoutes
+import com.hufeng943.timetable.presentation.ui.navigateSingle
 
 @Composable
 fun MorePager() {
@@ -38,7 +39,7 @@ fun MorePager() {
             // 1. 编辑课表
             item {
                 FilledTonalButton(
-                    onClick = { navController.navigate(NavRoutes.LIST_TIMETABLE) },
+                    onClick = { navController.navigateSingle(NavRoutes.LIST_TIMETABLE) },
                     modifier = Modifier.fillMaxWidth(),
                     icon = {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = null)

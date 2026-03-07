@@ -9,6 +9,7 @@ import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState
+import com.hufeng943.timetable.presentation.ui.navigateSingle
 import com.hufeng943.timetable.presentation.ui.screens.common.ColorSelectionScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.DeleteConfirmScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.NameEditScreen
@@ -35,13 +36,13 @@ fun EditCourseScreen(
                         viewModel.onAction(EditCourseAction.Upsert)
                         navController.popBackStack()
                     },
-                    onNameClick = { internalNavController.navigate(InternalNavRoutes.NAME) },
-                    onLocationClick = { internalNavController.navigate(InternalNavRoutes.LOCATION) },
+                    onNameClick = { internalNavController.navigateSingle(InternalNavRoutes.NAME) },
+                    onLocationClick = { internalNavController.navigateSingle(InternalNavRoutes.LOCATION) },
                     onLocationLongClick = { viewModel.onAction(EditCourseAction.UpdateLocation()) },
-                    onTeacherClick = { internalNavController.navigate(InternalNavRoutes.TEACHER) },
+                    onTeacherClick = { internalNavController.navigateSingle(InternalNavRoutes.TEACHER) },
                     onTeacherLongClick = { viewModel.onAction(EditCourseAction.UpdateTeacher()) },
-                    onColorClick = { internalNavController.navigate(InternalNavRoutes.COLOR) },
-                    onDelete = { internalNavController.navigate(InternalNavRoutes.DELETE_CONFIRM) })
+                    onColorClick = { internalNavController.navigateSingle(InternalNavRoutes.COLOR) },
+                    onDelete = { internalNavController.navigateSingle(InternalNavRoutes.DELETE_CONFIRM) })
             }
         }
 

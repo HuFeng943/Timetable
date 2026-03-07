@@ -7,6 +7,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.hufeng943.timetable.presentation.ui.LocalNavController
 import com.hufeng943.timetable.presentation.ui.NavRoutes.editCourse
 import com.hufeng943.timetable.presentation.ui.NavRoutes.listTimeSlot
+import com.hufeng943.timetable.presentation.ui.navigateSingle
 import com.hufeng943.timetable.presentation.ui.screens.common.ErrorScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.AppError
@@ -26,11 +27,11 @@ fun CourseListScreen(
         is UiState.Empty -> ErrorScreen(AppError.UnexpectedEmpty())
         is UiState.Success -> {
             CourseListPager(courses = state.data.allCourses, onAddCourse = {
-                navController.navigate(editCourse(state.data.timetableId))
+                navController.navigateSingle(editCourse(state.data.timetableId))
             }, onCourseClick = { courseId ->
-                navController.navigate(listTimeSlot(courseId))
+                navController.navigateSingle(listTimeSlot(courseId))
             }, onCourseLongClick = { courseId ->
-                navController.navigate(editCourse(state.data.timetableId, courseId))
+                navController.navigateSingle(editCourse(state.data.timetableId, courseId))
             })
         }
     }
