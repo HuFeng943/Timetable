@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.data.PreferenceStorage
 import com.hufeng943.timetable.data.TimeFormat
-import com.hufeng943.timetable.presentation.theme.AppConfig
+import com.hufeng943.timetable.presentation.ui.common.AppConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted

@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.theme
+package com.hufeng943.timetable.presentation.ui.common
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.hufeng943.timetable.data.TimeFormat

@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
-import com.hufeng943.timetable.presentation.theme.LocalAppConfig
+import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
 import kotlinx.datetime.LocalTime
 import java.time.format.DateTimeFormatter
 

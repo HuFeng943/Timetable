@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.hufeng943.timetable.presentation.theme.LocalNavController
-import com.hufeng943.timetable.presentation.theme.navigateSingle
 import com.hufeng943.timetable.presentation.ui.NavRoutes
 import com.hufeng943.timetable.presentation.ui.NavRoutes.editTimetable
 import com.hufeng943.timetable.presentation.ui.NavRoutes.listCourse
+import com.hufeng943.timetable.presentation.ui.common.LocalNavController
+import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.edit.timetable.TimetableListViewModel

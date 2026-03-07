@@ -5,7 +5,7 @@ import android.text.format.DateFormat
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.hufeng943.timetable.presentation.theme.AppConfig
+import com.hufeng943.timetable.presentation.ui.common.AppConfig
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

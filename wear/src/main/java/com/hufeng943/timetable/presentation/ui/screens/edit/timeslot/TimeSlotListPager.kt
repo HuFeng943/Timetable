@@ -16,7 +16,7 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
-import com.hufeng943.timetable.presentation.theme.LocalAppConfig
+import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
 import com.hufeng943.timetable.shared.model.TimeSlot
 import kotlinx.datetime.toJavaDayOfWeek
 import java.time.format.TextStyle

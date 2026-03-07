@@ -17,9 +17,9 @@ import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.theme.LocalNavController
-import com.hufeng943.timetable.presentation.theme.navigateSingle
 import com.hufeng943.timetable.presentation.ui.NavRoutes.courseDetail
+import com.hufeng943.timetable.presentation.ui.common.LocalNavController
+import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 import com.hufeng943.timetable.presentation.ui.components.TimetableCard
 import com.hufeng943.timetable.presentation.ui.screens.common.ErrorScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen

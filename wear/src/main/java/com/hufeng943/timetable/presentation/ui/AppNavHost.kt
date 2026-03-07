@@ -9,8 +9,8 @@ import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
-import com.hufeng943.timetable.presentation.theme.LocalAppConfig
-import com.hufeng943.timetable.presentation.theme.LocalNavController
+import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
+import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.screens.detail.CourseDetailScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.course.CourseListScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.course.EditCourseScreen
