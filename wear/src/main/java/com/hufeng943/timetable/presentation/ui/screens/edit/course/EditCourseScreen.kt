@@ -7,9 +7,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
-import com.hufeng943.timetable.presentation.ui.LocalNavController
+import com.hufeng943.timetable.presentation.theme.LocalNavController
+import com.hufeng943.timetable.presentation.theme.navigateSingle
 import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState
-import com.hufeng943.timetable.presentation.ui.navigateSingle
 import com.hufeng943.timetable.presentation.ui.screens.common.ColorSelectionScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.DeleteConfirmScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.NameEditScreen

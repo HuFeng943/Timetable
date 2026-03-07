@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.ui
+package com.hufeng943.timetable.presentation.theme
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.NavController

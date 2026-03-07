@@ -17,9 +17,9 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.ui.LocalNavController
+import com.hufeng943.timetable.presentation.theme.LocalNavController
+import com.hufeng943.timetable.presentation.theme.navigateSingle
 import com.hufeng943.timetable.presentation.ui.NavRoutes
-import com.hufeng943.timetable.presentation.ui.navigateSingle
 
 @Composable
 fun MorePager() {
