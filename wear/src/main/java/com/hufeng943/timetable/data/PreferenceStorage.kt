@@ -1,7 +1,7 @@
 package com.hufeng943.timetable.data
 
 import android.content.Context
-import androidx.datastore.preferences.core.booleanPreferencesKey
+import android.util.Log
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -18,19 +18,26 @@ class PreferenceStorage @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     private object Keys {
-        val IS_24_HOUR = booleanPreferencesKey("is_24_hour_override")
-        val USE_24_HOUR = booleanPreferencesKey("use_24_hour")
+        val TIME_FORMAT = stringPreferencesKey("time_format")
         val APP_LANGUAGE = stringPreferencesKey("app_language")
     }
 
-    // 默认值
-    val use24HourFlow: Flow<Boolean> = context.dataStore.data.map { prefs ->
-        prefs[Keys.IS_24_HOUR]?.let { override ->
-            if (override) prefs[Keys.USE_24_HOUR] ?: true else null
-        } ?: android.text.format.DateFormat.is24HourFormat(context)
+    val is24HourFlow: Flow<Boolean> = context.dataStore.data.map { prefs ->
+        val setting = try {
+            TimeFormat.valueOf(prefs[Keys.TIME_FORMAT] ?: TimeFormat.SYSTEM.name)
+        } catch (e: Exception) {
+            Log.e("PreferenceStorage", "Invalid time format setting: ${prefs[Keys.TIME_FORMAT]}")
+            TimeFormat.SYSTEM
+        }
+
+        when (setting) {
+            TimeFormat.SYSTEM -> android.text.format.DateFormat.is24HourFormat(context)
+            TimeFormat.H12 -> false
+            TimeFormat.H24 -> true
+        }
     }
 
-    suspend fun set24HourOverride(use24Hour: Boolean) {
-        context.dataStore.edit { it[Keys.IS_24_HOUR] = true; it[Keys.USE_24_HOUR] = use24Hour }
+    suspend fun setTimeFormat(format: TimeFormat) {
+        context.dataStore.edit { it[Keys.TIME_FORMAT] = format.name }
     }
 }
