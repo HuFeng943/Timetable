@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
@@ -15,10 +16,10 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
+import com.hufeng943.timetable.presentation.theme.LocalAppConfig
 import com.hufeng943.timetable.shared.model.TimeSlot
 import kotlinx.datetime.toJavaDayOfWeek
 import java.time.format.TextStyle
-import java.util.Locale
 
 @Composable
 fun TimeSlotListPager(
@@ -63,15 +64,17 @@ fun TimeSlotListPager(
 fun TimeSlotCard(
     timeSlot: TimeSlot, onClick: () -> Unit, modifier: Modifier = Modifier
 ) {
+    val config = LocalAppConfig.current
+    val locale = config.locale
+    // val is24Hour = config.is24Hour
     TitleCard(onClick = onClick, modifier = modifier.fillMaxWidth(), title = {
-        // 核心时间跨度
         Text("${timeSlot.startTime} - ${timeSlot.endTime}")
     }, subtitle = {
-        // 显示周几以及重复模式
-        val dayText = timeSlot.dayOfWeek.toJavaDayOfWeek().getDisplayName(
-            TextStyle.SHORT, // "周一" / "Mon"
-            Locale.getDefault()
-        )
+        val dayText = remember(timeSlot.dayOfWeek, locale) {
+            timeSlot.dayOfWeek.toJavaDayOfWeek().getDisplayName(
+                TextStyle.SHORT, locale
+            )
+        }
         Text("$dayText · ${timeSlot.recurrence.name}")
     }, content = {
         // 如果有备注就显示，没有就省下空间

@@ -1,6 +1,5 @@
 package com.hufeng943.timetable.presentation.ui.components
 
-import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -9,59 +8,50 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
+import com.hufeng943.timetable.presentation.theme.LocalAppConfig
 import kotlinx.datetime.LocalTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
-object TimeFormatters {
-    val formatter24h: DateTimeFormatter by lazy {
-        DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault())
-    }
-    val formatter12h: DateTimeFormatter by lazy {
-        DateTimeFormatter.ofPattern("hh:mm", Locale.getDefault())
-    }
-    val amPmFormatter: DateTimeFormatter by lazy {
-        DateTimeFormatter.ofPattern("a", Locale.US)
-    }
-}
 
 @Composable
 fun TimeText(time: LocalTime) {
-    val context = LocalContext.current
-    val is24Hour = DateFormat.is24HourFormat(context)
+    val config = LocalAppConfig.current
+    val is24Hour = config.is24Hour
+    val locale = config.locale
+
     val localTime = remember(time) { java.time.LocalTime.of(time.hour, time.minute) }
-    val aTextStyle = MaterialTheme.typography.labelSmall.copy(
-        fontSize = 10.sp,
-        lineHeight = 10.sp
-    )
-    val timeStr = remember(localTime, is24Hour) {
-        if (is24Hour) TimeFormatters.formatter24h.format(localTime)
-        else TimeFormatters.formatter12h.format(localTime)
+
+    val timeStr = remember(localTime, is24Hour, locale) {
+        val pattern = if (is24Hour) "HH:mm" else "hh:mm"
+        DateTimeFormatter.ofPattern(pattern, locale).format(localTime)
     }
 
     if (is24Hour) {
         Text(
-            text = timeStr,
-            style = MaterialTheme.typography.labelSmall
+            text = timeStr, style = MaterialTheme.typography.labelSmall
         )
     } else {
-        val amPm = remember(localTime) { TimeFormatters.amPmFormatter.format(localTime) }
+        val amPm = remember(localTime, locale) {
+            DateTimeFormatter.ofPattern("a", locale).format(localTime)
+        }
+
+        val aTextStyle = MaterialTheme.typography.labelSmall.copy(
+            fontSize = 10.sp, lineHeight = 10.sp
+        )
+
         Column(
             modifier = Modifier.width(IntrinsicSize.Min),
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.Top
         ) {
             Text(
-                text = timeStr,
-                style = MaterialTheme.typography.labelSmall
+                text = timeStr, style = MaterialTheme.typography.labelSmall
             )
             Text(
-                text = amPm,
-                style = aTextStyle
+                text = amPm, style = aTextStyle
             )
         }
     }

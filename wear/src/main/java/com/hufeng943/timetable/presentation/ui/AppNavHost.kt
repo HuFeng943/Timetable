@@ -2,10 +2,14 @@ package com.hufeng943.timetable.presentation.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.hufeng943.timetable.presentation.theme.LocalAppConfig
 import com.hufeng943.timetable.presentation.theme.LocalNavController
 import com.hufeng943.timetable.presentation.ui.screens.detail.CourseDetailScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.course.CourseListScreen
@@ -14,12 +18,17 @@ import com.hufeng943.timetable.presentation.ui.screens.edit.timeslot.TimeSlotLis
 import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.EditTimetableScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.TimetableListScreen
 import com.hufeng943.timetable.presentation.ui.screens.home.HomeScreen
+import com.hufeng943.timetable.presentation.viewmodel.AppConfigViewModel
 
 @Composable
-fun AppNavHost() {
+fun AppNavHost(appConfigViewModel: AppConfigViewModel = hiltViewModel()) {
     val navController = rememberSwipeDismissableNavController()
+    val config by appConfigViewModel.appConfig.collectAsState()
     AppScaffold {
-        CompositionLocalProvider(LocalNavController provides navController) {
+        CompositionLocalProvider(
+            LocalNavController provides navController,
+            LocalAppConfig provides config
+        ) {
             SwipeDismissableNavHost(
                 navController = navController, startDestination = NavRoutes.MAIN
             ) {
