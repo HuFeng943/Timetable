@@ -1,11 +1,23 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit.course
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
@@ -33,7 +45,10 @@ fun CourseListPager(
         }
     }) { contentPadding ->
         ScalingLazyColumn(
-            state = scrollState, modifier = Modifier.fillMaxSize(), contentPadding = contentPadding
+            autoCentering = null,
+            state = scrollState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = contentPadding
         ) {
             item {
                 ListHeader {
@@ -46,17 +61,42 @@ fun CourseListPager(
                 }
             } else {
                 items(courses, key = { it.id }) { course ->
-                    TitleCard(
+                    CourseCard(
+                        course = course,
                         onClick = { onCourseClick(course.id) },
                         onLongClick = { onCourseLongClick(course.id) },
-                        title = { Text(course.name) },
-                        subtitle = {
-                            Text("${course.timeSlots.size} 个时间段")
-                        },
-                        modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
         }
     }
+}
+
+@Composable
+fun CourseCard(
+    course: Course, onClick: () -> Unit, onLongClick: () -> Unit, modifier: Modifier = Modifier
+) {
+    TitleCard(
+        onClick = onClick,
+        onLongClick = onLongClick,
+        modifier = modifier.fillMaxWidth(),
+        title = {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(8.dp)
+                        .clip(CircleShape)
+                        .background(Color(course.color))
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(course.name, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+        },
+        subtitle = {
+            // 组合地点和教师信息
+            val info = listOfNotNull(
+                course.location, course.teacher, "${course.timeSlots.size}个时段"
+            ).joinToString(" · ")
+            Text(info, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        })
 }

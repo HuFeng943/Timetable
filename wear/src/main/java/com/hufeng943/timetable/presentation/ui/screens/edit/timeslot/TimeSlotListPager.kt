@@ -16,6 +16,9 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.shared.model.TimeSlot
+import kotlinx.datetime.toJavaDayOfWeek
+import java.time.format.TextStyle
+import java.util.Locale
 
 @Composable
 fun TimeSlotListPager(
@@ -32,7 +35,10 @@ fun TimeSlotListPager(
         }
     }) { contentPadding ->
         ScalingLazyColumn(
-            state = scrollState, modifier = Modifier.fillMaxSize(), contentPadding = contentPadding
+            autoCentering = null,
+            state = scrollState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = contentPadding
         ) {
             item {
                 ListHeader {
@@ -45,14 +51,34 @@ fun TimeSlotListPager(
                 }
             } else {
                 items(timeSlots, key = { it.id }) { timeSlot ->
-                    TitleCard(
-                        onClick = { onTimeSlotClick(timeSlot.id) },
-                        title = { Text(timeSlot.startTime.toString()) },
-                        subtitle = {},
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    TimeSlotCard(
+                        timeSlot = timeSlot, onClick = { onTimeSlotClick(timeSlot.id) })
                 }
             }
         }
     }
+}
+
+@Composable
+fun TimeSlotCard(
+    timeSlot: TimeSlot, onClick: () -> Unit, modifier: Modifier = Modifier
+) {
+    TitleCard(onClick = onClick, modifier = modifier.fillMaxWidth(), title = {
+        // 核心时间跨度
+        Text("${timeSlot.startTime} - ${timeSlot.endTime}")
+    }, subtitle = {
+        // 显示周几以及重复模式
+        val dayText = timeSlot.dayOfWeek.toJavaDayOfWeek().getDisplayName(
+            TextStyle.SHORT, // "周一" / "Mon"
+            Locale.getDefault()
+        )
+        Text("$dayText · ${timeSlot.recurrence.name}")
+    }, content = {
+        // 如果有备注就显示，没有就省下空间
+        timeSlot.remark?.let {
+            Text(
+                text = it, maxLines = 1
+            )
+        }
+    })
 }

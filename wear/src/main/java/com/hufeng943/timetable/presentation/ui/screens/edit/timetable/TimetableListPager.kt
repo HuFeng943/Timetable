@@ -38,7 +38,10 @@ fun TimetableListPager(
         }
     }) { contentPadding ->
         ScalingLazyColumn(
-            state = scrollState, modifier = Modifier.fillMaxSize(), contentPadding = contentPadding
+            autoCentering = null,
+            state = scrollState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = contentPadding
         ) {
             item {
                 ListHeader {
