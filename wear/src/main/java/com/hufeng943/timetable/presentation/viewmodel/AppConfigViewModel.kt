@@ -7,7 +7,9 @@ import com.hufeng943.timetable.data.TimeFormat
 import com.hufeng943.timetable.presentation.ui.common.AppConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -28,10 +30,15 @@ class AppConfigViewModel @Inject constructor(
         viewModelScope.launch { preferenceStorage.setTimeFormat(newFormat) }
     }
 
+    private val _localeRefreshEvent = MutableSharedFlow<Locale?>(replay = 0)
+    val localeRefreshEvent = _localeRefreshEvent.asSharedFlow()
 
     fun updateLanguage(locale: Locale?) {
         viewModelScope.launch {
-            preferenceStorage.setLanguage(locale?.toLanguageTag() ?: "system")
+            preferenceStorage.setLanguage(locale)
+
+            // 发送通知
+            _localeRefreshEvent.emit(locale)
         }
     }
 }

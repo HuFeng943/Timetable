@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun TimeText(time: LocalTime) {
     val config = LocalAppConfig.current
-    val is24Hour = config.is24Hour
+    val is24Hour = config.is24HourFormat
     val locale = config.locale
 
     val localTime = remember(time) { java.time.LocalTime.of(time.hour, time.minute) }

@@ -30,19 +30,23 @@ class PreferenceStorage @Inject constructor(
             TimeFormat.valueOf(prefs[Keys.TIME_FORMAT] ?: TimeFormat.SYSTEM.name)
         }.getOrDefault(TimeFormat.SYSTEM)
 
+        val finalLocale = if (langSetting == "system") {
+            context.resources.configuration.locales[0] ?: Locale.getDefault()
+        } else {
+            Locale.forLanguageTag(langSetting)
+        }
+
+        val finalIs24Hour = when (formatSetting) {
+            TimeFormat.H12 -> false
+            TimeFormat.H24 -> true
+            TimeFormat.SYSTEM -> DateFormat.is24HourFormat(context)
+        }
+
         AppConfig(
-            is24Hour = when (formatSetting) {
-                TimeFormat.SYSTEM -> DateFormat.is24HourFormat(context)
-                TimeFormat.H12 -> false
-                TimeFormat.H24 -> true
-            },
-            timeFormatSetting = formatSetting,
-            locale = if (langSetting == "system" || langSetting.isBlank()) {
-                context.resources.configuration.locales[0] ?: Locale.getDefault()
-            } else {
-                runCatching { Locale.forLanguageTag(langSetting) }.getOrDefault(Locale.getDefault())
-            },
-            appLanguage = langSetting
+            useSystemLanguage = langSetting == "system",
+            locale = finalLocale,
+            is24HourFormat = finalIs24Hour,
+            timeFormatSetting = formatSetting
         )
     }
 
@@ -50,7 +54,8 @@ class PreferenceStorage @Inject constructor(
         context.dataStore.edit { it[Keys.TIME_FORMAT] = format.name }
     }
 
-    suspend fun setLanguage(languageCode: String) {
-        context.dataStore.edit { it[Keys.APP_LANGUAGE] = languageCode }
+    suspend fun setLanguage(locale: Locale?) {
+        val langTag = locale?.toLanguageTag() ?: "system"
+        context.dataStore.edit { it[Keys.APP_LANGUAGE] = langTag }
     }
 }
