@@ -6,10 +6,12 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.hufeng943.timetable.presentation.ui.common.AppConfig
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -25,16 +27,11 @@ class PreferenceStorage @Inject constructor(
     }
 
     val appConfigFlow: Flow<AppConfig> = context.dataStore.data.map { prefs ->
-        val langSetting = prefs[Keys.APP_LANGUAGE] ?: "system" // 默认跟随系统
+        val langSetting = prefs[Keys.APP_LANGUAGE].let { tag -> if (tag == "system") null else tag }
         val formatSetting = runCatching {
             TimeFormat.valueOf(prefs[Keys.TIME_FORMAT] ?: TimeFormat.SYSTEM.name)
         }.getOrDefault(TimeFormat.SYSTEM)
 
-        val finalLocale = if (langSetting == "system") {
-            context.resources.configuration.locales[0] ?: Locale.getDefault()
-        } else {
-            Locale.forLanguageTag(langSetting)
-        }
 
         val finalIs24Hour = when (formatSetting) {
             TimeFormat.H12 -> false
@@ -43,8 +40,7 @@ class PreferenceStorage @Inject constructor(
         }
 
         AppConfig(
-            useSystemLanguage = langSetting == "system",
-            locale = finalLocale,
+            languageTag = langSetting,
             is24HourFormat = finalIs24Hour,
             timeFormatSetting = formatSetting
         )
@@ -54,8 +50,13 @@ class PreferenceStorage @Inject constructor(
         context.dataStore.edit { it[Keys.TIME_FORMAT] = format.name }
     }
 
-    suspend fun setLanguage(locale: Locale?) {
-        val langTag = locale?.toLanguageTag() ?: "system"
-        context.dataStore.edit { it[Keys.APP_LANGUAGE] = langTag }
+    suspend fun setLanguage(languageTag: String?) {
+        context.dataStore.edit { it[Keys.APP_LANGUAGE] = languageTag ?: "system" }
     }
+}
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface PreferenceStorageEntryPoint {
+    fun preferenceStorage(): PreferenceStorage
 }

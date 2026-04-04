@@ -25,7 +25,6 @@ import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 import com.hufeng943.timetable.presentation.viewmodel.AppConfigViewModel
-import java.util.Locale
 
 @Composable
 fun MorePager(
@@ -46,23 +45,25 @@ fun MorePager(
             }
 
             item {// 临时测试用
-                val currentLangTag =
-                    if (config.useSystemLanguage) "system" else config.locale.toLanguageTag()
+                // 获取当前语言标签（用于逻辑判断）
+                val currentLangTag = config.languageTag  // null 表示跟随系统
 
                 FilledTonalButton(
                     onClick = {
-                        val nextLocale = when {
-                            currentLangTag == "system" -> Locale.SIMPLIFIED_CHINESE
-                            currentLangTag.startsWith("zh") -> Locale.ENGLISH
-                            currentLangTag.startsWith("en") -> null
-                            else -> Locale.SIMPLIFIED_CHINESE
+                        // 根据当前 languageTag 决定下一个 languageTag
+                        val nextTag = when {
+                            currentLangTag == null -> "zh-CN"           // 跟随系统 → 简体中文
+                            currentLangTag.startsWith("zh") -> "en"      // 中文 → 英文
+                            currentLangTag.startsWith("en") -> null      // 英文 → 跟随系统
+                            else -> "zh-CN"                              // 其他 → 简体中文
                         }
-                        appConfigViewModel.updateLanguage(nextLocale)
+                        // ViewModel 的 updateLanguage 应接受 String? 类型
+                        appConfigViewModel.updateLanguage(nextTag)
                     },
                     modifier = Modifier.fillMaxWidth(),
                     label = {
                         val labelText = when {
-                            currentLangTag == "system" -> "切换到中文"
+                            currentLangTag == null -> "切换到中文"
                             currentLangTag.startsWith("zh") -> "Switch to English"
                             currentLangTag.startsWith("en") -> "使用系统语言"
                             else -> "重置语言"
@@ -71,7 +72,7 @@ fun MorePager(
                     },
                     secondaryLabel = {
                         val statusText = when {
-                            config.useSystemLanguage -> "跟随系统"
+                            currentLangTag == null -> "跟随系统"
                             currentLangTag.startsWith("zh") -> "简体中文"
                             currentLangTag.startsWith("en") -> "English"
                             else -> currentLangTag
@@ -80,6 +81,7 @@ fun MorePager(
                     }
                 )
             }
+
             // 1. 编辑课表
             item {
                 FilledTonalButton(

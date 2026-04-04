@@ -1,33 +1,58 @@
 package com.hufeng943.timetable.presentation
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.profileinstaller.ProfileInstaller
+import com.hufeng943.timetable.data.PreferenceStorageEntryPoint
 import com.hufeng943.timetable.presentation.theme.TimetableTheme
 import com.hufeng943.timetable.presentation.ui.AppNavHost
 import com.hufeng943.timetable.presentation.viewmodel.AppConfigViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.Locale
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val appConfigViewModel: AppConfigViewModel by viewModels()
-    private var refreshTrigger by mutableStateOf(0)
+
+    override fun attachBaseContext(newBase: Context) {
+        // 手动获取 PreferenceStorage
+        val storage = EntryPointAccessors.fromApplication(
+            newBase.applicationContext, PreferenceStorageEntryPoint::class.java
+        ).preferenceStorage()
+
+        val config = runBlocking {
+            storage.appConfigFlow.first()
+        }
+
+        // 应用语言配置
+        val context = if (config.languageTag != null) {
+            val locale = Locale.forLanguageTag(config.languageTag)
+            val configuration = Configuration(newBase.resources.configuration)
+            Locale.setDefault(locale)
+            configuration.setLocale(locale)
+            newBase.createConfigurationContext(configuration)
+        } else {
+            newBase
+        }
+
+        super.attachBaseContext(context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -36,30 +61,22 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 ProfileInstaller.writeProfile(this@MainActivity)
-                Log.d("ProfileInstaller", "AOT profile 写入成功")
+                Log.i("ProfileInstaller", "AOT profile 写入成功")
             } catch (e: Exception) {
                 Log.w("ProfileInstaller", "AOT 写入失败: ${e.message}", e)
             }
         } // 给没Google Play的设备跑跑 AOT
 
-        lifecycleScope.launch {// 启动时语言同步
-            appConfigViewModel.appConfig.drop(1) // 跳过初始值
-                .first()
-                .let { config ->
-                    applyLanguageChange(config.locale)
-                }
-        }
-
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                appConfigViewModel.localeRefreshEvent.collect { targetLocale ->
-                    applyLanguageChange(targetLocale)
+                appConfigViewModel.localeRefreshEvent.collect { languageTag ->
+                    applyLanguageChange(Locale.forLanguageTag(languageTag))
                 }
             }
         }
 
         setContent {
-            refreshTrigger
+            Log.d("MainActivity", "孩子们，现在Locale是‘${Locale.getDefault()}’")
             TimetableTheme {
                 AppNavHost()
             }
@@ -71,7 +88,6 @@ class MainActivity : ComponentActivity() {
         config.setLocale(targetLocale)
         resources.updateConfiguration(config, resources.displayMetrics)
         applicationContext.resources.updateConfiguration(config, resources.displayMetrics)
-        refreshTrigger++ // 触发全局重组
-        Log.d("AppConfig", "语言更新为: $targetLocale")
+        Log.i("MainActivity", "语言动态更新为: $targetLocale")
     }
 }

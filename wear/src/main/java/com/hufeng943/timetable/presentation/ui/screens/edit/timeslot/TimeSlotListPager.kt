@@ -29,12 +29,12 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
-import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
 import com.hufeng943.timetable.presentation.ui.components.TimeText
 import com.hufeng943.timetable.shared.model.TimeSlot
 import com.hufeng943.timetable.shared.model.WeekPattern
 import kotlinx.datetime.toJavaDayOfWeek
 import java.time.format.TextStyle
+import java.util.Locale
 
 @Composable
 fun TimeSlotListPager(
@@ -79,8 +79,7 @@ fun TimeSlotListPager(
 fun TimeSlotCard(
     timeSlot: TimeSlot, onClick: () -> Unit, modifier: Modifier = Modifier
 ) {
-    val config = LocalAppConfig.current
-    val locale = config.locale
+    val locale = Locale.getDefault()
 
     Card(
         onClick = onClick,

@@ -1,5 +1,6 @@
 package com.hufeng943.timetable.presentation.viewmodel
 
+import android.content.res.Resources
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.data.PreferenceStorage
@@ -12,7 +13,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 @HiltViewModel
 class AppConfigViewModel @Inject constructor(
@@ -30,15 +30,16 @@ class AppConfigViewModel @Inject constructor(
         viewModelScope.launch { preferenceStorage.setTimeFormat(newFormat) }
     }
 
-    private val _localeRefreshEvent = MutableSharedFlow<Locale?>(replay = 0)
+    private val _localeRefreshEvent = MutableSharedFlow<String>(replay = 0)
     val localeRefreshEvent = _localeRefreshEvent.asSharedFlow()
 
-    fun updateLanguage(locale: Locale?) {
+    fun updateLanguage(languageTag: String?) {
         viewModelScope.launch {
-            preferenceStorage.setLanguage(locale)
-
+            preferenceStorage.setLanguage(languageTag)
             // 发送通知
-            _localeRefreshEvent.emit(locale)
+            _localeRefreshEvent.emit(
+                languageTag ?: Resources.getSystem().configuration.locales[0].toLanguageTag()
+            )
         }
     }
 }
