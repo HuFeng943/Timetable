@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.viewmodel.edit.timeslot
+package com.hufeng943.timetable.presentation.viewmodel.edit.timeSlot
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

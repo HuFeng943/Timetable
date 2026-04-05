@@ -45,6 +45,8 @@ fun AppNavHost(appConfigViewModel: AppConfigViewModel = hiltViewModel()) {
                 composable(NavRoutes.EDIT_COURSE) { EditCourseScreen() }
 
                 composable(NavRoutes.LIST_TIMESLOT) { TimeSlotListScreen() }
+
+                composable(NavRoutes.EDIT_TIMESLOT) { TimeSlotListScreen() }
             }
         }
     }
