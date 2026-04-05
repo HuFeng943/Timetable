@@ -9,7 +9,7 @@ interface TimetableRepository {
     // 更新
     suspend fun upsertTimetable(timetable: Timetable): Long
     suspend fun upsertCourse(course: Course, timetableId: Long): Long
-    suspend fun upsertTimeSlot(courseId: Long, timeSlot: TimeSlot): Long
+    suspend fun upsertTimeSlot(timeSlot: TimeSlot, courseId: Long): Long
 
     // 删除课表
     suspend fun deleteTimetable(timetableId: Long)
