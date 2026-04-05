@@ -28,8 +28,9 @@ class EditCourseViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             try {
-                val data = cId?.let { repository.getCourseById(it).firstOrNull() }
-                    ?: Course(name = "课程", color = 0xFFE57373)
+                val data = cId?.let { repository.getCourseById(it).firstOrNull() } ?: Course(
+                    name = "课程", color = 0xFFE57373
+                )
                 _uiState.value = UiState.Success(data)
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e)
@@ -62,7 +63,8 @@ class EditCourseViewModel @Inject constructor(
     private fun upsertCourse() {
         viewModelScope.launch {
             try {
-                val current = (uiState.value as? UiState.Success)?.data ?: return@launch
+                val current =
+                    (uiState.value as? UiState.Success)?.data ?: throw AppError.UnexpectedEmpty()
                 val tableId = tId ?: throw AppError.InvalidParameter(NavArgs.TABLE_ID)
 
                 repository.upsertCourse(current, tableId)
@@ -75,7 +77,10 @@ class EditCourseViewModel @Inject constructor(
     private fun deleteCourse() {
         viewModelScope.launch {
             try {
-                val courseId = (uiState.value as? UiState.Success)?.data?.id ?: return@launch
+                val courseId =
+                    (uiState.value as? UiState.Success)?.data?.id ?: throw AppError.CourseNotFound(
+                        null
+                    )
                 if (courseId != 0L) {
                     repository.deleteCourse(courseId)
                 }

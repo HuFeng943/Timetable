@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.presentation.ui.NavArgs
+import com.hufeng943.timetable.presentation.viewmodel.AppError
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
 import com.hufeng943.timetable.shared.model.Timetable
@@ -84,7 +85,8 @@ class EditTimetableViewModel @Inject constructor(
     private fun upsertTimetable() {
         viewModelScope.launch {
             try {
-                val current = (uiState.value as? UiState.Success)?.data ?: return@launch
+                val current =
+                    (uiState.value as? UiState.Success)?.data ?: throw AppError.UnexpectedEmpty()
                 repository.upsertTimetable(current)
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e)
@@ -95,8 +97,8 @@ class EditTimetableViewModel @Inject constructor(
     private fun deleteTimetable() {
         viewModelScope.launch {
             try {
-                val timetableId =
-                    (uiState.value as? UiState.Success)?.data?.timetableId ?: return@launch
+                val timetableId = (uiState.value as? UiState.Success)?.data?.timetableId
+                    ?: throw AppError.TimetableNotFound(null)
                 if (timetableId != 0L) {
                     repository.deleteTimetable(timetableId)
                 }
