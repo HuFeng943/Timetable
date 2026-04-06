@@ -14,6 +14,7 @@ import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.screens.detail.CourseDetailScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.course.CourseListScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.course.EditCourseScreen
+import com.hufeng943.timetable.presentation.ui.screens.edit.timeslot.EditTimeSlotScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.timeslot.TimeSlotListScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.EditTimetableScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.TimetableListScreen
@@ -46,7 +47,7 @@ fun AppNavHost(appConfigViewModel: AppConfigViewModel = hiltViewModel()) {
 
                 composable(NavRoutes.LIST_TIMESLOT) { TimeSlotListScreen() }
 
-                composable(NavRoutes.EDIT_TIMESLOT) { TimeSlotListScreen() }
+                composable(NavRoutes.EDIT_TIMESLOT) { EditTimeSlotScreen() }
             }
         }
     }

@@ -11,7 +11,7 @@ import com.hufeng943.timetable.presentation.ui.screens.common.ErrorScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.AppError
 import com.hufeng943.timetable.presentation.viewmodel.UiState
-import com.hufeng943.timetable.presentation.viewmodel.edit.timeSlot.TimeSlotListViewModel
+import com.hufeng943.timetable.presentation.viewmodel.edit.timeslot.TimeSlotListViewModel
 
 @Composable
 fun TimeSlotListScreen(
