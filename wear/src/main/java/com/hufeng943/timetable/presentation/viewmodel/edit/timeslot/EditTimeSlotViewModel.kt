@@ -13,9 +13,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.todayIn
 import javax.inject.Inject
+import kotlin.time.Clock
 
 @HiltViewModel
 class EditTimeSlotViewModel @Inject constructor(
@@ -34,7 +36,7 @@ class EditTimeSlotViewModel @Inject constructor(
                 val data = sId?.let { repository.getTimeSlotById(it).firstOrNull() } ?: TimeSlot(
                     startTime = LocalTime(8, 0),
                     endTime = LocalTime(9, 30),
-                    dayOfWeek = DayOfWeek.MONDAY
+                    dayOfWeek = Clock.System.todayIn(TimeZone.currentSystemDefault()).dayOfWeek
                 )
                 _uiState.value = UiState.Success(data)
             } catch (e: Exception) {
