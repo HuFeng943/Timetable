@@ -19,6 +19,7 @@ fun TimeSlot.toTimeSlotEntity(courseId: Long): TimeSlotEntity {
     val recurrenceInt = this.recurrence.ordinal
 
     return TimeSlotEntity(
+        id = this.id,
         courseId = courseId,
         dayOfWeek = dayOfWeekInt,
         startMinute = startMinute,
