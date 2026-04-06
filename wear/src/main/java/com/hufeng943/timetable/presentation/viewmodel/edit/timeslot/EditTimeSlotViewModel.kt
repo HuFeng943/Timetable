@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.viewmodel.edit.timeSlot
+package com.hufeng943.timetable.presentation.viewmodel.edit.timeslot
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -8,7 +8,6 @@ import com.hufeng943.timetable.presentation.viewmodel.AppError
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
 import com.hufeng943.timetable.shared.model.TimeSlot
-import com.hufeng943.timetable.shared.model.WeekPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,9 +34,7 @@ class EditTimeSlotViewModel @Inject constructor(
                 val data = sId?.let { repository.getTimeSlotById(it).firstOrNull() } ?: TimeSlot(
                     startTime = LocalTime(8, 0),
                     endTime = LocalTime(9, 30),
-                    dayOfWeek = DayOfWeek.MONDAY,
-                    recurrence = WeekPattern.EVERY_WEEK,
-                    remark = null
+                    dayOfWeek = DayOfWeek.MONDAY
                 )
                 _uiState.value = UiState.Success(data)
             } catch (e: Exception) {
@@ -48,8 +45,17 @@ class EditTimeSlotViewModel @Inject constructor(
 
     fun onAction(action: EditTimeSlotAction) {
         when (action) {
-            is EditTimeSlotAction.UpdateStartTime -> updateSuccessState { it.copy(startTime = action.startTime) }
-            is EditTimeSlotAction.UpdateEndTime -> updateSuccessState { it.copy(endTime = action.endTime) }
+            is EditTimeSlotAction.UpdateStartTime -> updateSuccessState { current ->
+                val newStart = action.startTime
+                val newEnd = if (newStart > current.endTime) newStart else current.endTime
+                current.copy(startTime = newStart, endTime = newEnd)
+            }
+
+            is EditTimeSlotAction.UpdateEndTime -> updateSuccessState { current ->
+                val newEnd = action.endTime
+                val newStart = if (newEnd < current.startTime) newEnd else current.startTime
+                current.copy(startTime = newStart, endTime = newEnd)
+            }
             is EditTimeSlotAction.UpdateDayOfWeek -> updateSuccessState { it.copy(dayOfWeek = action.dayOfWeek) }
             is EditTimeSlotAction.UpdateRecurrence -> updateSuccessState { it.copy(recurrence = action.recurrence) }
             is EditTimeSlotAction.UpdateRemark -> updateSuccessState { it.copy(remark = action.remark) }

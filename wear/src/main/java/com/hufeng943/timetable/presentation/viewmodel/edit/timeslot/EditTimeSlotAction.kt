@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.viewmodel.edit.timeSlot
+package com.hufeng943.timetable.presentation.viewmodel.edit.timeslot
 
 import com.hufeng943.timetable.shared.model.WeekPattern
 import kotlinx.datetime.DayOfWeek
