@@ -24,7 +24,7 @@ class TimetableRepositoryImpl(private val dao: TimetableDao) : TimetableReposito
         return dao.upsertCourse(courseEntity)
     }
 
-    override suspend fun upsertTimeSlot(courseId: Long, timeSlot: TimeSlot): Long {
+    override suspend fun upsertTimeSlot(timeSlot: TimeSlot, courseId: Long): Long {
         val timeSlotEntity = timeSlot.toTimeSlotEntity(courseId)
         return dao.upsertTimeSlot(timeSlotEntity)
     }
