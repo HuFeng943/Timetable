@@ -8,6 +8,8 @@ import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.core.content.edit
+import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -59,11 +61,26 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                ProfileInstaller.writeProfile(this@MainActivity)
-                Log.i("ProfileInstaller", "AOT profile 写入成功")
-            } catch (e: Exception) {
-                Log.w("ProfileInstaller", "AOT 写入失败: ${e.message}", e)
+            val prefs =
+                getSharedPreferences("android.content.Context.MODE_PRIVATE", MODE_PRIVATE)
+            val packageInfo = packageManager.getPackageInfo(packageName, 0)
+            val currentVersion = PackageInfoCompat.getLongVersionCode(packageInfo)
+
+            val lastWrittenVersion = prefs.getLong("last_aot_version", -1L)
+
+            if (lastWrittenVersion < currentVersion) {
+                try {
+                    ProfileInstaller.writeProfile(this@MainActivity)
+                    prefs.edit { putLong("last_aot_version", currentVersion) }
+                    Log.i("ProfileInstaller", "AOT Profile 已为版本 $currentVersion 更新")
+                } catch (e: Exception) {
+                    Log.w("ProfileInstaller", "AOT 写入失败: ${e.message}")
+                }
+            } else {
+                Log.i(
+                    "ProfileInstaller",
+                    "$lastWrittenVersion<$currentVersion 跳过 ProfileInstaller"
+                )
             }
         } // 给没Google Play的设备跑跑 AOT
 
