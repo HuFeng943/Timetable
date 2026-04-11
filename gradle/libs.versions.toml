@@ -20,7 +20,7 @@ activityCompose = "1.13.0"
 navigationCompose = "2.9.7"
 
 # Wear Compose/Tiles/Horologist 体系
-wearComposeM3 = "1.6.0"
+wearComposeM3 = "1.6.1"
 wearToolingPreview = "1.0.0"
 playServicesWearable = "19.0.0"
 tiles = "1.6.0"
