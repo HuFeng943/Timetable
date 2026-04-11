@@ -61,8 +61,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         lifecycleScope.launch(Dispatchers.IO) {
-            val prefs =
-                getSharedPreferences("android.content.Context.MODE_PRIVATE", MODE_PRIVATE)
+            val prefs = getSharedPreferences("android.content.Context.MODE_PRIVATE", MODE_PRIVATE)
             val packageInfo = packageManager.getPackageInfo(packageName, 0)
             val currentVersion = PackageInfoCompat.getLongVersionCode(packageInfo)
 
@@ -78,8 +77,7 @@ class MainActivity : ComponentActivity() {
                 }
             } else {
                 Log.i(
-                    "ProfileInstaller",
-                    "$lastWrittenVersion<$currentVersion 跳过 ProfileInstaller"
+                    "ProfileInstaller", "$lastWrittenVersion!<$currentVersion 跳过 ProfileInstaller"
                 )
             }
         } // 给没Google Play的设备跑跑 AOT
@@ -87,7 +85,8 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 appConfigViewModel.localeRefreshEvent.collect { languageTag ->
-                    applyLanguageChange(Locale.forLanguageTag(languageTag))
+                    Log.i("localeRefreshEvent", "Locale 更新 - $languageTag")
+                    recreate()
                 }
             }
         }
@@ -98,13 +97,5 @@ class MainActivity : ComponentActivity() {
                 AppNavHost()
             }
         }
-    }
-
-    private fun applyLanguageChange(targetLocale: Locale?) {
-        val config = resources.configuration
-        config.setLocale(targetLocale)
-        resources.updateConfiguration(config, resources.displayMetrics)
-        applicationContext.resources.updateConfiguration(config, resources.displayMetrics)
-        Log.i("MainActivity", "语言动态更新为: $targetLocale")
     }
 }
