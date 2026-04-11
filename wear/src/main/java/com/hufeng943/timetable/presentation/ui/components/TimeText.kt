@@ -18,41 +18,55 @@ import java.util.Locale
 
 
 @Composable
-fun TimeText(time: LocalTime) {
-    val config = LocalAppConfig.current
-    val is24Hour = config.is24HourFormat
-    val locale = Locale.getDefault()
+fun TimeText(time: LocalTime?) {
+    val aTextStyle = MaterialTheme.typography.labelSmall.copy(
+        fontSize = 10.sp, lineHeight = 10.sp
+    )
+    if (time != null) {
+        val config = LocalAppConfig.current
+        val is24Hour = config.is24HourFormat
+        val locale = Locale.getDefault()
 
-    val localTime = remember(time) { java.time.LocalTime.of(time.hour, time.minute) }
+        val localTime = remember(time) { java.time.LocalTime.of(time.hour, time.minute) }
 
-    val timeStr = remember(localTime, is24Hour, locale) {
-        val pattern = if (is24Hour) "HH:mm" else "hh:mm"
-        DateTimeFormatter.ofPattern(pattern, locale).format(localTime)
-    }
-
-    if (is24Hour) {
-        Text(
-            text = timeStr, style = MaterialTheme.typography.labelSmall
-        )
-    } else {
-        val amPm = remember(localTime, locale) {
-            DateTimeFormatter.ofPattern("a", locale).format(localTime)
+        val timeStr = remember(localTime, is24Hour, locale) {
+            val pattern = if (is24Hour) "HH:mm" else "hh:mm"
+            DateTimeFormatter.ofPattern(pattern, locale).format(localTime)
         }
 
-        val aTextStyle = MaterialTheme.typography.labelSmall.copy(
-            fontSize = 10.sp, lineHeight = 10.sp
-        )
+        if (is24Hour) {
+            Text(
+                text = timeStr, style = MaterialTheme.typography.labelSmall
+            )
+        } else {
+            val amPm = remember(localTime, locale) {
+                DateTimeFormatter.ofPattern("a", locale).format(localTime)
+            }
 
+            Column(
+                modifier = Modifier.width(IntrinsicSize.Min),
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Text(
+                    text = timeStr, style = MaterialTheme.typography.labelSmall
+                )
+                Text(
+                    text = amPm, style = aTextStyle
+                )
+            }
+        }
+    } else {
         Column(
             modifier = Modifier.width(IntrinsicSize.Min),
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.Top
         ) {
             Text(
-                text = timeStr, style = MaterialTheme.typography.labelSmall
+                text = "--:--", style = MaterialTheme.typography.labelSmall
             )
             Text(
-                text = amPm, style = aTextStyle
+                text = "--", style = aTextStyle
             )
         }
     }
