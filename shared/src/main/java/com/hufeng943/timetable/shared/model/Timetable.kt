@@ -17,12 +17,12 @@ import kotlin.time.Instant
 data class Timetable(
     val allCourses: List<Course> = emptyList(),
     val timetableId: Long = 0,
-    val semesterName: String, // 课程表的名称
+    val semesterName: String = "", // 课程表的名称
     @Serializable(with = InstantAsLongSerializer::class)// 这是kotlin.time.Instant
     val createdAt: Instant,
     val semesterStart: LocalDate, // 课表开始日期
     val semesterEnd: LocalDate? = null, // 课表结束日期,有可能永不结束
-    val color: Long
+    val color: Long = -1L
 ) {
     init {
         require(semesterName.isNotBlank()) { "Semester name cannot be blank." }

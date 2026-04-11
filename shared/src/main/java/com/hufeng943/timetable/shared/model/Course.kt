@@ -9,13 +9,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Course(
     val id: Long = 0,
-    val name: String,
+    val name: String = "",
     val timeSlots: List<TimeSlot> = emptyList(),
     val location: String? = null,
-    val color: Long,
+    val color: Long = -1L,
     val teacher: String? = null
-) {
-    init {
-        require(name.isNotBlank()) { "Course name cannot be blank." }
-    }
-}
+)
