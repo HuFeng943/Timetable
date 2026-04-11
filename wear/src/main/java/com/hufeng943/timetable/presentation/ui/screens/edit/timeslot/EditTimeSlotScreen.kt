@@ -96,7 +96,6 @@ fun EditTimeSlotScreen(
                 DayOfWeekSelectionScreen(
                     initialDay = timeSlot.dayOfWeek, onDaySelected = { day ->
                         viewModel.onAction(EditTimeSlotAction.UpdateDayOfWeek(day))
-                        internalNavController.popBackStack()
                     })
             }
         }
@@ -106,7 +105,6 @@ fun EditTimeSlotScreen(
                 RecurrenceSelectionScreen(
                     initialPattern = timeSlot.recurrence, onPatternSelected = { pattern ->
                         viewModel.onAction(EditTimeSlotAction.UpdateRecurrence(pattern))
-                        internalNavController.popBackStack()
                     })
             }
         }
