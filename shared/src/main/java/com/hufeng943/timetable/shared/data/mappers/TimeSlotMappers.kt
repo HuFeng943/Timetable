@@ -9,11 +9,11 @@ import kotlinx.datetime.isoDayNumber
 
 fun TimeSlot.toTimeSlotEntity(courseId: Long): TimeSlotEntity {
     // LocalTime -> Int (分钟数)
-    val startMinute = this.startTime.hour * 60 + this.startTime.minute
-    val endMinute = this.endTime.hour * 60 + this.endTime.minute
+    val startMinute = this.startTime!!.hour * 60 + this.startTime.minute
+    val endMinute = this.endTime!!.hour * 60 + this.endTime.minute
 
     // DayOfWeek -> Int (isoDayNumber)
-    val dayOfWeekInt = this.dayOfWeek.isoDayNumber
+    val dayOfWeekInt = this.dayOfWeek!!.isoDayNumber
 
     // WeekPattern -> Int (ordinal)
     val recurrenceInt = this.recurrence.ordinal

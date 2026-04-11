@@ -108,9 +108,9 @@ fun TimeSlotCard(
 
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Top) {
                 val dayText = remember(timeSlot.dayOfWeek, locale) {
-                    timeSlot.dayOfWeek.toJavaDayOfWeek().getDisplayName(
+                    timeSlot.dayOfWeek?.toJavaDayOfWeek()?.getDisplayName(
                         TextStyle.SHORT, locale
-                    )
+                    ) ?: "未知"
                 }
                 val recurrenceText = remember(timeSlot.recurrence) {
                     when (timeSlot.recurrence) {

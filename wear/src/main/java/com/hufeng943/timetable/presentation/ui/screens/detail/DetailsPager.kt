@@ -26,9 +26,9 @@ fun DetailsPager(courseUi: CourseUi) {
                 Text(text = "地点：${courseUi.location ?: "未填写"}")
                 Text(
                     text = "时间：${
-                        courseUi.timeSlot.dayOfWeek.name.substring(
+                        courseUi.timeSlot.dayOfWeek?.name?.substring(
                             0, 3
-                        )
+                        ) ?: "未填写"
                     } ${courseUi.timeSlot.startTime} - ${courseUi.timeSlot.endTime}"
                 )
                 Text(text = "重复：${courseUi.timeSlot.recurrence}")

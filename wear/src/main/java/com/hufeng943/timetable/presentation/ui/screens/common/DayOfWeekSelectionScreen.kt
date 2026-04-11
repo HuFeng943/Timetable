@@ -21,7 +21,7 @@ import java.time.format.TextStyle
 
 @Composable
 fun DayOfWeekSelectionScreen(
-    initialDay: DayOfWeek, onDaySelected: (DayOfWeek) -> Unit
+    initialDay: DayOfWeek?, onDaySelected: (DayOfWeek) -> Unit
 ) {
     val days = remember { DayOfWeek.entries }
 

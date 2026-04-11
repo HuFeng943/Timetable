@@ -21,8 +21,11 @@ import com.hufeng943.timetable.presentation.ui.screens.common.RecurrenceSelectio
 import com.hufeng943.timetable.presentation.ui.screens.edit.InternalNavRoutes
 import com.hufeng943.timetable.presentation.viewmodel.edit.timeslot.EditTimeSlotAction
 import com.hufeng943.timetable.presentation.viewmodel.edit.timeslot.EditTimeSlotViewModel
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalTime
 import kotlinx.datetime.toKotlinLocalTime
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 
 @Composable
 fun EditTimeSlotScreen(
@@ -64,7 +67,9 @@ fun EditTimeSlotScreen(
         composable(InternalNavRoutes.START_TIME) {
             HandleEditUiState(uiState) { timeSlot ->
                 TimePicker(
-                    initialTime = timeSlot.startTime.toJavaLocalTime(), onTimePicked = { newTime ->
+                    initialTime = (timeSlot.startTime ?: Clock.System.now().toLocalDateTime(
+                        TimeZone.currentSystemDefault()
+                    ).time).toJavaLocalTime(), onTimePicked = { newTime ->
                         viewModel.onAction(EditTimeSlotAction.UpdateStartTime(newTime.toKotlinLocalTime()))
                         internalNavController.popBackStack()
                     }, timePickerType = if (config.is24HourFormat) {
@@ -79,7 +84,9 @@ fun EditTimeSlotScreen(
         composable(InternalNavRoutes.END_TIME) {
             HandleEditUiState(uiState) { timeSlot ->
                 TimePicker(
-                    initialTime = timeSlot.endTime.toJavaLocalTime(), onTimePicked = { newTime ->
+                    initialTime = (timeSlot.endTime ?: Clock.System.now().toLocalDateTime(
+                        TimeZone.currentSystemDefault()
+                    ).time).toJavaLocalTime(), onTimePicked = { newTime ->
                         viewModel.onAction(EditTimeSlotAction.UpdateEndTime(newTime.toKotlinLocalTime()))
                         internalNavController.popBackStack()
                     }, timePickerType = if (config.is24HourFormat) {

@@ -62,7 +62,7 @@ fun EditTimeSlotMainPager(
                     onClick = onStartTimeClick,
                     title = { Text("开始时间", style = MaterialTheme.typography.labelLarge) }
                 ) {
-                    Text(timeSlot.startTime.toDisplayString(config.is24HourFormat))
+                    Text(timeSlot.startTime?.toDisplayString(config.is24HourFormat) ?: "未设置")
                 }
             }
 
@@ -72,7 +72,7 @@ fun EditTimeSlotMainPager(
                     onClick = onEndTimeClick,
                     title = { Text("结束时间", style = MaterialTheme.typography.labelLarge) }
                 ) {
-                    Text(timeSlot.endTime.toDisplayString(config.is24HourFormat))
+                    Text(timeSlot.endTime?.toDisplayString(config.is24HourFormat) ?: "未设置")
                 }
             }
 
@@ -83,8 +83,8 @@ fun EditTimeSlotMainPager(
                     title = { Text("星期", style = MaterialTheme.typography.labelLarge) }
                 ) {
                     Text(
-                        text = timeSlot.dayOfWeek.toJavaDayOfWeek()
-                            .getDisplayName(TextStyle.FULL, Locale.getDefault()),
+                        text = timeSlot.dayOfWeek?.toJavaDayOfWeek()
+                            ?.getDisplayName(TextStyle.FULL, Locale.getDefault()) ?: "未设置",
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
