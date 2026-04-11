@@ -25,7 +25,6 @@ data class Timetable(
     val color: Long = -1L
 ) {
     init {
-        require(semesterName.isNotBlank()) { "Semester name cannot be blank." }
         require(
             semesterEnd == null || semesterStart <= semesterEnd
         ) { "Invalid semester dates." }
