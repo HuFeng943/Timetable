@@ -15,9 +15,4 @@ data class CourseUi(
     val location: String?,
     val teacher: String?,
     val dailyOrder: Int? = null
-) {
-    init {
-        require(name.isNotBlank()) { "CourseUI name cannot be blank." }
-        require(timeSlot.endTime > timeSlot.startTime) { "End time must be after start time." }
-    }
-}
+)
