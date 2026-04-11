@@ -13,11 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.todayIn
 import javax.inject.Inject
-import kotlin.time.Clock
 
 @HiltViewModel
 class EditTimeSlotViewModel @Inject constructor(
@@ -33,11 +29,7 @@ class EditTimeSlotViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             try {
-                val data = sId?.let { repository.getTimeSlotById(it).firstOrNull() } ?: TimeSlot(
-                    startTime = LocalTime(8, 0),
-                    endTime = LocalTime(9, 30),
-                    dayOfWeek = Clock.System.todayIn(TimeZone.currentSystemDefault()).dayOfWeek
-                )
+                val data = sId?.let { repository.getTimeSlotById(it).firstOrNull() } ?: TimeSlot()
                 _uiState.value = UiState.Success(data)
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e)
@@ -49,15 +41,18 @@ class EditTimeSlotViewModel @Inject constructor(
         when (action) {
             is EditTimeSlotAction.UpdateStartTime -> updateSuccessState { current ->
                 val newStart = action.startTime
-                val newEnd = if (newStart > current.endTime) newStart else current.endTime
+                val newEnd =
+                    current.endTime?.let { if (newStart > it) newStart else current.endTime }
                 current.copy(startTime = newStart, endTime = newEnd)
             }
 
             is EditTimeSlotAction.UpdateEndTime -> updateSuccessState { current ->
                 val newEnd = action.endTime
-                val newStart = if (newEnd < current.startTime) newEnd else current.startTime
+                val newStart =
+                    current.startTime?.let { if (newEnd < it) newEnd else current.startTime }
                 current.copy(startTime = newStart, endTime = newEnd)
             }
+
             is EditTimeSlotAction.UpdateDayOfWeek -> updateSuccessState { it.copy(dayOfWeek = action.dayOfWeek) }
             is EditTimeSlotAction.UpdateRecurrence -> updateSuccessState { it.copy(recurrence = action.recurrence) }
             is EditTimeSlotAction.UpdateRemark -> updateSuccessState { it.copy(remark = action.remark) }

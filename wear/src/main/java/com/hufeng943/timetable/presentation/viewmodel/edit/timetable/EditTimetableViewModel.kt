@@ -33,10 +33,8 @@ class EditTimetableViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val data = tId?.let { repository.getTimetableById(it).firstOrNull() } ?: Timetable(
-                    semesterName = "课表",
                     createdAt = Clock.System.now(),
-                    semesterStart = Clock.System.todayIn(TimeZone.currentSystemDefault()),
-                    color = 0xFFE57373
+                    semesterStart = Clock.System.todayIn(TimeZone.currentSystemDefault())
                 )
                 _uiState.value = UiState.Success(data)
             } catch (e: Exception) {
