@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.foundation.lazy.AutoCenteringParams
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.EdgeButton
@@ -45,11 +46,11 @@ fun NameEditScreen(
                 Icons.Default.Check, contentDescription = stringResource(R.string.check)
             )
         }
-    }) { contentPadding ->
+    }) {
         ScalingLazyColumn(
+            autoCentering = AutoCenteringParams(itemIndex = 1),
             modifier = Modifier.fillMaxSize(),
             state = scrollState,
-            contentPadding = contentPadding
         ) {
             item {
                 ListHeader {
