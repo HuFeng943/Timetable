@@ -16,7 +16,7 @@ import androidx.wear.compose.material3.TitleCard
 @Composable
 fun ColorPickerCard(
     label: String,
-    color: Long,
+    color: Color,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -36,7 +36,7 @@ fun ColorPickerCard(
                 .fillMaxWidth()
                 .height(40.dp)
                 .background(
-                    color = Color(color),
+                    color = color,
                     shape = MaterialTheme.shapes.medium
                 )
         )
