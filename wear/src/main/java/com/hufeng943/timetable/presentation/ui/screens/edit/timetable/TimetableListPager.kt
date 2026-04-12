@@ -57,7 +57,7 @@ fun TimetableListPager(
                     TitleCard(// TODO 课表未开始/正进行/已结束状态显示
                         onClick = { onTimetableClick(timetable.timetableId) },
                         onLongClick = { onTimetableLongClick(timetable.timetableId) },
-                        title = { Text(timetable.semesterName) },
+                        title = { Text(timetable.semesterName.ifBlank { stringResource(R.string.default_semester_name) }) },
                         subtitle = {
                             Text(
                                 text = stringResource(

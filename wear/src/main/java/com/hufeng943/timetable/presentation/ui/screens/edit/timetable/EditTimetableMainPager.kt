@@ -14,6 +14,8 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
+import com.hufeng943.timetable.presentation.ui.common.toColor
+import com.hufeng943.timetable.presentation.ui.common.toDisplayString
 import com.hufeng943.timetable.presentation.ui.components.ColorPickerCard
 import com.hufeng943.timetable.presentation.ui.components.DeleteButton
 import com.hufeng943.timetable.shared.model.Timetable
@@ -61,7 +63,10 @@ fun EditTimetableMainPager(
                         )
                     },
                 ) {
-                    Text(timetable.semesterName, style = MaterialTheme.typography.labelLarge)
+                    Text(
+                        timetable.semesterName.ifBlank { stringResource(R.string.default_semester_name) },
+                        style = MaterialTheme.typography.labelLarge
+                    )
                 }
             }
 
@@ -73,7 +78,7 @@ fun EditTimetableMainPager(
                     title = { Text(stringResource(R.string.edit_timetable_start)) },
                 ) {
                     Text(
-                        timetable.semesterStart.toString(),
+                        timetable.semesterStart.toDisplayString(),
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
@@ -87,7 +92,7 @@ fun EditTimetableMainPager(
                     title = { Text(stringResource(R.string.edit_timetable_end)) },
                 ) {
                     Text(
-                        timetable.semesterEnd?.toString() ?: "永不结束",
+                        timetable.semesterEnd?.toDisplayString() ?: "永不结束",
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
@@ -96,7 +101,7 @@ fun EditTimetableMainPager(
             item { // 颜色
                 ColorPickerCard(
                     label = stringResource(R.string.edit_timetable_color),
-                    color = timetable.color,
+                    color = timetable.color.toColor(),
                     onClick = onColorClick
                 )
             }

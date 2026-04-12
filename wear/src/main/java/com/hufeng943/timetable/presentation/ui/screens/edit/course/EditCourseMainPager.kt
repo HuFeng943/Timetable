@@ -14,6 +14,7 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
+import com.hufeng943.timetable.presentation.ui.common.toColor
 import com.hufeng943.timetable.presentation.ui.components.ColorPickerCard
 import com.hufeng943.timetable.presentation.ui.components.DeleteButton
 import com.hufeng943.timetable.shared.model.Course
@@ -103,7 +104,7 @@ fun EditCourseMainPager(
 
             item { // 颜色
                 ColorPickerCard(
-                    label = "课程颜色", color = course.color, onClick = onColorClick
+                    label = "课程颜色", color = course.color.toColor(), onClick = onColorClick
                 )
             }
 
