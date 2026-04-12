@@ -14,6 +14,7 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
+import com.hufeng943.timetable.presentation.ui.common.displayName
 import com.hufeng943.timetable.presentation.ui.common.toColor
 import com.hufeng943.timetable.presentation.ui.components.ColorPickerCard
 import com.hufeng943.timetable.presentation.ui.components.DeleteButton
@@ -64,7 +65,7 @@ fun EditCourseMainPager(
                         )
                     },
                 ) {
-                    Text(course.name, style = MaterialTheme.typography.labelLarge)
+                    Text(course.displayName, style = MaterialTheme.typography.labelLarge)
                 }
             }
 

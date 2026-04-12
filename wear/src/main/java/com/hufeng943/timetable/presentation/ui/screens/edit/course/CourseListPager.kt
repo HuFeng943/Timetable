@@ -27,6 +27,7 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
+import com.hufeng943.timetable.presentation.ui.common.displayName
 import com.hufeng943.timetable.shared.model.Course
 
 @Composable
@@ -89,7 +90,7 @@ fun CourseCard(
                         .background(Color(course.color))
                 )
                 Spacer(Modifier.width(8.dp))
-                Text(course.name, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(course.displayName, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         },
         subtitle = {

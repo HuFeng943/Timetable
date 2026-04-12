@@ -9,6 +9,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
+import com.hufeng943.timetable.presentation.ui.common.displayName
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState
 import com.hufeng943.timetable.presentation.ui.screens.common.ColorSelectionScreen
@@ -104,7 +105,7 @@ fun EditTimetableScreen(
 
         composable(InternalNavRoutes.DELETE_CONFIRM) {
             HandleEditUiState(uiState) { timetable ->
-                DeleteConfirmScreen(detail = "课表 “${timetable.semesterName}”", onConfirm = {
+                DeleteConfirmScreen(detail = "课表 “${timetable.displayName}”", onConfirm = {
                     viewModel.onAction(EditTimetableAction.Delete)
                     navController.popBackStack()
                 }, onCancel = {
