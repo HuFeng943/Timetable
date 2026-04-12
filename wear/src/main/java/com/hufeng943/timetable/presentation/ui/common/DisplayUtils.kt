@@ -18,10 +18,11 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
+@Composable
 fun WeekPattern.toDisplayString() = when (this) {
-    WeekPattern.EVERY_WEEK -> "每周"
-    WeekPattern.ODD_WEEK -> "单周"
-    WeekPattern.EVEN_WEEK -> "双周"
+    WeekPattern.EVERY_WEEK -> stringResource(R.string.every_week)
+    WeekPattern.ODD_WEEK -> stringResource(R.string.odd_week)
+    WeekPattern.EVEN_WEEK -> stringResource(R.string.even_week)
 }
 
 fun DayOfWeek.toDisplayString(textStyle: TextStyle): String =
