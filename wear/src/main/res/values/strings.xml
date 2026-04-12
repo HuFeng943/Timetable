@@ -22,4 +22,6 @@
     <string name="edit_timetable_end">End Date</string>
     <string name="edit_timetable_color">Timetable Color</string>
     <string name="check">Confirm</string>
+    <string name="default_semester_name">Unnamed Schedule</string>
+    <string name="default_course_name">Unnamed Course</string>
 </resources>
