@@ -6,12 +6,14 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.RadioButton
 import androidx.wear.compose.material3.Text
+import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.toDisplayString
 import com.hufeng943.timetable.shared.model.WeekPattern
 
@@ -36,7 +38,7 @@ fun RecurrenceSelectionScreen(
     ) {
         item {
             ListHeader {
-                Text("重复规则")
+                Text(stringResource(R.string.recurrence_title))
             }
         }
 
@@ -47,8 +49,8 @@ fun RecurrenceSelectionScreen(
                 label = { Text(pattern.toDisplayString()) },
                 secondaryLabel = {
                     when (pattern) {
-                        WeekPattern.ODD_WEEK -> Text("仅在单周上课")
-                        WeekPattern.EVEN_WEEK -> Text("仅在双周上课")
+                        WeekPattern.ODD_WEEK -> Text(stringResource(R.string.recurrence_odd_week))
+                        WeekPattern.EVEN_WEEK -> Text(stringResource(R.string.recurrence_even_week))
                         else -> null
                     }
                 },

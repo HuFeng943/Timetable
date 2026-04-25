@@ -50,8 +50,8 @@ fun EditCourseMainPager(
             item {
                 ListHeader {
                     Text(
-                        if (course.id == 0L) "添加课程"
-                        else "编辑课程"
+                        if (course.id == 0L) stringResource(R.string.edit_course_add)
+                        else stringResource(R.string.edit_course_edit)
                     )
                 }
             }
@@ -61,7 +61,8 @@ fun EditCourseMainPager(
                     onClick = onNameClick,
                     title = {
                         Text(
-                            "课程名称", style = MaterialTheme.typography.labelLarge
+                            stringResource(R.string.edit_course_name),
+                            style = MaterialTheme.typography.labelLarge
                         )
                     },
                 ) {
@@ -73,15 +74,17 @@ fun EditCourseMainPager(
                 TitleCard(
                     onClick = onLocationClick,
                     onLongClick = onLocationLongClick,
-                    subtitle = { if (course.location != null) Text("长按清除设置") },
+                    subtitle = { if (course.location != null) Text(stringResource(R.string.clear_long_press)) },
                     title = {
                         Text(
-                            "上课地点", style = MaterialTheme.typography.labelLarge
+                            stringResource(R.string.edit_course_location),
+                            style = MaterialTheme.typography.labelLarge
                         )
                     },
                 ) {
                     Text(
-                        course.location ?: "未设置", style = MaterialTheme.typography.labelLarge
+                        course.location ?: stringResource(R.string.not_set),
+                        style = MaterialTheme.typography.labelLarge
                     )
                 }
             }
@@ -90,29 +93,33 @@ fun EditCourseMainPager(
                 TitleCard(
                     onClick = onTeacherClick,
                     onLongClick = onTeacherLongClick,
-                    subtitle = { if (course.teacher != null) Text("长按清除设置") },
+                    subtitle = { if (course.teacher != null) Text(stringResource(R.string.clear_long_press)) },
                     title = {
                         Text(
-                            "授课教师", style = MaterialTheme.typography.labelLarge
+                            stringResource(R.string.edit_course_teacher),
+                            style = MaterialTheme.typography.labelLarge
                         )
                     },
                 ) {
                     Text(
-                        course.teacher ?: "未设置", style = MaterialTheme.typography.labelLarge
+                        course.teacher ?: stringResource(R.string.not_set),
+                        style = MaterialTheme.typography.labelLarge
                     )
                 }
             }
 
             item { // 颜色
                 ColorPickerCard(
-                    label = "课程颜色", color = course.color.toColor(), onClick = onColorClick
+                    label = stringResource(R.string.edit_course_color),
+                    color = course.color.toColor(),
+                    onClick = onColorClick
                 )
             }
 
             if (course.id != 0L) {
                 item {
                     DeleteButton(
-                        label = "删除此课程", onClick = onDelete
+                        label = stringResource(R.string.edit_course_delete), onClick = onDelete
                     )
                 }
             }

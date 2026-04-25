@@ -3,10 +3,12 @@ package com.hufeng943.timetable.presentation.ui.screens.edit.course
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.displayName
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
@@ -50,7 +52,10 @@ fun EditCourseScreen(
 
         composable(InternalNavRoutes.NAME) {
             HandleEditUiState(uiState) { course ->
-                NameEditScreen(label = "输入课程名称", initialText = course.name) {
+                NameEditScreen(
+                    label = stringResource(R.string.edit_course_name_hint),
+                    initialText = course.name
+                ) {
                     viewModel.onAction(EditCourseAction.UpdateName(it))
                     internalNavController.popBackStack()
                 }
@@ -59,7 +64,10 @@ fun EditCourseScreen(
 
         composable(InternalNavRoutes.LOCATION) {
             HandleEditUiState(uiState) { course ->
-                NameEditScreen(label = "输入上课地点", initialText = course.location ?: "") {
+                NameEditScreen(
+                    label = stringResource(R.string.edit_course_location_hint),
+                    initialText = course.location ?: ""
+                ) {
                     viewModel.onAction(EditCourseAction.UpdateLocation(it))
                     internalNavController.popBackStack()
                 }
@@ -68,7 +76,10 @@ fun EditCourseScreen(
 
         composable(InternalNavRoutes.TEACHER) {
             HandleEditUiState(uiState) { course ->
-                NameEditScreen(label = "输入教师姓名", initialText = course.teacher ?: "") {
+                NameEditScreen(
+                    label = stringResource(R.string.edit_course_teacher_hint),
+                    initialText = course.teacher ?: ""
+                ) {
                     viewModel.onAction(EditCourseAction.UpdateTeacher(it))
                     internalNavController.popBackStack()
                 }
@@ -84,7 +95,10 @@ fun EditCourseScreen(
 
         composable(InternalNavRoutes.DELETE_CONFIRM) {
             HandleEditUiState(uiState) { course ->
-                DeleteConfirmScreen(detail = "课程 “${course.displayName}”", onConfirm = {
+                DeleteConfirmScreen(
+                    detail = stringResource(
+                        R.string.edit_course_display_name, course.displayName
+                    ), onConfirm = {
                     viewModel.onAction(EditCourseAction.Delete)
                     navController.popBackStack()
                 }, onCancel = { internalNavController.popBackStack() })

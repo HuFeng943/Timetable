@@ -52,7 +52,11 @@ fun EditTimeSlotMainPager(
         ) {
             item {
                 ListHeader {
-                    Text(if (timeSlot.id == 0L) "添加时间段" else "编辑时间段")
+                    Text(
+                        if (timeSlot.id == 0L) stringResource(R.string.edit_timeslot_add) else stringResource(
+                            R.string.edit_timeslot_edit
+                        )
+                    )
                 }
             }
 
@@ -60,9 +64,19 @@ fun EditTimeSlotMainPager(
             item {
                 TitleCard(
                     onClick = onStartTimeClick,
-                    title = { Text("开始时间", style = MaterialTheme.typography.labelLarge) }
+                    title = {
+                        Text(
+                            stringResource(R.string.edit_timeslot_start),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 ) {
-                    Text(timeSlot.startTime?.toDisplayString(config.is24HourFormat) ?: "未设置")
+                    Text(
+                        timeSlot.startTime?.toDisplayString(config.is24HourFormat)
+                            ?: stringResource(
+                                R.string.not_set
+                            )
+                    )
                 }
             }
 
@@ -70,9 +84,18 @@ fun EditTimeSlotMainPager(
             item {
                 TitleCard(
                     onClick = onEndTimeClick,
-                    title = { Text("结束时间", style = MaterialTheme.typography.labelLarge) }
+                    title = {
+                        Text(
+                            stringResource(R.string.edit_timeslot_end),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 ) {
-                    Text(timeSlot.endTime?.toDisplayString(config.is24HourFormat) ?: "未设置")
+                    Text(
+                        timeSlot.endTime?.toDisplayString(config.is24HourFormat) ?: stringResource(
+                            R.string.not_set
+                        )
+                    )
                 }
             }
 
@@ -80,11 +103,18 @@ fun EditTimeSlotMainPager(
             item {
                 TitleCard(
                     onClick = onDayOfWeekClick,
-                    title = { Text("星期", style = MaterialTheme.typography.labelLarge) }
+                    title = {
+                        Text(
+                            stringResource(R.string.edit_timeslot_week),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 ) {
                     Text(
                         text = timeSlot.dayOfWeek?.toJavaDayOfWeek()
-                            ?.getDisplayName(TextStyle.FULL, Locale.getDefault()) ?: "未设置",
+                            ?.getDisplayName(TextStyle.FULL, Locale.getDefault()) ?: stringResource(
+                            R.string.not_set
+                        ),
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
@@ -94,7 +124,12 @@ fun EditTimeSlotMainPager(
             item {
                 TitleCard(
                     onClick = onRecurrenceClick,
-                    title = { Text("重复规则", style = MaterialTheme.typography.labelLarge) }
+                    title = {
+                        Text(
+                            stringResource(R.string.edit_timeslot_repeat),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 ) {
                     Text(
                         text = timeSlot.recurrence.toDisplayString(),
@@ -108,11 +143,16 @@ fun EditTimeSlotMainPager(
                 TitleCard(
                     onClick = onRemarkClick,
                     onLongClick = onRemarkLongClick,
-                    subtitle = { if (timeSlot.remark != null) Text("长按清除") },
-                    title = { Text("备注", style = MaterialTheme.typography.labelLarge) }
+                    subtitle = { if (timeSlot.remark != null) Text(stringResource(R.string.clear_long_press)) },
+                    title = {
+                        Text(
+                            stringResource(R.string.edit_timeslot_remark),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 ) {
                     Text(
-                        text = timeSlot.remark ?: "未设置",
+                        text = timeSlot.remark ?: stringResource(R.string.not_set),
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
@@ -120,7 +160,10 @@ fun EditTimeSlotMainPager(
 
             if (timeSlot.id != 0L) {
                 item {
-                    DeleteButton(label = "删除此时间段", onClick = onDelete)
+                    DeleteButton(
+                        label = stringResource(R.string.edit_timeslot_delete),
+                        onClick = onDelete
+                    )
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit.course
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
@@ -27,6 +29,7 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
+import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.displayName
 import com.hufeng943.timetable.shared.model.Course
 
@@ -41,7 +44,8 @@ fun CourseListPager(
     ScreenScaffold(scrollState = scrollState, edgeButton = {
         EdgeButton(onClick = onAddCourse) {
             Icon(
-                imageVector = Icons.Default.Add, contentDescription = "新增课程"
+                imageVector = Icons.Default.Add,
+                contentDescription = stringResource(R.string.edit_course_add)
             )
         }
     }) { contentPadding ->
@@ -53,12 +57,12 @@ fun CourseListPager(
         ) {
             item {
                 ListHeader {
-                    Text("课程列表")
+                    Text(stringResource(R.string.edit_course_title))
                 }
             }
             if (courses.isEmpty()) {
                 item {
-                    Text("暂无课程")
+                    Text(stringResource(R.string.edit_course_empty))
                 }
             } else {
                 items(courses, key = { it.id }) { course ->
@@ -96,8 +100,14 @@ fun CourseCard(
         subtitle = {
             // 组合地点和教师信息
             val info = listOfNotNull(
-                course.location, course.teacher, "${course.timeSlots.size}个时段"
-            ).joinToString(" · ")
-            Text(info, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                course.location,
+                course.teacher,
+                stringResource(R.string.edit_course_number, course.timeSlots.size)
+            ).joinToString(stringResource(R.string.info_separator))
+            Text(
+                info, maxLines = 1, modifier = Modifier.basicMarquee(
+                    iterations = Int.MAX_VALUE
+                )
+            )
         })
 }

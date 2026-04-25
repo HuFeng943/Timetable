@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
@@ -15,6 +16,7 @@ import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.RadioButton
 import androidx.wear.compose.material3.Text
+import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.toDisplayString
 import kotlinx.datetime.DayOfWeek
 import java.time.format.TextStyle
@@ -39,7 +41,7 @@ fun DayOfWeekSelectionScreen(
             .fillMaxSize()
             .selectableGroup()
     ) {
-        item { ListHeader { Text("选择星期") } }
+        item { ListHeader { Text(stringResource(R.string.selection_week)) } }
 
         items(days) { day ->
             RadioButton(

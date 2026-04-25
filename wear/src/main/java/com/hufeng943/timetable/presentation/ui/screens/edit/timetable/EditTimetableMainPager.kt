@@ -50,7 +50,11 @@ fun EditTimetableMainPager(
         ) {
             item {
                 ListHeader {
-                    Text(if (timetable.timetableId == 0L) stringResource(R.string.edit_timetable_add) else "编辑课表")
+                    Text(
+                        if (timetable.timetableId == 0L) stringResource(R.string.edit_timetable_add) else stringResource(
+                            R.string.edit_timetable_edit
+                        )
+                    )
                 }
             }
 
@@ -75,7 +79,7 @@ fun EditTimetableMainPager(
                 TitleCard(
                     onClick = onStartDateClick,
                     onLongClick = onStartDateLongClick,
-                    subtitle = { if (!startDateIsToday) Text("长按设置为当前日期") },
+                    subtitle = { if (!startDateIsToday) Text(stringResource(R.string.set_current_date_long_press)) },
                     title = { Text(stringResource(R.string.edit_timetable_start)) },
                 ) {
                     Text(
@@ -89,11 +93,12 @@ fun EditTimetableMainPager(
                 TitleCard(
                     onClick = onEndDateClick,
                     onLongClick = onEndDateLongClick,
-                    subtitle = { if (timetable.semesterEnd != null) Text("长按设置为永不结束") },
+                    subtitle = { if (timetable.semesterEnd != null) Text(stringResource(R.string.set_never_ends_long_press)) },
                     title = { Text(stringResource(R.string.edit_timetable_end)) },
                 ) {
                     Text(
-                        timetable.semesterEnd?.toDisplayString() ?: "永不结束",
+                        timetable.semesterEnd?.toDisplayString()
+                            ?: stringResource(R.string.never_ends),
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
@@ -109,7 +114,10 @@ fun EditTimetableMainPager(
 
             if (timetable.timetableId != 0L) { // 只有编辑时才显示
                 item {
-                    DeleteButton(label = "删除此课表", onClick = onDelete)
+                    DeleteButton(
+                        label = stringResource(R.string.edit_timetable_delete),
+                        onClick = onDelete
+                    )
                 }
             }
         }

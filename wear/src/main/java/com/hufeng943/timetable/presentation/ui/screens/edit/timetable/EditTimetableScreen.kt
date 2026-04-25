@@ -3,11 +3,13 @@ package com.hufeng943.timetable.presentation.ui.screens.edit.timetable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.compose.material3.DatePicker
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.displayName
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
@@ -88,7 +90,8 @@ fun EditTimetableScreen(
         composable(InternalNavRoutes.NAME) {
             HandleEditUiState(uiState) { timetable ->
                 NameEditScreen(
-                    label = "输入课表名称", initialText = timetable.semesterName
+                    label = stringResource(R.string.edit_timetable_name_hint),
+                    initialText = timetable.semesterName
                 ) { newValue ->
                     viewModel.onAction(EditTimetableAction.UpdateName(newValue))
                     internalNavController.popBackStack() // 保存后退出
@@ -105,7 +108,11 @@ fun EditTimetableScreen(
 
         composable(InternalNavRoutes.DELETE_CONFIRM) {
             HandleEditUiState(uiState) { timetable ->
-                DeleteConfirmScreen(detail = "课表 “${timetable.displayName}”", onConfirm = {
+                DeleteConfirmScreen(
+                    detail = stringResource(
+                        R.string.edit_timetable_display_name,
+                        timetable.displayName
+                    ), onConfirm = {
                     viewModel.onAction(EditTimetableAction.Delete)
                     navController.popBackStack()
                 }, onCancel = {

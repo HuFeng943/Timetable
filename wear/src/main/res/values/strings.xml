@@ -7,13 +7,16 @@
     <string name="hello_world" translatable="false">From the Square world,\nHello, %1$s!</string>
     <string name="tile_label" translatable="false">Example tile</string>
     <string name="complication_label" translatable="false">Example complication</string>
+    <!-- Home -->
     <string name="home_title">Today</string>
+    <string name="home_empty_course_hint">No classes today. Enjoy!</string>
+    <string name="more_title">More</string>
     <string name="more_menu_edit">Edit Timetable</string>
     <string name="more_menu_settings">Settings</string>
     <string name="more_menu_about">About</string>
-    <string name="edit_timetable_title">Edit Timetable</string>
-    <string name="more_title">More</string>
-    <string name="home_empty_course_hint">No classes today. Enjoy!</string>
+    <!-- Edit - Timetable -->
+    <string name="edit_timetable_title">Timetable List</string>
+    <string name="edit_timetable_edit">Edit Timetable</string>
     <string name="edit_timetable_add">Add Timetable</string>
     <string name="edit_timetable_empty">No timetables yet</string>
     <string name="edit_timetable_number">%1$d Courses</string>
@@ -21,7 +24,65 @@
     <string name="edit_timetable_start">Start Date</string>
     <string name="edit_timetable_end">End Date</string>
     <string name="edit_timetable_color">Timetable Color</string>
+    <string name="edit_timetable_name_hint">Enter timetable name</string>
+    <string name="edit_timetable_display_name">Timetable \"%1$s\"</string>
+    <string name="edit_timetable_delete">Delete</string>
+    <!-- Edit - Course -->
+    <string name="edit_course_title">Course List</string>
+    <string name="edit_course_add">Add Course</string>
+    <string name="edit_course_empty">No courses yet</string>
+    <string name="edit_course_number">%1$d time slots</string>
+    <string name="edit_course_name">Course Name</string>
+    <string name="edit_course_location">Location</string>
+    <string name="edit_course_teacher">Teacher</string>
+    <string name="edit_course_color">Course Color</string>
+    <string name="edit_course_name_hint">Enter course name</string>
+    <string name="edit_course_location_hint">Enter location</string>
+    <string name="edit_course_teacher_hint">Enter teacher name</string>
+    <string name="edit_course_display_name">Course \"%1$s\"</string>
+    <string name="edit_course_edit">Edit Course</string>
+    <string name="edit_course_delete">Delete</string>
+    <!-- Edit - TimeSlot -->
+    <string name="edit_timeslot_title">Time Slot List</string>
+    <string name="edit_timeslot_edit">Edit Time Slot</string>
+    <string name="edit_timeslot_add">Add Time Slot</string>
+    <string name="edit_timeslot_empty">No time slots yet</string>
+    <string name="edit_timeslot_start">Start Time</string>
+    <string name="edit_timeslot_end">End Time</string>
+    <string name="edit_timeslot_week">Weekday</string>
+    <string name="edit_timeslot_repeat">Repeat Rule</string>
+    <string name="edit_timeslot_remark">Note</string>
+    <string name="edit_timeslot_remark_hint">Enter note</string>
+    <string name="edit_timeslot_display_name">Time Slot %1$s-%2$s</string>
+    <string name="edit_timeslot_delete">Delete</string>
+    <!-- Set -->
+    <string name="clear_long_press">Long press to clear</string>
+    <string name="set_current_date_long_press">Long press to set current date</string>
+    <string name="never_ends">Never ends</string>
+    <string name="set_never_ends_long_press">Long press to set never ends</string>
+    <string name="unknown">Unknown</string>
+    <string name="not_set">Not set</string>
     <string name="check">Confirm</string>
-    <string name="default_semester_name">Unnamed Schedule</string>
+    <!-- Default -->
+    <string name="default_semester_name">Unnamed Timetable</string>
     <string name="default_course_name">Unnamed Course</string>
+    <string name="info_separator">" · "</string>
+    <!-- WeekPattern -->
+    <string name="every_week">Every week</string>
+    <string name="odd_week">Odd weeks</string>
+    <string name="even_week">Even weeks</string>
+    <string name="recurrence_title">Repeat Rule</string>
+    <string name="recurrence_odd_week">Odd weeks only</string>
+    <string name="recurrence_even_week">Even weeks only</string>
+    <!-- AppError -->
+    <string name="apperror_timetablenotfound">Timetable not found (ID: %1$d)</string>
+    <string name="apperror_coursenotfound">Course not found (ID: %1$d)</string>
+    <string name="apperror_timeslotnotfound">Time slot not found (ID: %1$d)</string>
+    <string name="apperror_invalidparameter">Invalid parameter: %1$s</string>
+    <string name="apperror_unexpectedempty">Unexpected empty state</string>
+    <string name="apperror_unknown">An unknown error occurred: %1$s</string>
+    <!-- Common -->
+    <string name="delete_confirm">Are you sure you want to delete?</string>
+    <string name="delete_confirm_hint">Once deleted, %1$s cannot be recovered.</string>
+    <string name="selection_week">Select weekday</string>
 </resources>

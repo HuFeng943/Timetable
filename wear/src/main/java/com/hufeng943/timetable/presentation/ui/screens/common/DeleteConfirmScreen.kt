@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
@@ -19,6 +20,7 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
+import com.hufeng943.timetable.R
 
 @Composable
 fun DeleteConfirmScreen(
@@ -34,7 +36,7 @@ fun DeleteConfirmScreen(
             item {
                 ListHeader {
                     Text(
-                        "确定删除吗？",
+                        stringResource(R.string.delete_confirm),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -43,7 +45,7 @@ fun DeleteConfirmScreen(
 
             item {
                 Text(
-                    text = "$detail 一旦删除就找不回来了",
+                    text = stringResource(R.string.delete_confirm_hint, detail),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,

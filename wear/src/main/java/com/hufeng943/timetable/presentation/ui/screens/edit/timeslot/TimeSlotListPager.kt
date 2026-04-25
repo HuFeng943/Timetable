@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
@@ -29,9 +30,10 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
+import com.hufeng943.timetable.R
+import com.hufeng943.timetable.presentation.ui.common.toDisplayString
 import com.hufeng943.timetable.presentation.ui.components.TimeText
 import com.hufeng943.timetable.shared.model.TimeSlot
-import com.hufeng943.timetable.shared.model.WeekPattern
 import kotlinx.datetime.toJavaDayOfWeek
 import java.time.format.TextStyle
 import java.util.Locale
@@ -46,7 +48,8 @@ fun TimeSlotListPager(
     ScreenScaffold(scrollState = scrollState, edgeButton = {
         EdgeButton(onClick = onAddTimeSlot) {
             Icon(
-                imageVector = Icons.Default.Add, contentDescription = "新增课时"
+                imageVector = Icons.Default.Add,
+                contentDescription = stringResource(R.string.edit_timeslot_add)
             )
         }
     }) { contentPadding ->
@@ -58,12 +61,12 @@ fun TimeSlotListPager(
         ) {
             item {
                 ListHeader {
-                    Text("课时列表")
+                    Text(stringResource(R.string.edit_timeslot_title))
                 }
             }
             if (timeSlots.isEmpty()) {
                 item {
-                    Text("暂无课时")
+                    Text(stringResource(R.string.edit_timeslot_empty))
                 }
             } else {
                 items(timeSlots, key = { it.id }) { timeSlot ->
@@ -110,17 +113,10 @@ fun TimeSlotCard(
                 val dayText = remember(timeSlot.dayOfWeek, locale) {
                     timeSlot.dayOfWeek?.toJavaDayOfWeek()?.getDisplayName(
                         TextStyle.SHORT, locale
-                    ) ?: "未知"
-                }
-                val recurrenceText = remember(timeSlot.recurrence) {
-                    when (timeSlot.recurrence) {
-                        WeekPattern.EVERY_WEEK -> "每周"
-                        WeekPattern.ODD_WEEK -> "单周"
-                        WeekPattern.EVEN_WEEK -> "双周"
-                    }
-                }
+                    )
+                } ?: stringResource(R.string.unknown)
                 Text(
-                    text = "$recurrenceText · $dayText",
+                    text = "${timeSlot.recurrence.toDisplayString()} · $dayText",
                     style = MaterialTheme.typography.titleMedium
                 )
 
@@ -128,7 +124,7 @@ fun TimeSlotCard(
                     Text(
                         text = it,
                         style = MaterialTheme.typography.bodySmall,
-                        maxLines = 1,
+                        maxLines = 3,
                         overflow = TextOverflow.Ellipsis
                     )
                 }

@@ -4,12 +4,14 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.compose.material3.TimePicker
 import androidx.wear.compose.material3.TimePickerType
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
@@ -119,7 +121,8 @@ fun EditTimeSlotScreen(
         composable(InternalNavRoutes.NAME) {
             HandleEditUiState(uiState) { timeSlot ->
                 NameEditScreen(
-                    label = "输入备注", initialText = timeSlot.remark ?: ""
+                    label = stringResource(R.string.edit_timeslot_remark_hint),
+                    initialText = timeSlot.remark ?: ""
                 ) { newRemark ->
                     viewModel.onAction(EditTimeSlotAction.UpdateRemark(newRemark.ifBlank { null }))
                     internalNavController.popBackStack()
@@ -130,7 +133,11 @@ fun EditTimeSlotScreen(
         composable(InternalNavRoutes.DELETE_CONFIRM) {
             HandleEditUiState(uiState) { timeSlot ->
                 DeleteConfirmScreen(
-                    detail = "时间段 ${timeSlot.startTime}-${timeSlot.endTime}",
+                    detail = stringResource(
+                        R.string.edit_timeslot_display_name,
+                        timeSlot.startTime!!,
+                        timeSlot.endTime!!//TODO
+                    ),
                     onConfirm = {
                         viewModel.onAction(EditTimeSlotAction.Delete)
                         navController.popBackStack()

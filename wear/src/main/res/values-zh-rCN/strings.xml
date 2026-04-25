@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Home -->
     <string name="home_title">今日程</string>
+    <string name="home_empty_course_hint">今天没有课程，是自由的一天！</string>
+    <string name="more_title">更多</string>
     <string name="more_menu_edit">编辑课表</string>
     <string name="more_menu_settings">设置中心</string>
     <string name="more_menu_about">关于我们</string>
-    <string name="edit_timetable_title">课表编辑</string>
-    <string name="home_empty_course_hint">今天没有课程，是自由的一天！</string>
-    <string name="more_title">更多</string>
+    <!-- Edit - Timetable -->
+    <string name="edit_timetable_title">课表列表</string>
+    <string name="edit_timetable_edit">编辑课表</string>
     <string name="edit_timetable_add">新增课表</string>
     <string name="edit_timetable_empty">还没有课表</string>
     <string name="edit_timetable_number">共 %1$d 门课程</string>
@@ -14,7 +17,65 @@
     <string name="edit_timetable_start">课表开始日期</string>
     <string name="edit_timetable_end">课表结束日期</string>
     <string name="edit_timetable_color">课表颜色</string>
+    <string name="edit_timetable_name_hint">输入课表名称</string>
+    <string name="edit_timetable_display_name">课表 “%1$s”</string>
+    <string name="edit_timetable_delete">删除此课表</string>
+    <!-- Edit - Course -->
+    <string name="edit_course_title">课程列表</string>
+    <string name="edit_course_add">新增课程</string>
+    <string name="edit_course_empty">暂无课程</string>
+    <string name="edit_course_number">%1$d个课时</string>
+    <string name="edit_course_name">课程名称</string>
+    <string name="edit_course_location">上课地点</string>
+    <string name="edit_course_teacher">授课教师</string>
+    <string name="edit_course_color">课程颜色</string>
+    <string name="edit_course_name_hint">输入课程名称</string>
+    <string name="edit_course_location_hint">输入上课地点</string>
+    <string name="edit_course_teacher_hint">输入教师姓名</string>
+    <string name="edit_course_display_name">课程 “%1$s”</string>
+    <string name="edit_course_edit">编辑课程</string>
+    <string name="edit_course_delete">删除此课程</string>
+    <!-- Edit - TimeSlot -->
+    <string name="edit_timeslot_title">课时列表</string>
+    <string name="edit_timeslot_edit">编辑课时</string>
+    <string name="edit_timeslot_add">新增课时</string>
+    <string name="edit_timeslot_empty">暂无课时</string>
+    <string name="edit_timeslot_start">开始时间</string>
+    <string name="edit_timeslot_end">结束时间</string>
+    <string name="edit_timeslot_week">星期</string>
+    <string name="edit_timeslot_repeat">重复规则</string>
+    <string name="edit_timeslot_remark">备注</string>
+    <string name="edit_timeslot_remark_hint">输入备注</string>
+    <string name="edit_timeslot_display_name">时间段 %1$s-%2$s</string>
+    <string name="edit_timeslot_delete">删除此课时</string>
+    <!-- Set -->
+    <string name="clear_long_press">长按清除</string>
+    <string name="set_current_date_long_press">长按设置为当前日期</string>
+    <string name="never_ends">永不结束</string>
+    <string name="set_never_ends_long_press">长按设置为永不结束</string>
+    <string name="unknown">未知</string>
+    <string name="not_set">未设置</string>
     <string name="check">确定</string>
+    <!-- Default -->
     <string name="default_semester_name">未命名课表</string>
     <string name="default_course_name">未命名课程</string>
+    <string name="info_separator">" · "</string>
+    <!-- WeekPattern -->
+    <string name="every_week">每周</string>
+    <string name="odd_week">单周</string>
+    <string name="even_week">双周</string>
+    <string name="recurrence_title">重复规则</string>
+    <string name="recurrence_odd_week">仅在单周上课</string>
+    <string name="recurrence_even_week">仅在双周上课</string>
+    <!-- AppError -->
+    <string name="apperror_timetablenotfound">找不到这个课表 (ID: %1$d)</string>
+    <string name="apperror_coursenotfound">找不到这节课 (ID: %1$d)</string>
+    <string name="apperror_timeslotnotfound">找不到这个时间段 (ID: %1$d)</string>
+    <string name="apperror_invalidparameter">跳转参数错误：%1$s</string>
+    <string name="apperror_unexpectedempty">意外的空状态</string>
+    <string name="apperror_unknown">发生了未知的错误：%1$s</string>
+    <!-- Common -->
+    <string name="delete_confirm">确定删除吗？</string>
+    <string name="delete_confirm_hint">%1$s 一旦删除就找不回来了</string>
+    <string name="selection_week">选择星期</string>
 </resources>
