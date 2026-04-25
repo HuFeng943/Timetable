@@ -1,6 +1,6 @@
 [versions]
 # Gradle 插件/核心工具
-agp = "9.1.0"
+agp = "9.1.1"
 # noinspection NewerVersionAvailable
 kotlin = "2.2.10"
 ksp = "2.3.6"
@@ -15,9 +15,9 @@ profileinstaller = "1.4.1"
 
 # Compose 体系
 composeM3 = "1.4.0"
-composeBom = "2026.03.01"
+composeBom = "2026.04.01"
 activityCompose = "1.13.0"
-navigationCompose = "2.9.7"
+navigationCompose = "2.9.8"
 
 # Wear Compose/Tiles/Horologist 体系
 wearComposeM3 = "1.6.1"
@@ -33,7 +33,7 @@ watchfaceComplicationsDataSourceKtx = "1.3.0"
 room = "2.8.4"
 
 # KotlinX 依赖
-serialization = "1.10.0"
+serialization = "1.11.0"
 kotlinxDatetime = "0.7.1"
 
 # Hilt
