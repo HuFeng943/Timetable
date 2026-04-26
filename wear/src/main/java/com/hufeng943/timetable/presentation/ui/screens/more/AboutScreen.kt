@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.Text
 
 @Composable
 fun AboutScreen() {
@@ -23,7 +24,9 @@ fun AboutScreen() {
             contentPadding = contentPadding,
             modifier = Modifier.fillMaxSize()
         ) {
-            versionName//TODO
+            item {
+                Text(versionName.toString())
+            }
         }
     }
 }

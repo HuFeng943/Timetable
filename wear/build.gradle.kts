@@ -1,5 +1,20 @@
 import com.android.build.api.dsl.ApplicationExtension
 
+val versionPrefix = "0.6.7"
+
+
+fun getGitCommitCount(): Int {
+    return try {
+        val process = ProcessBuilder("git", "rev-list", "--count", "HEAD")
+            .redirectErrorStream(true).start()
+        val output = process.inputStream.bufferedReader().readText().trim()
+        process.waitFor()
+        if (process.exitValue() != 0) 1 else output.toInt()
+    } catch (_: Exception) {
+        1
+    }
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -10,14 +25,18 @@ plugins {
 configure<ApplicationExtension> {
     namespace = "com.hufeng943.timetable"
     compileSdk = 36
+    //noinspection WrongGradleMethod
+    val isRelease = gradle.startParameter.taskNames.any {
+        it.contains("Release", ignoreCase = true)
+    }
 
     defaultConfig {
         applicationId = "com.hufeng943.timetable"
         minSdk = 28
         targetSdk = 36
-        versionCode = 2
-        versionName = "0.0.0-alpha02"
-
+        versionCode = if (isRelease) getGitCommitCount() else 1
+        versionName =
+            if (isRelease) "$versionPrefix-${getGitCommitCount()}" else "$versionPrefix-debug"
     }
 
     splits {
