@@ -45,6 +45,7 @@ fun EditCourseScreen(
                     onTeacherClick = { internalNavController.navigateSingle(InternalNavRoutes.TEACHER) },
                     onTeacherLongClick = { viewModel.onAction(EditCourseAction.UpdateTeacher()) },
                     onColorClick = { internalNavController.navigateSingle(InternalNavRoutes.COLOR) },
+                    onColorLongClick = { viewModel.onAction(EditCourseAction.UpdateColor()) },
                     onDelete = { internalNavController.navigateSingle(InternalNavRoutes.DELETE_CONFIRM) })
             }
         }

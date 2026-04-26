@@ -50,7 +50,7 @@ fun Long.toColor(): Color = if (this == -1L) {
     MaterialTheme.colorScheme.primaryContainer
 } else {
     Color(this)
-}
+}// TODO 废除
 
 val Timetable.displayName: String
     @Composable

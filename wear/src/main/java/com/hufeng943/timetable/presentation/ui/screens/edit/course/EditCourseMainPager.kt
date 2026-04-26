@@ -30,6 +30,7 @@ fun EditCourseMainPager(
     onTeacherClick: () -> Unit,
     onTeacherLongClick: () -> Unit,
     onColorClick: () -> Unit,
+    onColorLongClick: () -> Unit,
     onDelete: () -> Unit,
 ) {
     val scrollState = rememberScalingLazyListState()
@@ -112,7 +113,8 @@ fun EditCourseMainPager(
                 ColorPickerCard(
                     label = stringResource(R.string.edit_course_color),
                     color = course.color.toColor(),
-                    onClick = onColorClick
+                    onClick = onColorClick,
+                    onLongClick = onColorLongClick
                 )
             }
 

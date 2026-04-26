@@ -10,7 +10,7 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
-import com.hufeng943.timetable.presentation.ui.components.TimetableCard
+import com.hufeng943.timetable.presentation.ui.components.CourseCard
 import com.hufeng943.timetable.shared.ui.CourseUi
 
 @Composable
@@ -31,7 +31,7 @@ fun CourseListPager(courseUis: List<CourseUi>) {
 
             items(
                 items = courseUis, key = { it.timeSlot.id }) { courseUi ->
-                TimetableCard(courseUi) {}
+                CourseCard(courseUi) {}
             }
         }
     }

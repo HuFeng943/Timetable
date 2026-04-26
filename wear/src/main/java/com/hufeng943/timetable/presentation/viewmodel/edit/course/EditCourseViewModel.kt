@@ -42,7 +42,9 @@ class EditCourseViewModel @Inject constructor(
             is EditCourseAction.UpdateLocation -> updateSuccessState { it.copy(location = action.location) }
             is EditCourseAction.UpdateTeacher -> updateSuccessState { it.copy(teacher = action.teacher) }
             is EditCourseAction.UpdateColor -> updateSuccessState {
-                it.copy(color = action.color.toArgb().toLong() and 0xFFFFFFFFL)
+                it.copy(color = action.color?.let { color ->
+                    (color.toArgb().toLong() and 0xFFFFFFFFL)
+                } ?: -1L)
             }
 
             EditCourseAction.Upsert -> upsertCourse()

@@ -18,17 +18,17 @@ fun ColorPickerCard(
     label: String,
     color: Color,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onLongClick: () -> Unit,
 ) {
     TitleCard(
         onClick = onClick,
+        onLongClick = onLongClick,
         title = {
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelLarge
             )
-        },
-        modifier = modifier
+        }
     ) {
         Spacer(modifier = Modifier.height(6.dp))
         Box(

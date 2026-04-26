@@ -24,7 +24,7 @@ import com.hufeng943.timetable.shared.ui.CourseUi
 
 
 @Composable
-fun TimetableCard(course: CourseUi, onClick: () -> Unit) {
+fun CourseCard(course: CourseUi, onClick: () -> Unit) {
     Card(
         onClick = onClick,
         contentPadding = PaddingValues(vertical = 4.dp, horizontal = 10.dp),

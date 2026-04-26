@@ -6,7 +6,7 @@ sealed class EditCourseAction {
     data class UpdateName(val name: String) : EditCourseAction()
     data class UpdateLocation(val location: String? = null) : EditCourseAction()
     data class UpdateTeacher(val teacher: String? = null) : EditCourseAction()
-    data class UpdateColor(val color: Color) : EditCourseAction()
+    data class UpdateColor(val color: Color? = null) : EditCourseAction()
     object Upsert : EditCourseAction()
     object Delete : EditCourseAction()
 }
