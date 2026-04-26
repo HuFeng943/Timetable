@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -20,6 +19,7 @@ import androidx.wear.compose.material3.Card
 import androidx.wear.compose.material3.CardDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
+import com.hufeng943.timetable.presentation.ui.common.toColor
 import com.hufeng943.timetable.shared.ui.CourseUi
 
 
@@ -29,7 +29,7 @@ fun CourseCard(course: CourseUi, onClick: () -> Unit) {
         onClick = onClick,
         contentPadding = PaddingValues(vertical = 4.dp, horizontal = 10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(course.color),// 卡片背景色
+            containerColor = course.color.toColor(),// 卡片背景色
         )
     ) {
         Row(
