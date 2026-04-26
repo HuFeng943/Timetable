@@ -8,6 +8,7 @@ import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.ui.platform.LocalLocale
 import androidx.core.content.edit
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -92,7 +93,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            Log.d("MainActivity", "孩子们，现在Locale是‘${Locale.getDefault()}’")
+            Log.d("MainActivity", "孩子们，现在Locale是‘${LocalLocale.current.platformLocale}’")
             TimetableTheme {
                 AppNavHost()
             }

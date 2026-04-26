@@ -3,6 +3,7 @@ package com.hufeng943.timetable.presentation.ui.screens.edit.timeslot
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
@@ -20,7 +21,6 @@ import com.hufeng943.timetable.presentation.ui.components.DeleteButton
 import com.hufeng943.timetable.shared.model.TimeSlot
 import kotlinx.datetime.toJavaDayOfWeek
 import java.time.format.TextStyle
-import java.util.Locale
 
 @Composable
 fun EditTimeSlotMainPager(
@@ -37,10 +37,13 @@ fun EditTimeSlotMainPager(
     val config = LocalAppConfig.current
     val scrollState = rememberScalingLazyListState()
 
+    val canSave = timeSlot.startTime != null
+            && timeSlot.endTime != null
+            && timeSlot.dayOfWeek != null
     ScreenScaffold(
         scrollState = scrollState,
         edgeButton = {
-            EdgeButton(onClick = onSave) {
+            EdgeButton(onClick = onSave, enabled = canSave) {
                 Icon(Icons.Default.Check, contentDescription = stringResource(R.string.check))
             }
         }
@@ -112,7 +115,8 @@ fun EditTimeSlotMainPager(
                 ) {
                     Text(
                         text = timeSlot.dayOfWeek?.toJavaDayOfWeek()
-                            ?.getDisplayName(TextStyle.FULL, Locale.getDefault()) ?: stringResource(
+                            ?.getDisplayName(TextStyle.FULL, LocalLocale.current.platformLocale)
+                            ?: stringResource(
                             R.string.not_set
                         ),
                         style = MaterialTheme.typography.labelLarge
