@@ -1,7 +1,6 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit.timetable
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
@@ -15,9 +14,8 @@ import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
-import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.ui.common.displayName
+import com.hufeng943.timetable.presentation.ui.components.edit.EditTimetableCard
 import com.hufeng943.timetable.shared.model.Timetable
 
 @Composable
@@ -55,19 +53,7 @@ fun TimetableListPager(
                 }
             } else {
                 items(timetables, key = { it.timetableId }) { timetable ->
-                    TitleCard(// TODO 课表未开始/正进行/已结束状态显示
-                        onClick = { onTimetableClick(timetable.timetableId) },
-                        onLongClick = { onTimetableLongClick(timetable.timetableId) },
-                        title = { Text(timetable.displayName) },
-                        subtitle = {
-                            Text(
-                                text = stringResource(
-                                    R.string.edit_timetable_number, timetable.allCourses.size
-                                )
-                            )
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    EditTimetableCard(onTimetableClick, timetable, onTimetableLongClick)
                 }
             }
         }
