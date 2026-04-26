@@ -7,7 +7,7 @@ sealed class EditTimetableAction {
     data class UpdateName(val name: String) : EditTimetableAction()
     data class UpdateStartDate(val date: LocalDate? = null) : EditTimetableAction()
     data class UpdateEndDate(val date: LocalDate? = null) : EditTimetableAction()
-    data class UpdateColor(val color: Color) : EditTimetableAction()
+    data class UpdateColor(val color: Color? = null) : EditTimetableAction()
     object Upsert : EditTimetableAction()
     object Delete : EditTimetableAction()
 }

@@ -48,6 +48,7 @@ fun EditTimetableScreen(
                     onEndDateClick = { internalNavController.navigateSingle(InternalNavRoutes.END_DATE) },
                     onEndDateLongClick = { viewModel.onAction(EditTimetableAction.UpdateEndDate()) },
                     onColorClick = { internalNavController.navigateSingle(InternalNavRoutes.COLOR) },
+                    onColorLongClick = { viewModel.onAction(EditTimetableAction.UpdateColor()) },
                     onDelete = { internalNavController.navigateSingle(InternalNavRoutes.DELETE_CONFIRM) },
                     startDateIsToday = viewModel.toDay == timetable.semesterStart
                 )

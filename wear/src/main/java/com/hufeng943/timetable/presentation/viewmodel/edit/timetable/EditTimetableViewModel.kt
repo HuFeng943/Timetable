@@ -63,7 +63,9 @@ class EditTimetableViewModel @Inject constructor(
             }
 
             is EditTimetableAction.UpdateColor -> updateSuccessState {
-                it.copy(color = action.color.toArgb().toLong() and 0xFFFFFFFFL)
+                it.copy(color = action.color?.let { color ->
+                    (color.toArgb().toLong() and 0xFFFFFFFFL)
+                } ?: -1L)
             }
 
             EditTimetableAction.Upsert -> upsertTimetable()

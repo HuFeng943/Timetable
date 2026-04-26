@@ -32,6 +32,7 @@ fun EditTimetableMainPager(
     onEndDateClick: () -> Unit,
     onEndDateLongClick: () -> Unit,
     onColorClick: () -> Unit,
+    onColorLongClick: () -> Unit,
     onDelete: () -> Unit,
     startDateIsToday: Boolean
 ) {
@@ -44,9 +45,7 @@ fun EditTimetableMainPager(
             }
         }) { contentPadding ->
         ScalingLazyColumn(
-            autoCentering = null,
-            state = scrollState,
-            contentPadding = contentPadding
+            autoCentering = null, state = scrollState, contentPadding = contentPadding
         ) {
             item {
                 ListHeader {
@@ -69,8 +68,7 @@ fun EditTimetableMainPager(
                     },
                 ) {
                     Text(
-                        timetable.displayName,
-                        style = MaterialTheme.typography.labelLarge
+                        timetable.displayName, style = MaterialTheme.typography.labelLarge
                     )
                 }
             }
@@ -108,15 +106,15 @@ fun EditTimetableMainPager(
                 ColorPickerCard(
                     label = stringResource(R.string.edit_timetable_color),
                     color = timetable.color.toColor(),
-                    onClick = onColorClick
+                    onClick = onColorClick,
+                    onLongClick = onColorLongClick
                 )
             }
 
             if (timetable.timetableId != 0L) { // 只有编辑时才显示
                 item {
                     DeleteButton(
-                        label = stringResource(R.string.edit_timetable_delete),
-                        onClick = onDelete
+                        label = stringResource(R.string.edit_timetable_delete), onClick = onDelete
                     )
                 }
             }
