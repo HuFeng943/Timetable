@@ -135,14 +135,12 @@ fun EditTimeSlotScreen(
                 DeleteConfirmScreen(
                     detail = stringResource(
                         R.string.edit_timeslot_display_name,
-                        timeSlot.startTime!!,
-                        timeSlot.endTime!!//TODO
-                    ),
-                    onConfirm = {
+                        timeSlot.startTime ?: stringResource(R.string.unknown),
+                        timeSlot.endTime ?: stringResource(R.string.unknown)
+                    ), onConfirm = {
                         viewModel.onAction(EditTimeSlotAction.Delete)
                         navController.popBackStack()
-                    },
-                    onCancel = {
+                    }, onCancel = {
                         internalNavController.popBackStack()
                     })
             }
