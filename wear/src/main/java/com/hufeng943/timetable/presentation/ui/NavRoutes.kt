@@ -31,4 +31,6 @@ object NavRoutes {
     fun editTimeSlot(courseId: Long, timeSlotId: Long? = null) =
         "edit_timeslot/$courseId/$timeSlotId"
 
+    //----------------------------------
+    const val MORE_ABOUT = "more/about"
 }
