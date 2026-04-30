@@ -19,6 +19,7 @@ import com.hufeng943.timetable.presentation.ui.screens.edit.timeslot.TimeSlotLis
 import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.EditTimetableScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.TimetableListScreen
 import com.hufeng943.timetable.presentation.ui.screens.home.HomeScreen
+import com.hufeng943.timetable.presentation.ui.screens.more.AboutLibrariesScreen
 import com.hufeng943.timetable.presentation.ui.screens.more.AboutScreen
 import com.hufeng943.timetable.presentation.viewmodel.AppConfigViewModel
 
@@ -28,8 +29,7 @@ fun AppNavHost(appConfigViewModel: AppConfigViewModel = hiltViewModel()) {
     val config by appConfigViewModel.appConfig.collectAsState()
     AppScaffold {
         CompositionLocalProvider(
-            LocalNavController provides navController,
-            LocalAppConfig provides config
+            LocalNavController provides navController, LocalAppConfig provides config
         ) {
             SwipeDismissableNavHost(
                 navController = navController, startDestination = NavRoutes.MAIN
@@ -51,6 +51,8 @@ fun AppNavHost(appConfigViewModel: AppConfigViewModel = hiltViewModel()) {
                 composable(NavRoutes.EDIT_TIMESLOT) { EditTimeSlotScreen() }
 
                 composable(NavRoutes.MORE_ABOUT) { AboutScreen() }
+
+                composable(NavRoutes.MORE_ABOUT_LIBRARIES) { AboutLibrariesScreen() }
             }
         }
     }

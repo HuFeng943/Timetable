@@ -28,10 +28,14 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
+import com.hufeng943.timetable.presentation.ui.NavRoutes
+import com.hufeng943.timetable.presentation.ui.common.LocalNavController
+import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 
 @Composable
 fun AboutScreen() {
     val scrollState = rememberScalingLazyListState()
+    val navController = LocalNavController.current
     val context = LocalContext.current
     val versionName = remember {
         try {
@@ -93,7 +97,8 @@ fun AboutScreen() {
 
             item {
                 TitleCard(
-                    onClick = {//TODO
+                    onClick = {
+                        navController.navigateSingle(NavRoutes.MORE_ABOUT_LIBRARIES)
                     },
                     title = { Text(stringResource(R.string.about_declaration_title)) },
                     modifier = Modifier.fillMaxWidth(),
