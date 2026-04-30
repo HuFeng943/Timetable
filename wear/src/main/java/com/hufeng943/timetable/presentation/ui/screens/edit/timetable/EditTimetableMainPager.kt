@@ -107,7 +107,8 @@ fun EditTimetableMainPager(
                     label = stringResource(R.string.edit_timetable_color),
                     color = timetable.color.toColor(),
                     onClick = onColorClick,
-                    onLongClick = onColorLongClick
+                    onLongClick = onColorLongClick,
+                    isNull = timetable.color == -1L
                 )
             }
 

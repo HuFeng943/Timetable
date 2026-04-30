@@ -44,9 +44,7 @@ fun EditCourseMainPager(
         }
     }) { contentPadding ->
         ScalingLazyColumn(
-            autoCentering = null,
-            state = scrollState,
-            contentPadding = contentPadding
+            autoCentering = null, state = scrollState, contentPadding = contentPadding
         ) {
             item {
                 ListHeader {
@@ -114,7 +112,8 @@ fun EditCourseMainPager(
                     label = stringResource(R.string.edit_course_color),
                     color = course.color.toColor(),
                     onClick = onColorClick,
-                    onLongClick = onColorLongClick
+                    onLongClick = onColorLongClick,
+                    isNull = course.color == -1L
                 )
             }
 
