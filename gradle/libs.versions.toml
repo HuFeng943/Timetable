@@ -1,6 +1,6 @@
 [versions]
 # Gradle 插件/核心工具
-agp = "9.1.1"
+agp = "9.2.0"
 # noinspection NewerVersionAvailable
 kotlin = "2.2.10"
 ksp = "2.3.6"
