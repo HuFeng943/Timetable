@@ -6,7 +6,7 @@
     <string name="more_title">更多</string>
     <string name="more_menu_edit">编辑课表</string>
     <string name="more_menu_settings">设置中心</string>
-    <string name="more_menu_about">关于我们</string>
+    <string name="more_menu_about">关于应用</string>
     <!-- Edit - Timetable -->
     <string name="edit_timetable_title">课表列表</string>
     <string name="edit_timetable_edit">编辑课表</string>
@@ -59,7 +59,6 @@
     <!-- Default -->
     <string name="default_semester_name">未命名课表</string>
     <string name="default_course_name">未命名课程</string>
-    <string name="info_separator">" · "</string>
     <!-- WeekPattern -->
     <string name="every_week">每周</string>
     <string name="odd_week">单周</string>

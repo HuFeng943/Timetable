@@ -66,7 +66,7 @@
     <!-- Default -->
     <string name="default_semester_name">Unnamed Timetable</string>
     <string name="default_course_name">Unnamed Course</string>
-    <string name="info_separator">" · "</string>
+    <string name="info_separator" translatable="false">" · "</string>
     <!-- WeekPattern -->
     <string name="every_week">Every week</string>
     <string name="odd_week">Odd weeks</string>
