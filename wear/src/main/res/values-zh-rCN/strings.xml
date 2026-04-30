@@ -79,8 +79,13 @@
     <string name="about_declaration_title">声明</string>
     <string name="about_declaration_subtitle">单击以查看开源许可</string>
     <string name="about_declaration_text">" · 本应用由 HuFeng943 开发，并借助生成式 AI 辅助\n · 目前仍在持续完善中，部分功能可能尚未完整实现\n · 开发过程中参考了社区开源项目，在此致谢"</string>
+    <string name="about_library">第三方库</string>
+    <string name="about_library_open_source">✔ 开源协议</string>
+    <string name="about_library_version">版本 %1$s</string>
+    <string name="about_library_developers">作者 %1$s</string>
     <!-- Common -->
     <string name="delete_confirm">确定删除吗？</string>
     <string name="delete_confirm_hint">%1$s 一旦删除就找不回来了</string>
     <string name="selection_week">选择星期</string>
+    <string name="error_open_url_failed">无法打开网页</string>
 </resources>

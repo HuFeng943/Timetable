@@ -87,8 +87,13 @@
     <string name="about_declaration_title">Declaration</string>
     <string name="about_declaration_subtitle">Tap to view open source licenses</string>
     <string name="about_declaration_text">" · Developed by HuFeng943 with the assistance of generative AI\n · Still under continuous improvement, some features may not be fully implemented yet\n · Thanks to the open source projects referenced during development"</string>
+    <string name="about_library">Third-party Libraries</string>
+    <string name="about_library_open_source">✔ Open Source</string>
+    <string name="about_library_version">v%1$s</string>
+    <string name="about_library_developers">By %1$s</string>
     <!-- Common -->
     <string name="delete_confirm">Are you sure you want to delete?</string>
     <string name="delete_confirm_hint">Once deleted, %1$s cannot be recovered.</string>
     <string name="selection_week">Select weekday</string>
+    <string name="error_open_url_failed">Unable to open link</string>
 </resources>
