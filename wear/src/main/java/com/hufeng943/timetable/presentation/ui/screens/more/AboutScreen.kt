@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
@@ -51,6 +52,7 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.NavRoutes
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
+import kotlinx.coroutines.launch
 
 @SuppressLint("LocalContextGetResourceValueCall")
 @Composable
@@ -73,9 +75,21 @@ fun AboutScreen() {
         drawable.toBitmap().asImageBitmap()
     }
 
-    ScreenScaffold(scrollState = scrollState) { contentPadding ->
+    ScreenScaffold(
+        scrollState = scrollState, edgeButton = {
+            EdgeButton(onClick = {
+                scope.launch {
+                    scrollState.animateScrollToItem(0)
+                }
+            }) {
+                Icon(
+                    Icons.Default.KeyboardArrowUp,
+                    contentDescription = stringResource(R.string.check)
+                )
+            }
+        }) { contentPadding ->
         ScalingLazyColumn(
-            state = scrollState, contentPadding = contentPadding, modifier = Modifier.fillMaxSize()
+            autoCentering = null, state = scrollState, contentPadding = contentPadding
         ) {
             item {
                 ListHeader {
@@ -108,8 +122,7 @@ fun AboutScreen() {
                             R.string.about_version_label,
                             stringResource(R.string.info_separator),
                             versionName
-                        ),
-                        style = MaterialTheme.typography.labelSmall
+                        ), style = MaterialTheme.typography.labelSmall
                     )
                 }) {
                     Spacer(modifier = Modifier.height(6.dp))
@@ -119,27 +132,30 @@ fun AboutScreen() {
                 }
             }
             item {
-                var expanded by remember { mutableStateOf(true) }
+                var expanded by remember { mutableStateOf(false) }
                 val rotation by animateFloatAsState(
-                    targetValue = if (expanded) 180f else 0f,
-                    label = "Rotation"
+                    targetValue = if (expanded) 180f else 0f, label = "Rotation"
                 )
                 TitleCard(
-                    onClick = { expanded = !expanded },
-                    title = {
+                    onClick = { expanded = !expanded }, title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("更新内容", modifier = Modifier.weight(1f))
+                            Text(
+                                stringResource(R.string.about_changelog_title),
+                                modifier = Modifier.weight(1f)
+                            )
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowDown,
                                 contentDescription = null,
                                 modifier = Modifier.rotate(rotation) // 箭头随状态旋转
                             )
                         }
-                    },
-                    subtitle = {
-                        Text(if (expanded) "点击收起" else "点击展开查看详情")
-                    },
-                    modifier = Modifier.fillMaxWidth()
+                    }, subtitle = {
+                        Text(
+                            if (expanded) stringResource(R.string.about_changelog_collapse_hint) else stringResource(
+                                R.string.about_changelog_expand_hint
+                            )
+                        )
+                    }, modifier = Modifier.fillMaxWidth()
                 ) {
                     // 动画
                     AnimatedVisibility(
@@ -153,7 +169,7 @@ fun AboutScreen() {
                                 .fillMaxWidth()
                         ) {
                             Text(
-                                text = "TODO",
+                                text = stringResource(R.string.about_changelog),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -186,16 +202,16 @@ fun AboutScreen() {
                     onClick = {
                         navController.navigateSingle(NavRoutes.MORE_ABOUT_LIBRARIES)
                     },
-                    title = { Text("开源协议") },
+                    title = { Text(stringResource(R.string.about_license_title)) },
                     modifier = Modifier.fillMaxWidth(),
                     subtitle = {
                         Text(
-                            text = "单击以查看使用到的第三方库",
+                            text = stringResource(R.string.about_license_subtitle),
                             style = MaterialTheme.typography.labelSmall
                         )
                     }) {
                     Text(
-                        text = "本项目采用 MIT License + Commons Clause 双协议\nMIT License 允许自由使用、修改和分发，但须保留版权声明；\nCommons Clause 附加限制：不得将本软件或其功能作为付费产品或服务的核心价值进行售卖\n详细条款请查阅项目中的 LICENSE 文件",
+                        text = stringResource(R.string.about_license_description),
                         style = MaterialTheme.typography.labelSmall
                     )
                 }

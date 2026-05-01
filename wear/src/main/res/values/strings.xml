@@ -67,6 +67,7 @@
     <string name="default_semester_name">Unnamed Timetable</string>
     <string name="default_course_name">Unnamed Course</string>
     <string name="info_separator" translatable="false">" · "</string>
+    <string name="list_separator" translatable="false">", "</string>
     <!-- WeekPattern -->
     <string name="every_week">Every week</string>
     <string name="odd_week">Odd weeks</string>
@@ -91,6 +92,13 @@
     <string name="about_library_open_source">✔ Open Source</string>
     <string name="about_library_version">v%1$s</string>
     <string name="about_library_developers">By %1$s</string>
+    <string name="about_changelog_title">Changelog</string>
+    <string name="about_changelog_collapse_hint">Tap to collapse</string>
+    <string name="about_changelog_expand_hint">Tap to expand for details</string>
+    <string name="about_changelog">TODO</string>
+    <string name="about_license_title">Open Source License</string>
+    <string name="about_license_subtitle">Tap to view third-party libraries used</string>
+    <string name="about_license_description">" · This project adopts the MIT License + Commons Clause dual license\n · The MIT License allows free use, modification, and distribution, provided that the copyright notice is retained\n · The Commons Clause adds the restriction: you may not sell the software or its functionality as a core value of a paid product or service\n · Please refer to the LICENSE file in the project for full terms"</string>
     <!-- Common -->
     <string name="delete_confirm">Are you sure you want to delete?</string>
     <string name="delete_confirm_hint">Once deleted, %1$s cannot be recovered.</string>
