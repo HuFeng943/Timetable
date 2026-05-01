@@ -87,5 +87,4 @@
     <string name="delete_confirm">确定删除吗？</string>
     <string name="delete_confirm_hint">%1$s 一旦删除就找不回来了</string>
     <string name="selection_week">选择星期</string>
-    <string name="error_open_url_failed">无法打开网页</string>
 </resources>

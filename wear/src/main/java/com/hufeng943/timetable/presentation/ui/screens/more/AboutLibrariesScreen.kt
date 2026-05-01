@@ -1,10 +1,6 @@
 package com.hufeng943.timetable.presentation.ui.screens.more
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.net.Uri
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -67,24 +63,22 @@ fun LibraryCard(library: Library, modifier: Modifier = Modifier) {
             )
         )
     }, subtitle = {
-        if (library.openSource) {
-            Text(
-                text = stringResource(R.string.about_library_open_source),
-                style = MaterialTheme.typography.bodySmall,
-            )
-        }
-    }, onClick = {
-        if (!library.website.isNullOrBlank()) {
-            try {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(library.website)).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-                context.startActivity(intent)
-            } catch (e: Exception) {
-                Log.e("LibraryCard", "打开网址失败：$e")
-                Toast.makeText(
-                    context, context.getText(R.string.error_open_url_failed), Toast.LENGTH_SHORT
-                ).show()
+        Column() {
+            if (library.openSource) {
+                Text(
+                    text = stringResource(R.string.about_library_open_source),
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+            if (!library.website.isNullOrBlank()) {
+                Text(
+                    text = library.website.toString(),
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.basicMarquee(
+                        iterations = Int.MAX_VALUE
+                    )
+                )
+
             }
         }
     }) {
