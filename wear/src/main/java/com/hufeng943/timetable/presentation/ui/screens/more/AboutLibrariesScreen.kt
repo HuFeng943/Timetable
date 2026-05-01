@@ -1,6 +1,5 @@
 package com.hufeng943.timetable.presentation.ui.screens.more
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,7 +48,6 @@ fun AboutLibrariesScreen() {
     }
 }
 
-@SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 fun LibraryCard(library: Library, modifier: Modifier = Modifier) {
     val context = LocalContext.current

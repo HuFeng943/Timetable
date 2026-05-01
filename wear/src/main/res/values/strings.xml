@@ -85,7 +85,7 @@
     <string name="about_version_label">App version %1$s %2$s</string>
     <string name="about_description">A timetable app designed for smartwatches, focused on providing a concise and intuitive course viewing experience.</string>
     <string name="about_declaration_title">Declaration</string>
-    <string name="about_declaration_subtitle">Tap to open project homepage</string>
+    <string name="about_declaration_subtitle" translatable="false">https://github.com/HuFeng943/Timetable</string>
     <string name="about_declaration_text">" · Developed by HuFeng943 with the assistance of generative AI\n · Still under continuous improvement, some features may not be fully implemented yet\n · Thanks to the open source projects referenced during development"</string>
     <string name="about_library">Third-party Libraries</string>
     <string name="about_library_open_source">✔ Open Source</string>
