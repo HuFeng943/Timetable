@@ -34,4 +34,5 @@ object NavRoutes {
     //----------------------------------
     const val MORE_ABOUT = "more/about"
     const val MORE_ABOUT_LIBRARIES = "more/about/libraries"
+    const val MORE_SETTINGS = "more/settings"
 }

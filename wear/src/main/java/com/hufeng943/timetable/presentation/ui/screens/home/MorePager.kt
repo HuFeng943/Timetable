@@ -98,7 +98,7 @@ fun MorePager(
             // 2. 设置
             item {
                 FilledTonalButton(
-                    onClick = { /* TODO */ },
+                    onClick = { navController.navigateSingle(NavRoutes.MORE_SETTINGS) },
                     modifier = Modifier.fillMaxWidth(),
                     icon = {
                         Icon(imageVector = Icons.Default.Settings, contentDescription = null)
