@@ -6,6 +6,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.compose.material3.AppScaffold
+import androidx.wear.compose.material3.TimeText
+import androidx.wear.compose.material3.TimeTextDefaults.rememberTimeSource
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -28,7 +30,13 @@ import com.hufeng943.timetable.presentation.viewmodel.AppConfigViewModel
 fun AppNavHost(appConfigViewModel: AppConfigViewModel = hiltViewModel()) {
     val navController = rememberSwipeDismissableNavController()
     val config by appConfigViewModel.appConfig.collectAsState()
-    AppScaffold {
+    AppScaffold(timeText = {
+        TimeText(
+            timeSource = if (config.is24HourFormat) rememberTimeSource("HH:mm") else rememberTimeSource(
+                "h:mm"
+            )
+        )
+    }) {
         CompositionLocalProvider(
             LocalNavController provides navController, LocalAppConfig provides config
         ) {

@@ -21,7 +21,6 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.NavRoutes
-import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 import com.hufeng943.timetable.presentation.viewmodel.AppConfigViewModel
@@ -32,7 +31,6 @@ fun MorePager(
 ) {
     val scrollState = rememberScalingLazyListState()
     val navController = LocalNavController.current
-    val config = LocalAppConfig.current
 
     ScreenScaffold(scrollState = scrollState) { contentPadding ->
         ScalingLazyColumn(
@@ -42,44 +40,6 @@ fun MorePager(
                 ListHeader {
                     Text(stringResource(R.string.more_title))
                 }
-            }
-
-            item {// 临时测试用
-                // 获取当前语言标签（用于逻辑判断）
-                val currentLangTag = config.languageTag  // null 表示跟随系统
-
-                FilledTonalButton(
-                    onClick = {
-                        // 根据当前 languageTag 决定下一个 languageTag
-                        val nextTag = when {
-                            currentLangTag == null -> "zh-CN"           // 跟随系统 → 简体中文
-                            currentLangTag.startsWith("zh") -> "en"      // 中文 → 英文
-                            currentLangTag.startsWith("en") -> null      // 英文 → 跟随系统
-                            else -> "zh-CN"                              // 其他 → 简体中文
-                        }
-                        // ViewModel 的 updateLanguage 应接受 String? 类型
-                        appConfigViewModel.updateLanguage(nextTag)
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = {
-                        val labelText = when {
-                            currentLangTag == null -> "切换到中文"
-                            currentLangTag.startsWith("zh") -> "Switch to English"
-                            currentLangTag.startsWith("en") -> "使用系统语言"
-                            else -> "重置语言"
-                        }
-                        Text(labelText)
-                    },
-                    secondaryLabel = {
-                        val statusText = when {
-                            currentLangTag == null -> "跟随系统"
-                            currentLangTag.startsWith("zh") -> "简体中文"
-                            currentLangTag.startsWith("en") -> "English"
-                            else -> currentLangTag
-                        }
-                        Text("当前: $statusText")
-                    }
-                )
             }
 
             // 1. 编辑课表
