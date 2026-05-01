@@ -19,8 +19,8 @@ import com.hufeng943.timetable.presentation.ui.screens.edit.timeslot.TimeSlotLis
 import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.EditTimetableScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.TimetableListScreen
 import com.hufeng943.timetable.presentation.ui.screens.home.HomeScreen
-import com.hufeng943.timetable.presentation.ui.screens.more.AboutLibrariesScreen
-import com.hufeng943.timetable.presentation.ui.screens.more.AboutScreen
+import com.hufeng943.timetable.presentation.ui.screens.more.about.AboutLibrariesScreen
+import com.hufeng943.timetable.presentation.ui.screens.more.about.AboutScreen
 import com.hufeng943.timetable.presentation.viewmodel.AppConfigViewModel
 
 @Composable

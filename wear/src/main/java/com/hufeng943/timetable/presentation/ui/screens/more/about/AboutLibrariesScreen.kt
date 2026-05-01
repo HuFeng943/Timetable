@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.ui.screens.more
+package com.hufeng943.timetable.presentation.ui.screens.more.about
 
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Column

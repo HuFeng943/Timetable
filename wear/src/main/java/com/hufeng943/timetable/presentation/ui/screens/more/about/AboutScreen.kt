@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.ui.screens.more
+package com.hufeng943.timetable.presentation.ui.screens.more.about
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -46,7 +46,6 @@ import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
-import androidx.wear.remote.interactions.RemoteActivityHelper
 import com.google.android.gms.wearable.Wearable
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.NavRoutes
@@ -60,7 +59,6 @@ fun AboutScreen() {
     val scrollState = rememberScalingLazyListState()
     val navController = LocalNavController.current
     val context = LocalContext.current
-    val remoteActivityHelper = remember { RemoteActivityHelper(context) }
     val scope = rememberCoroutineScope()
     val nodeClient = Wearable.getNodeClient(context)
     val versionName = remember {
