@@ -79,7 +79,6 @@ fun LibraryCard(library: Library, modifier: Modifier = Modifier) {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(library.website)).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(intent)
             } catch (e: Exception) {
                 Log.e("LibraryCard", "打开网址失败：$e")

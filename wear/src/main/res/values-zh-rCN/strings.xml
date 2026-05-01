@@ -77,7 +77,7 @@
     <string name="about_version_label">应用版本 %1$s %2$s</string>
     <string name="about_description">一个为智能手表设计的课程表应用，专注于提供简洁直观的课程查看体验</string>
     <string name="about_declaration_title">声明</string>
-    <string name="about_declaration_subtitle">单击以查看开源许可</string>
+    <string name="about_declaration_subtitle">单击以打开项目主页</string>
     <string name="about_declaration_text">" · 本应用由 HuFeng943 开发，并借助生成式 AI 辅助\n · 目前仍在持续完善中，部分功能可能尚未完整实现\n · 开发过程中参考了社区开源项目，在此致谢"</string>
     <string name="about_library">第三方库</string>
     <string name="about_library_open_source">✔ 开源协议</string>
