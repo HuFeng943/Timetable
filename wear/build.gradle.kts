@@ -26,7 +26,7 @@ plugins {
 configure<ApplicationExtension> {
     namespace = "com.hufeng943.timetable"
     compileSdk = 36
-    //noinspection WrongGradleMethod
+
     val isRelease = gradle.startParameter.taskNames.any {
         it.contains("Release", ignoreCase = true)
     }
@@ -42,7 +42,7 @@ configure<ApplicationExtension> {
 
     splits {
         abi {
-            isEnable = true // 启用 ABI 分割打包
+            isEnable = true
             reset()
             include("armeabi-v7a", "arm64-v8a")
 
@@ -81,41 +81,47 @@ kotlin {
 }
 
 dependencies {
-    implementation(libs.play.services.wearable)
+    // 核心基础与 AndroidX
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.profileinstaller)
+    implementation(project(":shared"))
+
+    // Compose 基础体系
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.wear.tooling.preview)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.compose.material.icons.core)
 
+    // Wear OS 核心与 Compose Material 3
+    implementation(libs.play.services.wearable)
     implementation(libs.androidx.wear.compose.material3)
     implementation(libs.androidx.wear.compose.foundation)
     implementation(libs.androidx.wear.compose.navigation)
-    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.wear.tooling.preview)
+    implementation(libs.androidx.wear.remote)
 
+    // Wear Tiles 与 Complications (Horologist)
     implementation(libs.androidx.tiles)
     implementation(libs.androidx.tiles.tooling.preview)
+    implementation(libs.androidx.watchface.complications.data.source.ktx)
     implementation(libs.horologist.compose.tools)
     implementation(libs.horologist.tiles)
-    implementation(libs.androidx.watchface.complications.data.source.ktx)
 
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    implementation(libs.kotlinx.datetime)
-    implementation(libs.androidx.profileinstaller)
-    implementation(project(":shared"))
-
-    // Hilt
+    // 依赖注入 (Hilt)
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
-
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.androidx.appcompat)
-
     ksp(libs.hilt.compiler)
 
+    // 数据存储 (Room & DataStore)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    implementation(libs.androidx.datastore.preferences)
 
+    // KotlinX 扩展与辅助工具
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.aboutlibraries.compose.m3)
 }

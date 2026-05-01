@@ -1,25 +1,25 @@
 [versions]
-# Gradle 插件/核心工具
+# 构建工具与编译器
 agp = "9.2.0"
 # noinspection NewerVersionAvailable
 kotlin = "2.2.10"
 ksp = "2.3.6"
 
-# AndroidX/Google Core 依赖
+# AndroidX 核心与基础 UI
 coreKtx = "1.18.0"
 appcompat = "1.7.1"
 activity = "1.13.0"
 constraintlayout = "2.2.1"
 coreSplashscreen = "1.2.0"
-profileinstaller = "1.4.1"
+material = "1.13.0"
 
-# Compose 体系
-composeM3 = "1.4.0"
+# Compose 核心
 composeBom = "2026.04.01"
+composeM3 = "1.4.0"
 activityCompose = "1.13.0"
 navigationCompose = "2.9.8"
 
-# Wear Compose/Tiles/Horologist 体系
+# Wear OS 体系 (Compose/Tiles/Horologist)
 wearComposeM3 = "1.6.1"
 wearToolingPreview = "1.0.0"
 playServicesWearable = "19.0.0"
@@ -27,103 +27,101 @@ tiles = "1.6.0"
 tilesTooling = "1.6.0"
 tilesToolingPreview = "1.6.0"
 horologist = "0.7.15"
+wearRemote = "1.1.0"
 watchfaceComplicationsDataSourceKtx = "1.3.0"
 
-# Jetpack Data/Persistence
+# 数据存储与持久化
 room = "2.8.4"
+datastorePreferences = "1.2.1"
 
-# KotlinX 依赖
-serialization = "1.11.0"
-kotlinxDatetime = "0.7.1"
-
-# Hilt
+# 依赖注入 (Hilt)
 hilt = "2.59.2"
 androidxHilt = "1.3.0"
+
+# KotlinX 扩展库
+serialization = "1.11.0"
+kotlinxDatetime = "0.7.1"
+kotlinxCoroutines = "1.7.3"
+
+# 性能监控与三方库
+profileinstaller = "1.4.1"
+aboutLibraries = "14.0.1"
 
 # 测试依赖
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
-material = "1.13.0"
-datastorePreferences = "1.2.1"
-aboutLibraries = "14.0.1"
 
 [libraries]
-## 核心 Android/Google 依赖
+## AndroidX 核心与基础 UI
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
-androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profileinstaller" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 ## Compose 体系
-# 使用 BOM
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
-
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeM3" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
-
-## Wear Compose/Tiles/Horologist 体系
-# Compose Material 3
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeM3" }
-# Wear Compose Material 3
+## Wear OS 体系 (Compose/Tiles/Horologist)
 androidx-wear-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "wearComposeM3" }
 androidx-wear-compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "wearComposeM3" }
 androidx-wear-compose-navigation = { group = "androidx.wear.compose", name = "compose-navigation", version.ref = "wearComposeM3" }
 androidx-wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wearToolingPreview" }
-
-# Wear OS 核心/Tiles/Complications
+androidx-wear-remote = { group = "androidx.wear", name = "wear-remote-interactions", version.ref = "wearRemote" }
 play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "playServicesWearable" }
 androidx-tiles = { group = "androidx.wear.tiles", name = "tiles", version.ref = "tiles" }
 androidx-tiles-tooling = { group = "androidx.wear.tiles", name = "tiles-tooling", version.ref = "tilesTooling" }
 androidx-tiles-tooling-preview = { group = "androidx.wear.tiles", name = "tiles-tooling-preview", version.ref = "tilesToolingPreview" }
 androidx-watchface-complications-data-source-ktx = { group = "androidx.wear.watchface", name = "watchface-complications-data-source-ktx", version.ref = "watchfaceComplicationsDataSourceKtx" }
-
-# Horologist
 horologist-compose-tools = { group = "com.google.android.horologist", name = "horologist-compose-tools", version.ref = "horologist" }
 horologist-tiles = { group = "com.google.android.horologist", name = "horologist-tiles", version.ref = "horologist" }
 
-## Data Persistence (Room)
+## 数据存储与持久化
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" } # Compiler/KSP 依赖放最后
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
 
-## KotlinX 依赖
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
-kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
-
-# Hilt
+## 依赖注入 (Hilt)
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHilt" }
+
+## KotlinX 扩展库
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
+kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutines" }
+
+## 性能监控与三方库
+androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profileinstaller" }
+aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
 
 ## 测试依赖
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
-aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
 
 [plugins]
-# Android Gradle 插件
+# Android 核心插件
 android-application = { id = "com.android.application", version.ref = "agp" }
-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
-# Kotlin 插件 (全部使用统一的 `kotlin` 版本变量)
+# Kotlin 相关插件
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" } # Kotlin Compose 插件
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
-# KSP
+# 工具插件 (Hilt/KSP/Other)
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-
 aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
