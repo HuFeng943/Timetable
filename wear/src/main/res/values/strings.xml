@@ -103,4 +103,18 @@
     <string name="delete_confirm">Are you sure you want to delete?</string>
     <string name="delete_confirm_hint">Once deleted, %1$s cannot be recovered.</string>
     <string name="selection_week">Select weekday</string>
+    <!-- Settings -->
+
+    <string name="settings_language_select">语言</string>
+    <!-- Language -->
+    <string-array name="language_values" translatable="false">
+        <item>@null</item>
+        <item>zh-CN</item>
+        <item>en</item>
+    </string-array>
+    <string-array name="language_labels">
+        <item>跟随系统</item>
+        <item>简体中文</item>
+        <item>English</item>
+    </string-array>
 </resources>
