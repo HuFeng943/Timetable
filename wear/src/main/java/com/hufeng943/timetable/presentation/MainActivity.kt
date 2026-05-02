@@ -85,8 +85,7 @@ class MainActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                appConfigViewModel.localeRefreshEvent.collect { languageTag ->
-                    Log.i("localeRefreshEvent", "Locale 更新 - $languageTag")
+                appConfigViewModel.localeRecreateEvent.collect {
                     recreate()
                 }
             }

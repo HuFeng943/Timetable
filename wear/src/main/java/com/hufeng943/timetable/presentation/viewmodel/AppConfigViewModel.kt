@@ -1,6 +1,5 @@
 package com.hufeng943.timetable.presentation.viewmodel
 
-import android.content.res.Resources
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.data.PreferenceStorage
@@ -27,19 +26,19 @@ class AppConfigViewModel @Inject constructor(
     )
 
     fun updateFormat(newFormat: TimeFormat) {
-        viewModelScope.launch { preferenceStorage.setTimeFormat(newFormat) }
+        viewModelScope.launch {
+            preferenceStorage.setTimeFormat(newFormat)
+            _localeRecreateEvent.emit(Unit)
+        }
     }
 
-    private val _localeRefreshEvent = MutableSharedFlow<String>(replay = 0)
-    val localeRefreshEvent = _localeRefreshEvent.asSharedFlow()
+    private val _localeRecreateEvent = MutableSharedFlow<Unit>(replay = 0)
+    val localeRecreateEvent = _localeRecreateEvent.asSharedFlow()
 
     fun updateLanguage(languageTag: String?) {
         viewModelScope.launch {
             preferenceStorage.setLanguage(languageTag)
-            // 发送通知
-            _localeRefreshEvent.emit(
-                languageTag ?: Resources.getSystem().configuration.locales[0].toLanguageTag()
-            )
+            _localeRecreateEvent.emit(Unit)
         }
     }
 }
