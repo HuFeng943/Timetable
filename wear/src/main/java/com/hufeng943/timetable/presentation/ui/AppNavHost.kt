@@ -23,7 +23,7 @@ import com.hufeng943.timetable.presentation.ui.screens.edit.timetable.TimetableL
 import com.hufeng943.timetable.presentation.ui.screens.home.HomeScreen
 import com.hufeng943.timetable.presentation.ui.screens.more.about.AboutLibrariesScreen
 import com.hufeng943.timetable.presentation.ui.screens.more.about.AboutScreen
-import com.hufeng943.timetable.presentation.ui.screens.more.settings.SettingPager
+import com.hufeng943.timetable.presentation.ui.screens.more.settings.SettingScreen
 import com.hufeng943.timetable.presentation.viewmodel.AppConfigViewModel
 
 @Composable
@@ -63,7 +63,7 @@ fun AppNavHost(appConfigViewModel: AppConfigViewModel = hiltViewModel()) {
 
                 composable(NavRoutes.MORE_ABOUT_LIBRARIES) { AboutLibrariesScreen() }
 
-                composable(NavRoutes.MORE_SETTINGS) { SettingPager() }
+                composable(NavRoutes.MORE_SETTINGS) { SettingScreen() }
             }
         }
     }

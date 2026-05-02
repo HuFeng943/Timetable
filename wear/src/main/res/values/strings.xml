@@ -107,7 +107,7 @@
 
     <string name="settings_language">Language settings</string>
     <string name="settings_time_format">Time Format</string>
-    <string name="settings_time_format_system">System Default</string>
+    <string name="settings_time_format_system">Follow system</string>
     <string name="settings_time_format_12h">12-Hour</string>
     <string name="settings_time_format_24h">24-Hour</string>
     <!-- Language -->

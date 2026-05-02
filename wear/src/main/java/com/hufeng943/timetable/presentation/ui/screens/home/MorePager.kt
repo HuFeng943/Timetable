@@ -8,10 +8,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.FilledTonalButton
@@ -23,11 +20,9 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.NavRoutes
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
-import com.hufeng943.timetable.presentation.viewmodel.AppConfigViewModel
 
 @Composable
 fun MorePager(
-    appConfigViewModel: AppConfigViewModel = hiltViewModel(LocalContext.current as ViewModelStoreOwner)
 ) {
     val scrollState = rememberScalingLazyListState()
     val navController = LocalNavController.current
