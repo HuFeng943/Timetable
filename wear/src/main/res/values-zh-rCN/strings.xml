@@ -93,4 +93,16 @@
     <string name="delete_confirm">确定删除吗？</string>
     <string name="delete_confirm_hint">%1$s 一旦删除就找不回来了</string>
     <string name="selection_week">选择星期</string>
+    <!-- Settings -->
+    <string name="settings_language">语言设置</string>
+    <string name="settings_time_format">时间格式</string>
+    <string name="settings_time_format_system">跟随系统</string>
+    <string name="settings_time_format_12h">12 小时制</string>
+    <string name="settings_time_format_24h">24 小时制</string>
+    <!-- Language -->
+    <string-array name="language_labels">
+        <item>跟随系统</item>
+        <item>简体中文</item>
+        <item>English - 英语</item>
+    </string-array>
 </resources>

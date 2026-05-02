@@ -10,8 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.Icon
@@ -19,17 +17,14 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.RadioButton
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
-import com.hufeng943.timetable.presentation.ui.common.LocalNavController
-import com.hufeng943.timetable.presentation.viewmodel.AppConfigViewModel
+import com.hufeng943.timetable.presentation.ui.common.AppConfig
 
 @Composable
-fun LanguageSelectScreen(
-    appConfigViewModel: AppConfigViewModel = hiltViewModel(LocalContext.current as ViewModelStoreOwner)
+fun LanguageSelectPager(
+    config: AppConfig,
+    onLanguageSelect: (String?) -> Unit
 ) {
     val context = LocalContext.current
-    val navController = LocalNavController.current
-    val config = LocalAppConfig.current
 
     val languageValues = context.resources.getStringArray(R.array.language_values).toList()
     val languageLabels = context.resources.getStringArray(R.array.language_labels).toList()
@@ -55,7 +50,7 @@ fun LanguageSelectScreen(
     ) {
         item {
             ListHeader {
-                Text(stringResource(R.string.settings_language_select)) // 建议改为 stringResource(R.string.language_select_title)
+                Text(stringResource(R.string.settings_language))
             }
         }
 
@@ -71,7 +66,7 @@ fun LanguageSelectScreen(
             RadioButton(
                 selected = isSelected,
                 onSelect = {
-                    appConfigViewModel.updateLanguage(tag)
+                    onLanguageSelect(tag)
                 },
                 label = {
                     Text(text = label)
