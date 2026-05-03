@@ -8,6 +8,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
+import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 import com.hufeng943.timetable.presentation.viewmodel.AppConfigViewModel
 
 @Composable
@@ -23,8 +24,8 @@ fun SettingScreen(
         composable(InternalNavRoutes.MAIN) {
             SettingPager(
                 config = config,
-                onLanguageSelectClick = { internalNavController.navigate(InternalNavRoutes.LANGUAGE_SELECT) },
-                onTimeFormatSelectClick = { internalNavController.navigate(InternalNavRoutes.TIME_FORMAT_SELECT) })
+                onLanguageSelectClick = { internalNavController.navigateSingle(InternalNavRoutes.LANGUAGE_SELECT) },
+                onTimeFormatSelectClick = { internalNavController.navigateSingle(InternalNavRoutes.TIME_FORMAT_SELECT) })
         }
 
         composable(InternalNavRoutes.LANGUAGE_SELECT) {
