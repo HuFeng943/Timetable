@@ -13,6 +13,7 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.displayName
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
+import com.hufeng943.timetable.presentation.ui.common.popSafe
 import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState
 import com.hufeng943.timetable.presentation.ui.screens.common.ColorSelectionScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.DeleteConfirmScreen
@@ -40,7 +41,7 @@ fun EditTimetableScreen(
                     timetable = timetable,
                     onSave = {
                         viewModel.onAction(EditTimetableAction.Upsert)
-                        navController.popBackStack()
+                        navController.popSafe()
                     },
                     onNameClick = { internalNavController.navigateSingle(InternalNavRoutes.NAME) },
                     onStartDateClick = { internalNavController.navigateSingle(InternalNavRoutes.START_DATE) },
@@ -64,7 +65,7 @@ fun EditTimetableScreen(
                                 newDate.toKotlinLocalDate()
                             )
                         )
-                        internalNavController.popBackStack()
+                        internalNavController.popSafe()
                     },
                     initialDate = timetable.semesterStart.toJavaLocalDate(),
                 )
@@ -80,7 +81,7 @@ fun EditTimetableScreen(
                                 newDate.toKotlinLocalDate()
                             )
                         )
-                        internalNavController.popBackStack()
+                        internalNavController.popSafe()
                     },
                     initialDate = (timetable.semesterEnd
                         ?: timetable.semesterStart).toJavaLocalDate()
@@ -95,7 +96,7 @@ fun EditTimetableScreen(
                     initialText = timetable.semesterName
                 ) { newValue ->
                     viewModel.onAction(EditTimetableAction.UpdateName(newValue))
-                    internalNavController.popBackStack() // 保存后退出
+                    internalNavController.popSafe() // 保存后退出
                 }
             }
         }
@@ -103,7 +104,7 @@ fun EditTimetableScreen(
         composable(InternalNavRoutes.COLOR) {
             ColorSelectionScreen { color ->
                 viewModel.onAction(EditTimetableAction.UpdateColor(color))
-                internalNavController.popBackStack()
+                internalNavController.popSafe()
             }
         }
 
@@ -115,9 +116,9 @@ fun EditTimetableScreen(
                         timetable.displayName
                     ), onConfirm = {
                     viewModel.onAction(EditTimetableAction.Delete)
-                    navController.popBackStack()
+                        navController.popSafe()
                 }, onCancel = {
-                    internalNavController.popBackStack() // 只是关掉确认页，回到编辑页
+                        internalNavController.popSafe() // 只是关掉确认页，回到编辑页
                 })
             }
         }

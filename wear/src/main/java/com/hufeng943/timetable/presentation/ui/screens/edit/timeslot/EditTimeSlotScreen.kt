@@ -15,6 +15,7 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
+import com.hufeng943.timetable.presentation.ui.common.popSafe
 import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState
 import com.hufeng943.timetable.presentation.ui.screens.common.DayOfWeekSelectionScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.DeleteConfirmScreen
@@ -47,7 +48,7 @@ fun EditTimeSlotScreen(
                 Log.d("timeSlot", "timeSlot: $timeSlot")
                 EditTimeSlotMainPager(timeSlot = timeSlot, onSave = {
                     viewModel.onAction(EditTimeSlotAction.Upsert)
-                    navController.popBackStack()
+                    navController.popSafe()
                 }, onStartTimeClick = {
                     internalNavController.navigateSingle(InternalNavRoutes.START_TIME)
                 }, onEndTimeClick = {
@@ -73,7 +74,7 @@ fun EditTimeSlotScreen(
                         TimeZone.currentSystemDefault()
                     ).time).toJavaLocalTime(), onTimePicked = { newTime ->
                         viewModel.onAction(EditTimeSlotAction.UpdateStartTime(newTime.toKotlinLocalTime()))
-                        internalNavController.popBackStack()
+                        internalNavController.popSafe()
                     }, timePickerType = if (config.is24HourFormat) {
                         TimePickerType.HoursMinutes24H
                     } else {
@@ -90,7 +91,7 @@ fun EditTimeSlotScreen(
                         TimeZone.currentSystemDefault()
                     ).time).toJavaLocalTime(), onTimePicked = { newTime ->
                         viewModel.onAction(EditTimeSlotAction.UpdateEndTime(newTime.toKotlinLocalTime()))
-                        internalNavController.popBackStack()
+                        internalNavController.popSafe()
                     }, timePickerType = if (config.is24HourFormat) {
                         TimePickerType.HoursMinutes24H
                     } else {
@@ -125,7 +126,7 @@ fun EditTimeSlotScreen(
                     initialText = timeSlot.remark ?: ""
                 ) { newRemark ->
                     viewModel.onAction(EditTimeSlotAction.UpdateRemark(newRemark.ifBlank { null }))
-                    internalNavController.popBackStack()
+                    internalNavController.popSafe()
                 }
             }
         }
@@ -139,9 +140,9 @@ fun EditTimeSlotScreen(
                         timeSlot.endTime ?: stringResource(R.string.unknown)
                     ), onConfirm = {
                         viewModel.onAction(EditTimeSlotAction.Delete)
-                        navController.popBackStack()
+                        navController.popSafe()
                     }, onCancel = {
-                        internalNavController.popBackStack()
+                        internalNavController.popSafe()
                     })
             }
         }

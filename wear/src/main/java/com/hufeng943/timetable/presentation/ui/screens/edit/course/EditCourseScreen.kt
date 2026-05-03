@@ -12,6 +12,7 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.displayName
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
+import com.hufeng943.timetable.presentation.ui.common.popSafe
 import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState
 import com.hufeng943.timetable.presentation.ui.screens.common.ColorSelectionScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.DeleteConfirmScreen
@@ -37,7 +38,7 @@ fun EditCourseScreen(
                     course = course,
                     onSave = {
                         viewModel.onAction(EditCourseAction.Upsert)
-                        navController.popBackStack()
+                        navController.popSafe()
                     },
                     onNameClick = { internalNavController.navigateSingle(InternalNavRoutes.NAME) },
                     onLocationClick = { internalNavController.navigateSingle(InternalNavRoutes.LOCATION) },
@@ -58,7 +59,7 @@ fun EditCourseScreen(
                     initialText = course.name
                 ) {
                     viewModel.onAction(EditCourseAction.UpdateName(it))
-                    internalNavController.popBackStack()
+                    internalNavController.popSafe()
                 }
             }
         }
@@ -70,7 +71,7 @@ fun EditCourseScreen(
                     initialText = course.location ?: ""
                 ) {
                     viewModel.onAction(EditCourseAction.UpdateLocation(it))
-                    internalNavController.popBackStack()
+                    internalNavController.popSafe()
                 }
             }
         }
@@ -82,7 +83,7 @@ fun EditCourseScreen(
                     initialText = course.teacher ?: ""
                 ) {
                     viewModel.onAction(EditCourseAction.UpdateTeacher(it))
-                    internalNavController.popBackStack()
+                    internalNavController.popSafe()
                 }
             }
         }
@@ -90,7 +91,7 @@ fun EditCourseScreen(
         composable(InternalNavRoutes.COLOR) {
             ColorSelectionScreen { color ->
                 viewModel.onAction(EditCourseAction.UpdateColor(color))
-                internalNavController.popBackStack()
+                internalNavController.popSafe()
             }
         }
 
@@ -101,8 +102,8 @@ fun EditCourseScreen(
                         R.string.edit_course_display_name, course.displayName
                     ), onConfirm = {
                     viewModel.onAction(EditCourseAction.Delete)
-                    navController.popBackStack()
-                }, onCancel = { internalNavController.popBackStack() })
+                        navController.popSafe()
+                    }, onCancel = { internalNavController.popSafe() })
             }
         }
     }
