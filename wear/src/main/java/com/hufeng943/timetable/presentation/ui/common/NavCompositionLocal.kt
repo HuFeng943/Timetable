@@ -11,16 +11,18 @@ val LocalNavController = staticCompositionLocalOf<NavHostController> {
 }
 
 fun NavController.navigateSingle(
-    route: String,
-    builder: NavOptionsBuilder.() -> Unit = {}
+    route: String, builder: NavOptionsBuilder.() -> Unit = {}
 ) {
-    Log.d("navigateSingle", "route: $route，${currentBackStackEntry?.destination?.route == route}")
-    if (currentBackStackEntry?.destination?.route == route) return
+    if (currentBackStackEntry?.destination?.route != route) {
+        navigate(route) {
+            launchSingleTop = true
+            restoreState = true
+            builder()
+        }
+        Log.d("NavController", "跳转至: $route")
 
-    navigate(route) {
-        launchSingleTop = true
-        restoreState = true
-        builder()
+    } else {
+        Log.d("NavController", "跳转被拦截: $route")
     }
 }
 
@@ -30,6 +32,6 @@ fun NavController.popSafe() {
         popBackStack()
         Log.d("NavController", "弹出: $currentRoute")
     } else {
-        Log.w("NavController", "弹出失败: $currentRoute")
+        Log.d("NavController", "弹出被拦截: $currentRoute")
     }
 }
