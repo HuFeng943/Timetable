@@ -23,3 +23,13 @@ fun NavController.navigateSingle(
         builder()
     }
 }
+
+fun NavController.popSafe() {
+    val currentRoute = currentBackStackEntry?.destination?.route
+    if (currentRoute != null && previousBackStackEntry != null) {
+        popBackStack()
+        Log.d("NavController", "弹出: $currentRoute")
+    } else {
+        Log.w("NavController", "弹出失败: $currentRoute")
+    }
+}
