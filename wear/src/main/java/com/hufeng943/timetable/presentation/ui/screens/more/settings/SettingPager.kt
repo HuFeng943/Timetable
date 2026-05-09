@@ -67,7 +67,7 @@ fun SettingPager(
             }) {
                 Icon(
                     Icons.Default.KeyboardArrowUp,
-                    contentDescription = stringResource(R.string.check)
+                    contentDescription = stringResource(R.string.back_to_top)
                 )
             }
         }) { contentPadding ->

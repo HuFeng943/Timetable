@@ -93,6 +93,7 @@
     <string name="delete_confirm">确定删除吗？</string>
     <string name="delete_confirm_hint">%1$s 一旦删除就找不回来了</string>
     <string name="selection_week">选择星期</string>
+    <string name="back_to_top">返回顶部</string>
     <!-- Settings -->
     <string name="settings_language">语言设置</string>
     <string name="settings_time_format">时间格式</string>
