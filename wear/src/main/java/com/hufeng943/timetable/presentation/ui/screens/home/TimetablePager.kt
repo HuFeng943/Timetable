@@ -1,21 +1,21 @@
 package com.hufeng943.timetable.presentation.ui.screens.home
 
-import android.util.Log
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import androidx.wear.compose.foundation.lazy.itemsIndexed
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.ListHeader
@@ -41,9 +42,9 @@ import com.hufeng943.timetable.presentation.ui.screens.common.ErrorScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.home.TimetableViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
-
 
 @Composable
 fun TimetablePager(
@@ -59,100 +60,28 @@ fun TimetablePager(
         is UiState.Success -> {
             val coursesUi = state.data
             val scrollState = rememberScalingLazyListState(initialCenterItemIndex = 0)
+
             ScreenScaffold(scrollState = scrollState) { contentPadding ->
                 if (coursesUi.isEmpty()) {
-
-                    Box(
-                        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = stringResource(R.string.home_empty_course_hint),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
+                    EmptyCourseHint()
                 } else {
-                    var dragOffset by remember { mutableFloatStateOf(0f) }
-                    val animatable = remember { Animatable(0f) }
                     val scope = rememberCoroutineScope()
+                    val dragAnimatable = remember { Animatable(0f) }
+
                     val maxDragDistance = with(LocalDensity.current) { 120.dp.toPx() }
                     val refreshThreshold = with(LocalDensity.current) { 80.dp.toPx() }
 
-                    // 同步动画值和实际偏移
-                    LaunchedEffect(animatable.value) {
-                        dragOffset = animatable.value
-                    }
-
-                    // 创建嵌套滚动连接 - 在列表顶部时拦截向下滚动
-                    val nestedScrollConnection = remember {
-                        object : NestedScrollConnection {
-                            override fun onPreScroll(
-                                available: androidx.compose.ui.geometry.Offset,
-                                source: NestedScrollSource
-                            ): androidx.compose.ui.geometry.Offset {
-                                val firstVisibleItem =
-                                    scrollState.layoutInfo.visibleItemsInfo.firstOrNull()
-                                val isAtTop =
-                                    firstVisibleItem?.index == 0 && (firstVisibleItem?.offset
-                                        ?: 0) > -100
-                                Log.d(
-                                    "isAtTop",
-                                    "${firstVisibleItem?.index} ${firstVisibleItem?.offset}"
-                                )
-                                // 向下滚动且列表在顶部时，增加下拉偏移
-                                if (available.y > 0 && isAtTop && dragOffset < maxDragDistance) {
-                                    val newOffset =
-                                        (dragOffset + available.y).coerceIn(0f, maxDragDistance)
-                                    val consumed = newOffset - dragOffset
-
-                                    scope.launch {
-                                        animatable.snapTo(newOffset)
-                                    }
-
-                                    return androidx.compose.ui.geometry.Offset(0f, consumed)
-                                }
-                                // 向上滚动且有偏移时，减少偏移（手动拉回）
-                                else if (available.y < 0 && dragOffset > 0) {
-                                    val newOffset = (dragOffset + available.y).coerceAtLeast(0f)
-                                    val consumed = newOffset - dragOffset
-
-                                    scope.launch {
-                                        animatable.snapTo(newOffset)
-                                    }
-
-                                    return androidx.compose.ui.geometry.Offset(0f, consumed)
-                                }
-                                return androidx.compose.ui.geometry.Offset.Zero
-                            }
-
-                            override suspend fun onPostFling(
-                                consumed: Velocity,
-                                available: Velocity
-                            ): Velocity {
-                                // 手势结束后，直接回到顶部或刷新位置（不使用弹簧动画）
-                                if (dragOffset > 0) {
-                                    if (dragOffset >= refreshThreshold) {
-                                        // 超过阈值，保持在下拉位置
-                                        animatable.snapTo(refreshThreshold)
-                                    } else {
-                                        // 未超过阈值，直接回到顶部
-                                        animatable.snapTo(0f)
-                                    }
-                                }
-
-                                return Velocity.Zero
-                            }
-                        }
-                    }
+                    // 获取封装好的嵌套滚动连接
+                    val nestedScrollConnection = rememberPullToRefreshConnection(
+                        scrollState = scrollState,
+                        dragAnimatable = dragAnimatable,
+                        maxDragDistance = maxDragDistance,
+                        refreshThreshold = refreshThreshold,
+                        coroutineScope = scope
+                    )
 
                     PullToDatePicker(
-                        dragOffset = dragOffset,
-                        refreshThreshold = refreshThreshold,
-                        maxDragDistance = maxDragDistance,
-                        onDragOffsetChange = { newOffset ->
-                            scope.launch {
-                                animatable.snapTo(newOffset)
-                            }
-                        }
+                        dragOffset = dragAnimatable.value, refreshThreshold = refreshThreshold
                     ) {
                         ScalingLazyColumn(
                             modifier = Modifier
@@ -184,29 +113,97 @@ fun TimetablePager(
     }
 }
 
+/**
+ * 下拉刷新的手势拦截与动画处理逻辑
+ */
+@Composable
+private fun rememberPullToRefreshConnection(
+    scrollState: ScalingLazyListState,
+    dragAnimatable: Animatable<Float, AnimationVector1D>,
+    maxDragDistance: Float,
+    refreshThreshold: Float,
+    coroutineScope: CoroutineScope
+): NestedScrollConnection {
+    return remember(scrollState, maxDragDistance, refreshThreshold) {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                val firstVisibleItem = scrollState.layoutInfo.visibleItemsInfo.firstOrNull()
+                val isAtTop = firstVisibleItem?.index == 0 && (firstVisibleItem.offset) > -100
+                val currentOffset = dragAnimatable.value
+
+                // 向下滚动且列表在顶部时，增加下拉偏移
+                if (available.y > 0 && isAtTop && currentOffset < maxDragDistance) {
+                    val newOffset = (currentOffset + available.y).coerceIn(0f, maxDragDistance)
+                    val consumed = newOffset - currentOffset
+                    coroutineScope.launch { dragAnimatable.snapTo(newOffset) }
+                    return Offset(0f, consumed)
+                }
+                // 向上滚动且有偏移时，减少偏移（手动拉回）
+                else if (available.y < 0 && currentOffset > 0) {
+                    val newOffset = (currentOffset + available.y).coerceAtLeast(0f)
+                    val consumed = newOffset - currentOffset
+                    coroutineScope.launch { dragAnimatable.snapTo(newOffset) }
+                    return Offset(0f, consumed)
+                }
+                return Offset.Zero
+            }
+
+            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
+                val currentOffset = dragAnimatable.value
+                // 手势结束后，使用动画回到顶部或维持在刷新位置
+                if (currentOffset > 0) {
+                    val targetValue =
+                        if (currentOffset >= refreshThreshold) refreshThreshold else 0f
+                    dragAnimatable.animateTo(
+                        targetValue = targetValue, animationSpec = tween(durationMillis = 300)
+                    )
+                }
+                return Velocity.Zero
+            }
+        }
+    }
+}
+
+@Composable
+private fun EmptyCourseHint() {
+    Box(
+        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = stringResource(R.string.home_empty_course_hint),
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+}
+
 @Composable
 fun PullToDatePicker(
-    dragOffset: Float,
-    refreshThreshold: Float,
-    maxDragDistance: Float,
-    onDragOffsetChange: (Float) -> Unit,
-    content: @Composable () -> Unit
+    dragOffset: Float, refreshThreshold: Float, content: @Composable () -> Unit
 ) {
-    Box {
-        // 显示刷新指示器
+    Box(modifier = Modifier.fillMaxSize()) {
+        // 背景颜色变换
         if (dragOffset > 0) {
+            val progress = (dragOffset / refreshThreshold).coerceIn(0f, 1f)
+            val backgroundColor = MaterialTheme.colorScheme.primaryContainer.copy(
+                alpha = 0.2f + progress * 0.4f
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(backgroundColor)
+            )
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .offset {
-                        IntOffset(0, (dragOffset - 60.dp.toPx()).roundToInt())
-                    }, contentAlignment = Alignment.Center
+                    .offset { IntOffset(0, (dragOffset - 60.dp.toPx()).roundToInt()) },
+                contentAlignment = Alignment.Center
             ) {
-                Text("下拉刷新")
+                //TODO 添加日期选择器
             }
         }
 
-        // 主要内容
         Box(
             modifier = Modifier.offset {
                 IntOffset(0, dragOffset.roundToInt())
