@@ -20,6 +20,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
@@ -137,6 +140,11 @@ fun AboutScreen() {
                 TitleCard(
                     onClick = { expanded = !expanded }, title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.History,
+                                contentDescription = null,
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
                             Text(
                                 stringResource(R.string.about_changelog_title),
                                 modifier = Modifier.weight(1f)
@@ -177,7 +185,16 @@ fun AboutScreen() {
             }
             item {
                 TitleCard(
-                    title = { Text(stringResource(R.string.about_declaration_title)) },
+                    title = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.Info,
+                                contentDescription = null,
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text(stringResource(R.string.about_declaration_title))
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     subtitle = {
                         Text(
@@ -200,7 +217,16 @@ fun AboutScreen() {
                     onClick = {
                         navController.navigateSingle(NavRoutes.MORE_ABOUT_LIBRARIES)
                     },
-                    title = { Text(stringResource(R.string.about_license_title)) },
+                    title = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.Description,
+                                contentDescription = null,
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text(stringResource(R.string.about_license_title))
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     subtitle = {
                         Text(
