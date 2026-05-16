@@ -123,7 +123,8 @@ fun AboutScreen() {
                             R.string.about_version_label,
                             stringResource(R.string.info_separator),
                             versionName
-                        ), style = MaterialTheme.typography.labelSmall
+                        ), style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
                     )
                 }) {
                     Spacer(modifier = Modifier.height(6.dp))
@@ -159,7 +160,8 @@ fun AboutScreen() {
                         Text(
                             if (expanded) stringResource(R.string.about_changelog_collapse_hint) else stringResource(
                                 R.string.about_changelog_expand_hint
-                            )
+                            ),
+                            modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
                         )
                     }, modifier = Modifier.fillMaxWidth()
                 ) {
@@ -231,7 +233,8 @@ fun AboutScreen() {
                     subtitle = {
                         Text(
                             text = stringResource(R.string.about_license_subtitle),
-                            style = MaterialTheme.typography.labelSmall
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
                         )
                     }) {
                     Text(
