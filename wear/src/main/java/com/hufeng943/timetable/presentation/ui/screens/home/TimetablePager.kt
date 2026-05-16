@@ -1,34 +1,16 @@
 package com.hufeng943.timetable.presentation.ui.screens.home
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.Velocity
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import androidx.wear.compose.foundation.lazy.itemsIndexed
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.ListHeader
@@ -40,13 +22,16 @@ import com.hufeng943.timetable.presentation.ui.NavRoutes.courseDetail
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 import com.hufeng943.timetable.presentation.ui.components.CourseCard
+import com.hufeng943.timetable.presentation.ui.components.PullToDatePicker
+import com.hufeng943.timetable.presentation.ui.components.PullToDatePickerState
+import com.hufeng943.timetable.presentation.ui.components.pullToDatePickerDrag
+import com.hufeng943.timetable.presentation.ui.components.rememberPullToDatePickerState
+import com.hufeng943.timetable.presentation.ui.components.rememberPullToRefreshConnection
 import com.hufeng943.timetable.presentation.ui.screens.common.ErrorScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.home.TimetableViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
+import com.hufeng943.timetable.shared.ui.CourseUi
 
 @Composable
 fun TimetablePager(
@@ -61,106 +46,18 @@ fun TimetablePager(
         is UiState.Error -> ErrorScreen(state.throwable)
         is UiState.Success -> {
             val coursesUi = state.data
+            val pullToDatePickerState = rememberPullToDatePickerState()
 
             if (coursesUi.isEmpty()) {
-                // 空状态：不使用 ScreenScaffold，直接显示并支持下拉
-                val scope = rememberCoroutineScope()
-                val dragAnimatable = remember { Animatable(0f) }
-                val maxDragDistance = with(LocalDensity.current) { 120.dp.toPx() }
-                val refreshThreshold = with(LocalDensity.current) { 80.dp.toPx() }
-
-                PullToDatePicker(
-                    dragOffset = dragAnimatable.value,
-                    refreshThreshold = refreshThreshold
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .pointerInput(Unit) {
-                                detectVerticalDragGestures(
-                                    onVerticalDrag = { _, dragAmount ->
-                                        if (dragAmount > 0) {
-                                            val newOffset =
-                                                (dragAnimatable.value + dragAmount).coerceIn(
-                                                    0f,
-                                                    maxDragDistance
-                                                )
-                                            scope.launch { dragAnimatable.snapTo(newOffset) }
-                                        } else if (dragAmount < 0 && dragAnimatable.value > 0) {
-                                            val newOffset =
-                                                (dragAnimatable.value + dragAmount).coerceAtLeast(0f)
-                                            scope.launch { dragAnimatable.snapTo(newOffset) }
-                                        }
-                                    },
-                                    onDragEnd = {
-                                        // 手势结束时添加磁吸效果
-                                        scope.launch {
-                                            val currentOffset = dragAnimatable.value
-                                            if (currentOffset > 0) {
-                                                val targetValue =
-                                                    if (currentOffset >= refreshThreshold) refreshThreshold else 0f
-                                                dragAnimatable.animateTo(
-                                                    targetValue = targetValue,
-                                                    animationSpec = tween(durationMillis = 300)
-                                                )
-                                            }
-                                        }
-                                    }
-                                )
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = stringResource(R.string.home_empty_course_hint),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
-                }
+                EmptyCoursePager(state = pullToDatePickerState)
             } else {
-                // 有课程：使用 ScreenScaffold 和 ScalingLazyColumn
-                val scrollState = rememberScalingLazyListState(initialCenterItemIndex = 0)
-                val scope = rememberCoroutineScope()
-                val dragAnimatable = remember { Animatable(0f) }
-
-                val maxDragDistance = with(LocalDensity.current) { 120.dp.toPx() }
-                val refreshThreshold = with(LocalDensity.current) { 80.dp.toPx() }
-
-                // 获取封装好的嵌套滚动连接
-                val nestedScrollConnection = rememberPullToRefreshConnection(
-                    scrollState = scrollState,
-                    dragAnimatable = dragAnimatable,
-                    maxDragDistance = maxDragDistance,
-                    refreshThreshold = refreshThreshold,
-                    coroutineScope = scope
-                )
-
-                ScreenScaffold(scrollState = scrollState) { contentPadding ->
-                    PullToDatePicker(
-                        dragOffset = dragAnimatable.value, refreshThreshold = refreshThreshold
-                    ) {
-                        ScalingLazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .nestedScroll(nestedScrollConnection),
-                            state = scrollState,
-                            contentPadding = contentPadding
-                        ) {
-                            item {
-                                ListHeader {
-                                    Text(
-                                        text = stringResource(R.string.home_title),
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
-                                }
-                            }
-                            itemsIndexed(
-                                items = coursesUi,
-                                key = { _, courseUi -> courseUi.timeSlot.id }) { _, courseUi ->
-                                CourseCard(courseUi) {
-                                    navController.navigateSingle(courseDetail(courseUi.timeSlot.id))
-                                }
-                            }
-                        }
+                CourseListPager(
+                    coursesUi = coursesUi,
+                    state = pullToDatePickerState,
+                    itemKey = { courseUi -> courseUi.timeSlot.id }
+                ) { courseUi ->
+                    CourseCard(courseUi) {
+                        navController.navigateSingle(courseDetail(courseUi.timeSlot.id))
                     }
                 }
             }
@@ -169,101 +66,75 @@ fun TimetablePager(
 }
 
 /**
- * 下拉刷新的手势拦截与动画处理逻辑
+ * 空状态页面组件
  */
 @Composable
-private fun rememberPullToRefreshConnection(
-    scrollState: ScalingLazyListState,
-    dragAnimatable: Animatable<Float, AnimationVector1D>,
-    maxDragDistance: Float,
-    refreshThreshold: Float,
-    coroutineScope: CoroutineScope
-): NestedScrollConnection {
-    return remember(scrollState, maxDragDistance, refreshThreshold) {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val firstVisibleItem = scrollState.layoutInfo.visibleItemsInfo.firstOrNull()
-                val isAtTop = firstVisibleItem?.index == 0 && (firstVisibleItem.offset) > -100
-                val currentOffset = dragAnimatable.value
-
-                // 向下滚动且列表在顶部时，增加下拉偏移
-                if (available.y > 0 && isAtTop && currentOffset < maxDragDistance) {
-                    val newOffset = (currentOffset + available.y).coerceIn(0f, maxDragDistance)
-                    val consumed = newOffset - currentOffset
-                    coroutineScope.launch { dragAnimatable.snapTo(newOffset) }
-                    return Offset(0f, consumed)
-                }
-                // 向上滚动且有偏移时，减少偏移（手动拉回）
-                else if (available.y < 0 && currentOffset > 0) {
-                    val newOffset = (currentOffset + available.y).coerceAtLeast(0f)
-                    val consumed = newOffset - currentOffset
-                    coroutineScope.launch { dragAnimatable.snapTo(newOffset) }
-                    return Offset(0f, consumed)
-                }
-                return Offset.Zero
-            }
-
-            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-                val currentOffset = dragAnimatable.value
-                // 手势结束后，使用动画回到顶部或维持在刷新位置
-                if (currentOffset > 0) {
-                    val targetValue =
-                        if (currentOffset >= refreshThreshold) refreshThreshold else 0f
-                    dragAnimatable.animateTo(
-                        targetValue = targetValue, animationSpec = tween(durationMillis = 300)
-                    )
-                }
-                return Velocity.Zero
-            }
-        }
-    }
-}
-
-@Composable
-private fun EmptyCourseHint() {
-    Box(
-        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = stringResource(R.string.home_empty_course_hint),
-            style = MaterialTheme.typography.titleMedium
-        )
-    }
-}
-
-@Composable
-fun PullToDatePicker(
-    dragOffset: Float, refreshThreshold: Float, content: @Composable () -> Unit
+private fun EmptyCoursePager(
+    state: PullToDatePickerState,
+    modifier: Modifier = Modifier
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        // 背景颜色变换
-        if (dragOffset > 0) {
-            val progress = (dragOffset / refreshThreshold).coerceIn(0f, 1f)
-            val backgroundColor = MaterialTheme.colorScheme.primaryContainer.copy(
-                alpha = 0.2f + progress * 0.4f
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(backgroundColor)
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset { IntOffset(0, (dragOffset - 60.dp.toPx()).roundToInt()) },
-                contentAlignment = Alignment.Center
-            ) {
-                //TODO 添加日期选择器
-            }
-        }
-
+    PullToDatePicker(
+        dragOffset = state.dragOffset,
+        refreshThreshold = state.refreshThreshold
+    ) {
         Box(
-            modifier = Modifier.offset {
-                IntOffset(0, dragOffset.roundToInt())
-            }) {
-            content()
+            modifier = modifier
+                .fillMaxSize()
+                .pullToDatePickerDrag(state),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = stringResource(R.string.home_empty_course_hint),
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+    }
+}
+
+/**
+ * 课程列表页面组件
+ */
+@Composable
+private fun CourseListPager(
+    coursesUi: List<CourseUi>,
+    state: PullToDatePickerState,
+    itemKey: (CourseUi) -> Any,
+    modifier: Modifier = Modifier,
+    itemContent: @Composable (CourseUi) -> Unit
+) {
+    val scrollState = rememberScalingLazyListState(initialCenterItemIndex = 0)
+    val nestedScrollConnection = rememberPullToRefreshConnection(
+        scrollState = scrollState,
+        state = state
+    )
+
+    ScreenScaffold(scrollState = scrollState) { contentPadding ->
+        PullToDatePicker(
+            dragOffset = state.dragOffset,
+            refreshThreshold = state.refreshThreshold
+        ) {
+            ScalingLazyColumn(
+                modifier = modifier
+                    .fillMaxSize()
+                    .nestedScroll(nestedScrollConnection),
+                state = scrollState,
+                contentPadding = contentPadding
+            ) {
+                item {
+                    ListHeader {
+                        Text(
+                            text = stringResource(R.string.home_title),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                }
+                itemsIndexed(
+                    items = coursesUi,
+                    key = { _, item -> itemKey(item) }
+                ) { _, item ->
+                    itemContent(item)
+                }
+            }
         }
     }
 }
