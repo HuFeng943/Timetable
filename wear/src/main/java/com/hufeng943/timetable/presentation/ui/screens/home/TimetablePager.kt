@@ -4,6 +4,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
@@ -59,27 +61,80 @@ fun TimetablePager(
         is UiState.Error -> ErrorScreen(state.throwable)
         is UiState.Success -> {
             val coursesUi = state.data
-            val scrollState = rememberScalingLazyListState(initialCenterItemIndex = 0)
 
-            ScreenScaffold(scrollState = scrollState) { contentPadding ->
-                if (coursesUi.isEmpty()) {
-                    EmptyCourseHint()
-                } else {
-                    val scope = rememberCoroutineScope()
-                    val dragAnimatable = remember { Animatable(0f) }
+            if (coursesUi.isEmpty()) {
+                // 空状态：不使用 ScreenScaffold，直接显示并支持下拉
+                val scope = rememberCoroutineScope()
+                val dragAnimatable = remember { Animatable(0f) }
+                val maxDragDistance = with(LocalDensity.current) { 120.dp.toPx() }
+                val refreshThreshold = with(LocalDensity.current) { 80.dp.toPx() }
 
-                    val maxDragDistance = with(LocalDensity.current) { 120.dp.toPx() }
-                    val refreshThreshold = with(LocalDensity.current) { 80.dp.toPx() }
+                PullToDatePicker(
+                    dragOffset = dragAnimatable.value,
+                    refreshThreshold = refreshThreshold
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .pointerInput(Unit) {
+                                detectVerticalDragGestures(
+                                    onVerticalDrag = { _, dragAmount ->
+                                        if (dragAmount > 0) {
+                                            val newOffset =
+                                                (dragAnimatable.value + dragAmount).coerceIn(
+                                                    0f,
+                                                    maxDragDistance
+                                                )
+                                            scope.launch { dragAnimatable.snapTo(newOffset) }
+                                        } else if (dragAmount < 0 && dragAnimatable.value > 0) {
+                                            val newOffset =
+                                                (dragAnimatable.value + dragAmount).coerceAtLeast(0f)
+                                            scope.launch { dragAnimatable.snapTo(newOffset) }
+                                        }
+                                    },
+                                    onDragEnd = {
+                                        // 手势结束时添加磁吸效果
+                                        scope.launch {
+                                            val currentOffset = dragAnimatable.value
+                                            if (currentOffset > 0) {
+                                                val targetValue =
+                                                    if (currentOffset >= refreshThreshold) refreshThreshold else 0f
+                                                dragAnimatable.animateTo(
+                                                    targetValue = targetValue,
+                                                    animationSpec = tween(durationMillis = 300)
+                                                )
+                                            }
+                                        }
+                                    }
+                                )
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.home_empty_course_hint),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                }
+            } else {
+                // 有课程：使用 ScreenScaffold 和 ScalingLazyColumn
+                val scrollState = rememberScalingLazyListState(initialCenterItemIndex = 0)
+                val scope = rememberCoroutineScope()
+                val dragAnimatable = remember { Animatable(0f) }
 
-                    // 获取封装好的嵌套滚动连接
-                    val nestedScrollConnection = rememberPullToRefreshConnection(
-                        scrollState = scrollState,
-                        dragAnimatable = dragAnimatable,
-                        maxDragDistance = maxDragDistance,
-                        refreshThreshold = refreshThreshold,
-                        coroutineScope = scope
-                    )
+                val maxDragDistance = with(LocalDensity.current) { 120.dp.toPx() }
+                val refreshThreshold = with(LocalDensity.current) { 80.dp.toPx() }
 
+                // 获取封装好的嵌套滚动连接
+                val nestedScrollConnection = rememberPullToRefreshConnection(
+                    scrollState = scrollState,
+                    dragAnimatable = dragAnimatable,
+                    maxDragDistance = maxDragDistance,
+                    refreshThreshold = refreshThreshold,
+                    coroutineScope = scope
+                )
+
+                ScreenScaffold(scrollState = scrollState) { contentPadding ->
                     PullToDatePicker(
                         dragOffset = dragAnimatable.value, refreshThreshold = refreshThreshold
                     ) {
