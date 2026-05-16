@@ -1,30 +1,42 @@
+<!--
+  ~ Copyright (C) 2026 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
     android:height="108dp"
-    android:viewportWidth="108"
-    android:viewportHeight="108">
-    <path android:pathData="M31,63.928c0,0 6.4,-11 12.1,-13.1c7.2,-2.6 26,-1.4 26,-1.4l38.1,38.1L107,108.928l-32,-1L31,63.928z">
-        <aapt:attr name="android:fillColor">
-            <gradient
-                android:endX="85.84757"
-                android:endY="92.4963"
-                android:startX="42.9492"
-                android:startY="49.59793"
-                android:type="linear">
-                <item
-                    android:color="#44000000"
-                    android:offset="0.0" />
-                <item
-                    android:color="#00000000"
-                    android:offset="1.0" />
-            </gradient>
-        </aapt:attr>
-    </path>
-    <path
-        android:fillColor="#FFFFFF"
-        android:fillType="nonZero"
-        android:pathData="M65.3,45.828l3.8,-6.6c0.2,-0.4 0.1,-0.9 -0.3,-1.1c-0.4,-0.2 -0.9,-0.1 -1.1,0.3l-3.9,6.7c-6.3,-2.8 -13.4,-2.8 -19.7,0l-3.9,-6.7c-0.2,-0.4 -0.7,-0.5 -1.1,-0.3C38.8,38.328 38.7,38.828 38.9,39.228l3.8,6.6C36.2,49.428 31.7,56.028 31,63.928h46C76.3,56.028 71.8,49.428 65.3,45.828zM43.4,57.328c-0.8,0 -1.5,-0.5 -1.8,-1.2c-0.3,-0.7 -0.1,-1.5 0.4,-2.1c0.5,-0.5 1.4,-0.7 2.1,-0.4c0.7,0.3 1.2,1 1.2,1.8C45.3,56.528 44.5,57.328 43.4,57.328L43.4,57.328zM64.6,57.328c-0.8,0 -1.5,-0.5 -1.8,-1.2s-0.1,-1.5 0.4,-2.1c0.5,-0.5 1.4,-0.7 2.1,-0.4c0.7,0.3 1.2,1 1.2,1.8C66.5,56.528 65.6,57.328 64.6,57.328L64.6,57.328z"
-        android:strokeWidth="1"
-        android:strokeColor="#00000000" />
+    android:viewportWidth="3000"
+    android:viewportHeight="3000">
+    <group
+        android:scaleX="0.58928573"
+        android:scaleY="0.58928573"
+        android:translateX="591.5179"
+        android:translateY="616.0714">
+        <group>
+            <clip-path android:pathData="M0,0h3000v3000h-3000z" />
+            <path
+                android:fillColor="#7c73ea"
+                android:pathData="M2144.5,535.7L1736.9,535.7C1681.4,383.6 1513.7,305.6 1364.5,360.2c-83.8,29.2 -146.2,93.6 -177.4,175.5L779.5,535.7C671.8,535.7 584.5,623 584.5,730.7L584.5,2095.6c0,107.7 87.3,195 195,195L1462,2290.6l355.1,178.8 522.3,-280L2339.5,730.7c0,-107.7 -87.3,-195 -195,-195m-682.5,0a97.5,97.5 0,1 1,-97.5 97.5,97.5 97.5,0 0,1 97.5,-97.5M974.5,925.6h975L1949.5,730.7h195v585c0,19.9 195,195 195,195v678.7L1817.1,2469.3l-355.1,-373.8L779.5,2095.6L779.5,730.7L974.5,730.7L974.5,925.6m585,390L974.5,1315.6L974.5,1120.6h585v195m-195,390L974.5,1705.6v-195L1364.5,1510.6Z" />
+            <group>
+                <clip-path android:pathData="M911.8,1810.9a936.8,836.4 0,1 0,1873.5 0a936.8,836.4 0,1 0,-1873.5 0z" />
+                <path
+                    android:fillColor="#aaa7ff"
+                    android:pathData="M1382.7,1810.6c0,-278.1 209.9,-503.6 468.7,-503.6S2320.1,1532.5 2320.1,1810.6s-209.9,503.6 -468.7,503.6 -468.7,-225.5 -468.7,-503.6m1093.7,0c0,-214 -93,-403.7 -238.3,-526.3L2163.9,803.4L1538.9,803.4L1464.7,1284.3C1319.4,1406.9 1226.4,1596.6 1226.4,1810.6c0,213.2 93,403.7 238.3,526.3l74.2,480.9h625l74.2,-480.9C2383.4,2214.3 2476.3,2023.8 2476.3,1810.6Z" />
+            </group>
+            <path
+                android:fillColor="#d96fa9"
+                android:pathData="M1589.3,1688.9L1528.4,1688.9L1528.4,1505.9L1589.3,1505.9L1589.3,1688.9m-61,426.9L1589.3,2115.8L1589.3,1932.8L1528.4,1932.8L1528.4,2115.8M1558.8,1749.9a61,61 0,1 0,61 61,61.2 61.2,0 0,0 -61,-61M2199.2,1627.9L2199.2,1993.8a60.8,60.8 0,0 1,-61 61L1772.3,2054.8a61,61 0,0 1,-61 -61L1711.3,1871.8l-61,-61 61,-61L1711.3,1627.9a61,61 0,0 1,61 -61L2138.2,1566.9a60.8,60.8 0,0 1,61 61M2069.6,1759.9 L2034.2,1716.9 1924.8,1826.1l-48.5,-48.2 -35.4,35.4L1924.8,1904.8Z" />
+        </group>
+    </group>
 </vector>
