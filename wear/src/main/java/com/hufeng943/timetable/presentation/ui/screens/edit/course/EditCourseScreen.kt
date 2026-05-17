@@ -70,7 +70,12 @@ fun EditCourseScreen(
                     label = stringResource(R.string.edit_course_location_hint),
                     initialText = course.location ?: ""
                 ) {
-                    viewModel.onAction(EditCourseAction.UpdateLocation(it))
+                    viewModel.onAction(
+                        EditCourseAction.UpdateLocation(
+                            it.ifBlank {
+                                null
+                            })
+                    )
                     internalNavController.popSafe()
                 }
             }
@@ -82,7 +87,9 @@ fun EditCourseScreen(
                     label = stringResource(R.string.edit_course_teacher_hint),
                     initialText = course.teacher ?: ""
                 ) {
-                    viewModel.onAction(EditCourseAction.UpdateTeacher(it))
+                    viewModel.onAction(EditCourseAction.UpdateTeacher(it.ifBlank {
+                        null
+                    }))
                     internalNavController.popSafe()
                 }
             }
@@ -101,7 +108,7 @@ fun EditCourseScreen(
                     detail = stringResource(
                         R.string.edit_course_display_name, course.displayName
                     ), onConfirm = {
-                    viewModel.onAction(EditCourseAction.Delete)
+                        viewModel.onAction(EditCourseAction.Delete)
                         navController.popSafe()
                     }, onCancel = { internalNavController.popSafe() })
             }
