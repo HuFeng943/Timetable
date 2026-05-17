@@ -104,7 +104,9 @@ fun EditTimeSlotScreen(
         composable(InternalNavRoutes.WEEK_DAY) {
             HandleEditUiState(uiState) { timeSlot ->
                 DayOfWeekSelectionScreen(
-                    initialDay = timeSlot.dayOfWeek, onDaySelected = { day ->
+                    initialDay = timeSlot.dayOfWeek ?: Clock.System.now()
+                        .toLocalDateTime(TimeZone.currentSystemDefault()).date.dayOfWeek,
+                    onDaySelected = { day ->
                         viewModel.onAction(EditTimeSlotAction.UpdateDayOfWeek(day))
                     })
             }
