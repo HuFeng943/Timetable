@@ -2,17 +2,14 @@ import com.android.build.api.dsl.ApplicationExtension
 
 val versionPrefix = "0.6.7"
 
+val commitCountProvider = providers.exec {
+    commandLine("git", "rev-list", "--count", "HEAD")
+}.standardOutput.asText.map { output ->
+    output.trim().toIntOrNull() ?: 1
+}.orElse(1)
 
-fun getGitCommitCount(): Int {
-    return try {
-        val process = ProcessBuilder("git", "rev-list", "--count", "HEAD")
-            .redirectErrorStream(true).start()
-        val output = process.inputStream.bufferedReader().readText().trim()
-        process.waitFor()
-        if (process.exitValue() != 0) 1 else output.toInt()
-    } catch (_: Exception) {
-        1
-    }
+val isRelease = gradle.startParameter.taskNames.any {
+    it.contains("Release", ignoreCase = true)
 }
 
 plugins {
@@ -27,17 +24,18 @@ configure<ApplicationExtension> {
     namespace = "com.hufeng943.timetable"
     compileSdk = 36
 
-    val isRelease = gradle.startParameter.taskNames.any {
-        it.contains("Release", ignoreCase = true)
-    }
 
     defaultConfig {
         applicationId = "com.hufeng943.timetable"
         minSdk = 28
         targetSdk = 36
-        versionCode = if (isRelease) getGitCommitCount() else 1
-        versionName =
-            if (isRelease) "$versionPrefix-${getGitCommitCount()}" else "$versionPrefix-debug"
+
+        versionCode = if (isRelease) commitCountProvider.get() else 1
+        versionName = if (isRelease) {
+            commitCountProvider.map { count -> "$versionPrefix-$count" }.get()
+        } else {
+            "$versionPrefix-debug"
+        }
     }
 
     splits {
@@ -45,7 +43,6 @@ configure<ApplicationExtension> {
             isEnable = true
             reset()
             include("armeabi-v7a", "arm64-v8a")
-
             isUniversalApk = true
         }
     }

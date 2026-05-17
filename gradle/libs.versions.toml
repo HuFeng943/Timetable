@@ -3,7 +3,7 @@
 agp = "9.2.1"
 # noinspection NewerVersionAvailable
 kotlin = "2.2.10"
-ksp = "2.3.6"
+ksp = "2.3.7"
 
 # AndroidX 核心与基础 UI
 coreKtx = "1.18.0"
@@ -11,10 +11,10 @@ appcompat = "1.7.1"
 activity = "1.13.0"
 constraintlayout = "2.2.1"
 coreSplashscreen = "1.2.0"
-material = "1.13.0"
+material = "1.14.0"
 
 # Compose 核心
-composeBom = "2026.04.01"
+composeBom = "2026.05.00"
 composeM3 = "1.4.0"
 activityCompose = "1.13.0"
 navigationCompose = "2.9.8"
@@ -22,12 +22,12 @@ navigationCompose = "2.9.8"
 # Wear OS 体系 (Compose/Tiles/Horologist)
 wearComposeM3 = "1.6.1"
 wearToolingPreview = "1.0.0"
-playServicesWearable = "19.0.0"
+playServicesWearable = "20.0.1"
 tiles = "1.6.0"
 tilesTooling = "1.6.0"
 tilesToolingPreview = "1.6.0"
 horologist = "0.7.15"
-wearRemote = "1.1.0"
+wearRemote = "1.2.0"
 watchfaceComplicationsDataSourceKtx = "1.3.0"
 
 # 数据存储与持久化
@@ -40,12 +40,12 @@ androidxHilt = "1.3.0"
 
 # KotlinX 扩展库
 serialization = "1.11.0"
-kotlinxDatetime = "0.7.1"
-kotlinxCoroutines = "1.7.3"
+kotlinxDatetime = "0.8.0"
+kotlinxCoroutines = "1.11.0"
 
 # 性能监控与三方库
 profileinstaller = "1.4.1"
-aboutLibraries = "14.0.1"
+aboutLibraries = "14.2.0"
 
 # 测试依赖
 junit = "4.13.2"
