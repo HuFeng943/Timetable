@@ -9,6 +9,7 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.shared.model.Course
 import com.hufeng943.timetable.shared.model.Timetable
 import com.hufeng943.timetable.shared.model.WeekPattern
+import com.hufeng943.timetable.shared.ui.CourseUi
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
@@ -57,5 +58,9 @@ val Timetable.displayName: String
     get() = semesterName.ifBlank { stringResource(R.string.default_semester_name) }
 
 val Course.displayName: String
+    @Composable
+    get() = name.ifBlank { stringResource(R.string.default_course_name) }
+
+val CourseUi.displayName: String
     @Composable
     get() = name.ifBlank { stringResource(R.string.default_course_name) }
