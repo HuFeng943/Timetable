@@ -17,7 +17,7 @@ import com.hufeng943.timetable.presentation.ui.common.popSafe
 import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState
 import com.hufeng943.timetable.presentation.ui.screens.common.ColorSelectionScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.DeleteConfirmScreen
-import com.hufeng943.timetable.presentation.ui.screens.common.NameEditScreen
+import com.hufeng943.timetable.presentation.ui.screens.common.TextEditScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.InternalNavRoutes
 import com.hufeng943.timetable.presentation.viewmodel.edit.timetable.EditTimetableAction
 import com.hufeng943.timetable.presentation.viewmodel.edit.timetable.EditTimetableViewModel
@@ -91,7 +91,7 @@ fun EditTimetableScreen(
 
         composable(InternalNavRoutes.NAME) {
             HandleEditUiState(uiState) { timetable ->
-                NameEditScreen(
+                TextEditScreen(
                     label = stringResource(R.string.edit_timetable_name_hint),
                     initialText = timetable.semesterName
                 ) { newValue ->

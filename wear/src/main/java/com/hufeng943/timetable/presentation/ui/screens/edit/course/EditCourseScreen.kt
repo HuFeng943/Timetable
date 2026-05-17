@@ -16,7 +16,7 @@ import com.hufeng943.timetable.presentation.ui.common.popSafe
 import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState
 import com.hufeng943.timetable.presentation.ui.screens.common.ColorSelectionScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.DeleteConfirmScreen
-import com.hufeng943.timetable.presentation.ui.screens.common.NameEditScreen
+import com.hufeng943.timetable.presentation.ui.screens.common.TextEditScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.InternalNavRoutes
 import com.hufeng943.timetable.presentation.viewmodel.edit.course.EditCourseAction
 import com.hufeng943.timetable.presentation.viewmodel.edit.course.EditCourseViewModel
@@ -54,7 +54,7 @@ fun EditCourseScreen(
 
         composable(InternalNavRoutes.NAME) {
             HandleEditUiState(uiState) { course ->
-                NameEditScreen(
+                TextEditScreen(
                     label = stringResource(R.string.edit_course_name_hint),
                     initialText = course.name
                 ) {
@@ -66,7 +66,7 @@ fun EditCourseScreen(
 
         composable(InternalNavRoutes.LOCATION) {
             HandleEditUiState(uiState) { course ->
-                NameEditScreen(
+                TextEditScreen(
                     label = stringResource(R.string.edit_course_location_hint),
                     initialText = course.location ?: ""
                 ) {
@@ -78,7 +78,7 @@ fun EditCourseScreen(
 
         composable(InternalNavRoutes.TEACHER) {
             HandleEditUiState(uiState) { course ->
-                NameEditScreen(
+                TextEditScreen(
                     label = stringResource(R.string.edit_course_teacher_hint),
                     initialText = course.teacher ?: ""
                 ) {

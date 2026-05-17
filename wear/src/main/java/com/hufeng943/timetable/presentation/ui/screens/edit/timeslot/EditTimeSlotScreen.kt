@@ -19,8 +19,8 @@ import com.hufeng943.timetable.presentation.ui.common.popSafe
 import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState
 import com.hufeng943.timetable.presentation.ui.screens.common.DayOfWeekSelectionScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.DeleteConfirmScreen
-import com.hufeng943.timetable.presentation.ui.screens.common.NameEditScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.RecurrenceSelectionScreen
+import com.hufeng943.timetable.presentation.ui.screens.common.TextEditScreen
 import com.hufeng943.timetable.presentation.ui.screens.edit.InternalNavRoutes
 import com.hufeng943.timetable.presentation.viewmodel.edit.timeslot.EditTimeSlotAction
 import com.hufeng943.timetable.presentation.viewmodel.edit.timeslot.EditTimeSlotViewModel
@@ -121,7 +121,7 @@ fun EditTimeSlotScreen(
 
         composable(InternalNavRoutes.NAME) {
             HandleEditUiState(uiState) { timeSlot ->
-                NameEditScreen(
+                TextEditScreen(
                     label = stringResource(R.string.edit_timeslot_remark_hint),
                     initialText = timeSlot.remark ?: ""
                 ) { newRemark ->
