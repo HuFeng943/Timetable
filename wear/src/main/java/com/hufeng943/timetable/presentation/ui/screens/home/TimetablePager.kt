@@ -70,23 +70,23 @@ fun TimetablePager(
  */
 @Composable
 private fun EmptyCoursePager(
-    state: PullToDatePickerState,
-    modifier: Modifier = Modifier
+    state: PullToDatePickerState, modifier: Modifier = Modifier
 ) {
-    PullToDatePicker(
-        dragOffset = state.dragOffset,
-        refreshThreshold = state.refreshThreshold
-    ) {
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .pullToDatePickerDrag(state),
-            contentAlignment = Alignment.Center
+    ScreenScaffold {
+        PullToDatePicker(
+            dragOffset = state.dragOffset, refreshThreshold = state.refreshThreshold
         ) {
-            Text(
-                text = stringResource(R.string.home_empty_course_hint),
-                style = MaterialTheme.typography.titleMedium
-            )
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .pullToDatePickerDrag(state),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.home_empty_course_hint),
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
         }
     }
 }
@@ -104,14 +104,12 @@ private fun CourseListPager(
 ) {
     val scrollState = rememberScalingLazyListState(initialCenterItemIndex = 0)
     val nestedScrollConnection = rememberPullToRefreshConnection(
-        scrollState = scrollState,
-        state = state
+        scrollState = scrollState, state = state
     )
 
     ScreenScaffold(scrollState = scrollState) { contentPadding ->
         PullToDatePicker(
-            dragOffset = state.dragOffset,
-            refreshThreshold = state.refreshThreshold
+            dragOffset = state.dragOffset, refreshThreshold = state.refreshThreshold
         ) {
             ScalingLazyColumn(
                 modifier = modifier
@@ -129,9 +127,7 @@ private fun CourseListPager(
                     }
                 }
                 itemsIndexed(
-                    items = coursesUi,
-                    key = { _, item -> itemKey(item) }
-                ) { _, item ->
+                    items = coursesUi, key = { _, item -> itemKey(item) }) { _, item ->
                     itemContent(item)
                 }
             }
