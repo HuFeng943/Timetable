@@ -19,6 +19,7 @@ import androidx.wear.compose.material3.Card
 import androidx.wear.compose.material3.CardDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
+import com.hufeng943.timetable.presentation.ui.common.displayName
 import com.hufeng943.timetable.presentation.ui.common.toColor
 import com.hufeng943.timetable.shared.ui.CourseUi
 
@@ -53,7 +54,7 @@ fun CourseCard(course: CourseUi, onClick: () -> Unit) {
             // 区域 2 名称
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = course.name,
+                text = course.displayName,
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
