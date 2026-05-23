@@ -1,38 +1,208 @@
 package com.hufeng943.timetable.presentation.ui.screens.detail
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Notes
+import androidx.compose.material.icons.rounded.DeleteOutline
+import androidx.compose.material.icons.rounded.FormatListNumbered
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Place
+import androidx.compose.material.icons.rounded.Sync
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonDefaults
+import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
+import com.hufeng943.timetable.R
+import com.hufeng943.timetable.presentation.ui.common.toDisplayString
 import com.hufeng943.timetable.presentation.ui.common.ui.CourseUi
+import com.hufeng943.timetable.presentation.ui.components.ColorBox
+import com.hufeng943.timetable.presentation.ui.components.TimeText
+import java.time.format.TextStyle
 
 @Composable
 fun DetailsPager(courseUi: CourseUi) {
-    ScreenScaffold {
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = courseUi.displayName,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleLarge
+    val scrollState = rememberScalingLazyListState()
+
+    ScreenScaffold(
+        scrollState = scrollState,
+    ) { contentPadding ->
+        ScalingLazyColumn(
+            state = scrollState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = contentPadding,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ColorBox(color = courseUi.displayColor)
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = courseUi.displayName,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        maxLines = 1,
+                        modifier = Modifier
+                            .weight(1f)
+                            .basicMarquee(iterations = Int.MAX_VALUE)
+                    )
+                }
+            }
+
+            // 日期与时间文字
+            item {
+                val dayStr =
+                    courseUi.timeSlot.dayOfWeek?.toDisplayString(TextStyle.FULL_STANDALONE) ?: ""
+
+                if (dayStr.isEmpty() && courseUi.timeSlot.startTime == null) {
+                    Text(
+                        text = stringResource(R.string.not_set),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp, vertical = 12.dp)
+                    )
+                } else {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp, vertical = 12.dp),
+                        verticalAlignment = Alignment.Bottom
+                    ) {
+                        if (dayStr.isNotEmpty()) {
+                            Text(
+                                text = dayStr,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                        }
+
+                        TimeText(
+                            time = courseUi.timeSlot.startTime,
+                            style = MaterialTheme.typography.bodyLarge,
+                            isVertical = false
+                        )
+
+                        Text(
+                            text = " - ",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+
+                        TimeText(
+                            time = courseUi.timeSlot.endTime,
+                            style = MaterialTheme.typography.bodyLarge,
+                            isVertical = false
+                        )
+                    }
+                }
+            }
+
+            if (!courseUi.location.isNullOrBlank()) {
+                item {
+                    DetailListItem(icon = Icons.Rounded.Place, text = courseUi.location)
+                }
+            }
+
+            if (!courseUi.teacher.isNullOrBlank()) {
+                item {
+                    DetailListItem(icon = Icons.Rounded.Person, text = courseUi.teacher)
+                }
+            }
+
+            courseUi.dailyOrder?.let { order ->
+                item {
+                    DetailListItem(
+                        icon = Icons.Rounded.FormatListNumbered,
+                        text = stringResource(R.string.edit_course_number, order)
+                    )
+                }
+            }
+
+            val remark = courseUi.timeSlot.remark
+            if (!remark.isNullOrBlank()) {
+                item {
+                    DetailListItem(
+                        icon = Icons.AutoMirrored.Rounded.Notes,
+                        text = remark
+                    )
+                }
+            }
+
+            item {
+                DetailListItem(
+                    icon = Icons.Rounded.Sync,
+                    text = courseUi.timeSlot.recurrence.toDisplayString()
                 )
-                Text(text = "教师：${courseUi.displayTeacher}")
-                Text(text = "地点：${courseUi.displayLocation}")
-                Text(
-                    text = "时间：${
-                        courseUi.timeSlot.dayOfWeek?.name?.substring(
-                            0, 3
-                        ) ?: "未填写"
-                    } ${courseUi.timeSlot.startTime} - ${courseUi.timeSlot.endTime}"
-                )
-                Text(text = "重复：${courseUi.timeSlot.recurrence}")
+            }
+
+            item { Spacer(modifier = Modifier.height(16.dp)) }
+
+            item {
+                Button(
+                    onClick = { /* TODO: 处理删除等逻辑 */ },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError
+                    )
+                ) {
+                    Icon(imageVector = Icons.Rounded.DeleteOutline, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("删除课程")
+                }
             }
         }
+    }
+}
+
+@Composable
+fun DetailListItem(icon: ImageVector, text: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(28.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            maxLines = 1,
+            modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
+        )
     }
 }
