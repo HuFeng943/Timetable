@@ -1,7 +1,7 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit.timetable
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -39,7 +39,7 @@ fun EditTimetableMainPager(
     ScreenScaffold(
         scrollState = scrollState, edgeButton = {
             EdgeButton(onClick = onSave) {
-                Icon(Icons.Default.Check, contentDescription = stringResource(R.string.check))
+                Icon(Icons.Rounded.Check, contentDescription = stringResource(R.string.check))
             }
         }) { contentPadding ->
         ScalingLazyColumn(

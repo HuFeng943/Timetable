@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Notes
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.FormatListNumbered
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Place
@@ -172,7 +172,7 @@ fun DetailsPager(courseUi: CourseUi) {
                     onLongClick = { /* TODO: 处理长按逻辑 */ },
                     modifier = Modifier.fillMaxWidth(),
                     icon = {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = null)
+                        Icon(imageVector = Icons.Rounded.Edit, contentDescription = null)
                     },
                     label = {
                         Column(

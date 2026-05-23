@@ -3,9 +3,9 @@ package com.hufeng943.timetable.presentation.ui.screens.home
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -43,7 +43,7 @@ fun MorePager(
                     onClick = { navController.navigateSingle(NavRoutes.LIST_TIMETABLE) },
                     modifier = Modifier.fillMaxWidth(),
                     icon = {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = null)
+                        Icon(imageVector = Icons.Rounded.Edit, contentDescription = null)
                     },
                     label = {
                         Text(stringResource(R.string.more_menu_edit))
@@ -56,7 +56,7 @@ fun MorePager(
                     onClick = { navController.navigateSingle(NavRoutes.MORE_SETTINGS) },
                     modifier = Modifier.fillMaxWidth(),
                     icon = {
-                        Icon(imageVector = Icons.Default.Settings, contentDescription = null)
+                        Icon(imageVector = Icons.Rounded.Settings, contentDescription = null)
                     },
                     label = {
                         Text(stringResource(R.string.more_menu_settings))
@@ -69,7 +69,7 @@ fun MorePager(
                     onClick = { navController.navigateSingle(NavRoutes.MORE_ABOUT) },
                     modifier = Modifier.fillMaxWidth(),
                     icon = {
-                        Icon(imageVector = Icons.Default.Info, contentDescription = null)
+                        Icon(imageVector = Icons.Rounded.Info, contentDescription = null)
                     },
                     label = {
                         Text(stringResource(R.string.more_menu_about))

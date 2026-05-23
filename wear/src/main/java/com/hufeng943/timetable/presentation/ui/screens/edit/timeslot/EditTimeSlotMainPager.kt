@@ -1,7 +1,7 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit.timeslot
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
@@ -39,7 +39,7 @@ fun EditTimeSlotMainPager(
     ScreenScaffold(
         scrollState = scrollState, edgeButton = {
             EdgeButton(onClick = onSave, enabled = canSave) {
-                Icon(Icons.Default.Check, contentDescription = stringResource(R.string.check))
+                Icon(Icons.Rounded.Check, contentDescription = stringResource(R.string.check))
             }
         }) { contentPadding ->
         ScalingLazyColumn(

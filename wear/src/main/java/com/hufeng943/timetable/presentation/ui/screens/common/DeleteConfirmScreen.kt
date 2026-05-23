@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -59,7 +59,7 @@ fun DeleteConfirmScreen(
                     onClick = onCancel, modifier = Modifier.fillMaxWidth(),
                     icon = {
                         Icon(
-                            imageVector = Icons.Default.Close, contentDescription = null
+                            imageVector = Icons.Rounded.Close, contentDescription = null
                         )
                     },
                 ) {
@@ -78,7 +78,7 @@ fun DeleteConfirmScreen(
                     ),
                     icon = {
                         Icon(
-                            imageVector = Icons.Default.Check, contentDescription = null
+                            imageVector = Icons.Rounded.Check, contentDescription = null
                         )
                     },
                 ) {

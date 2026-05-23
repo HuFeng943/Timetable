@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -48,7 +48,7 @@ fun DayOfWeekSelectionScreen(
                 selected = (day == initialDay), onSelect = { onDaySelected(day) }, label = {
                     Text(text = day.toDisplayString(TextStyle.FULL_STANDALONE))
                 }, icon = {
-                    Icon(Icons.Default.DateRange, contentDescription = null)
+                    Icon(Icons.Rounded.DateRange, contentDescription = null)
                 }, modifier = Modifier.fillMaxWidth()
             )
         }

@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.rounded.AccessTime
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
+import androidx.compose.material.icons.rounded.Language
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -66,7 +66,7 @@ fun SettingPager(
                 }
             }) {
                 Icon(
-                    Icons.Default.KeyboardArrowUp,
+                    Icons.Rounded.KeyboardArrowUp,
                     contentDescription = stringResource(R.string.back_to_top)
                 )
             }
@@ -83,7 +83,7 @@ fun SettingPager(
             // 语言设置
             item {
                 SettingItemCard(
-                    icon = Icons.Default.Language,
+                    icon = Icons.Rounded.Language,
                     title = stringResource(R.string.settings_language),
                     value = currentLanguageLabel,
                     onClick = onLanguageSelectClick
@@ -93,7 +93,7 @@ fun SettingPager(
             // 时间格式设置
             item {
                 SettingItemCard(
-                    icon = Icons.Default.AccessTime,
+                    icon = Icons.Rounded.AccessTime,
                     title = stringResource(R.string.settings_time_format),
                     value = currentTimeFormatLabel,
                     onClick = onTimeFormatSelectClick

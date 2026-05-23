@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,7 +42,7 @@ fun TextEditScreen(
             onSave(textValue)
         }) {
             Icon(
-                Icons.Default.Check, contentDescription = stringResource(R.string.check)
+                Icons.Rounded.Check, contentDescription = stringResource(R.string.check)
             )
         }
     }) {

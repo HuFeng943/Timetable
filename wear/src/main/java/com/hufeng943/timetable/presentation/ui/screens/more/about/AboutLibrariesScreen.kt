@@ -4,7 +4,7 @@ import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -43,7 +43,7 @@ fun AboutLibrariesScreen() {
                 }
             }) {
                 Icon(
-                    Icons.Default.KeyboardArrowUp,
+                    Icons.Rounded.KeyboardArrowUp,
                     contentDescription = stringResource(R.string.back_to_top)
                 )
             }

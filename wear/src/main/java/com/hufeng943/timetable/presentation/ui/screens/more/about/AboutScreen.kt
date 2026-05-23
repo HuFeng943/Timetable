@@ -20,11 +20,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Description
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.rounded.Description
+import androidx.compose.material.icons.rounded.History
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -84,7 +84,7 @@ fun AboutScreen() {
                 }
             }) {
                 Icon(
-                    Icons.Default.KeyboardArrowUp,
+                    Icons.Rounded.KeyboardArrowUp,
                     contentDescription = stringResource(R.string.back_to_top)
                 )
             }
@@ -142,7 +142,7 @@ fun AboutScreen() {
                     onClick = { expanded = !expanded }, title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
-                                imageVector = Icons.Default.History,
+                                imageVector = Icons.Rounded.History,
                                 contentDescription = null,
                                 modifier = Modifier.padding(end = 8.dp)
                             )
@@ -151,7 +151,7 @@ fun AboutScreen() {
                                 modifier = Modifier.weight(1f)
                             )
                             Icon(
-                                imageVector = Icons.Default.KeyboardArrowDown,
+                                imageVector = Icons.Rounded.KeyboardArrowDown,
                                 contentDescription = null,
                                 modifier = Modifier.rotate(rotation) // 箭头随状态旋转
                             )
@@ -190,7 +190,7 @@ fun AboutScreen() {
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
-                                imageVector = Icons.Default.Info,
+                                imageVector = Icons.Rounded.Info,
                                 contentDescription = null,
                                 modifier = Modifier.padding(end = 8.dp)
                             )
@@ -222,7 +222,7 @@ fun AboutScreen() {
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
-                                imageVector = Icons.Default.Description,
+                                imageVector = Icons.Rounded.Description,
                                 contentDescription = null,
                                 modifier = Modifier.padding(end = 8.dp)
                             )

@@ -2,7 +2,7 @@ package com.hufeng943.timetable.presentation.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.wear.compose.material3.ButtonDefaults
@@ -22,7 +22,7 @@ fun DeleteButton(
         modifier = modifier.fillMaxWidth(),
         icon = {
             Icon(
-                imageVector = Icons.Default.Delete,
+                imageVector = Icons.Rounded.Delete,
                 contentDescription = null
             )
         },

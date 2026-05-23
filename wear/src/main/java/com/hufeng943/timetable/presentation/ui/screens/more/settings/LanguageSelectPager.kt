@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.rounded.Language
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -73,7 +73,7 @@ fun LanguageSelectPager(
                     Text(text = label)
                 }, icon = {
                     Icon(
-                        imageVector = Icons.Default.Language, contentDescription = null
+                        imageVector = Icons.Rounded.Language, contentDescription = null
                     )
                     }, modifier = Modifier.fillMaxWidth()
                 )

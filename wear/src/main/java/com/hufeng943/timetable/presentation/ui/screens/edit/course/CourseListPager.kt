@@ -2,7 +2,7 @@ package com.hufeng943.timetable.presentation.ui.screens.edit.course
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,7 +29,7 @@ fun CourseListPager(
     ScreenScaffold(scrollState = scrollState, edgeButton = {
         EdgeButton(onClick = onAddCourse) {
             Icon(
-                imageVector = Icons.Default.Add,
+                imageVector = Icons.Rounded.Add,
                 contentDescription = stringResource(R.string.edit_course_add)
             )
         }

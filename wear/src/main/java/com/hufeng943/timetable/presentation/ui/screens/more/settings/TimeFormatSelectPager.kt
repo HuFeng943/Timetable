@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.rounded.AccessTime
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -63,7 +63,7 @@ fun TimeFormatSelectPager(
                     Text(text = label)
                     }, icon = {
                     Icon(
-                        imageVector = Icons.Default.AccessTime, contentDescription = null
+                        imageVector = Icons.Rounded.AccessTime, contentDescription = null
                     )
                     }, modifier = Modifier.fillMaxWidth()
                 )
