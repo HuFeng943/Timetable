@@ -14,13 +14,13 @@ coreSplashscreen = "1.2.0"
 material = "1.14.0"
 
 # Compose 核心
-composeBom = "2026.05.00"
+composeBom = "2026.05.01"
 composeM3 = "1.4.0"
 activityCompose = "1.13.0"
 navigationCompose = "2.9.8"
 
 # Wear OS 体系 (Compose/Tiles/Horologist)
-wearComposeM3 = "1.6.1"
+wearComposeM3 = "1.6.2"
 wearToolingPreview = "1.0.0"
 playServicesWearable = "20.0.1"
 tiles = "1.6.0"
