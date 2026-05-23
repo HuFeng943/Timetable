@@ -1,9 +1,19 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit.timeslot
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Notes
+import androidx.compose.material.icons.rounded.AccessTime
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.DateRange
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.EdgeButton
@@ -59,10 +69,14 @@ fun EditTimeSlotMainPager(
             item {
                 TitleCard(
                     onClick = onStartTimeClick, title = {
-                        Text(
-                            stringResource(R.string.edit_timeslot_start),
-                            style = MaterialTheme.typography.labelLarge
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.AccessTime, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                stringResource(R.string.edit_timeslot_start),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
                     }) {
                     TimeText(
                         time = timeSlot.startTime,
@@ -77,10 +91,14 @@ fun EditTimeSlotMainPager(
             item {
                 TitleCard(
                     onClick = onEndTimeClick, title = {
-                        Text(
-                            stringResource(R.string.edit_timeslot_end),
-                            style = MaterialTheme.typography.labelLarge
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.AccessTime, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                stringResource(R.string.edit_timeslot_end),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
                     }) {
                     TimeText(
                         time = timeSlot.endTime,
@@ -95,10 +113,14 @@ fun EditTimeSlotMainPager(
             item {
                 TitleCard(
                     onClick = onDayOfWeekClick, title = {
-                        Text(
-                            stringResource(R.string.edit_timeslot_week),
-                            style = MaterialTheme.typography.labelLarge
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.DateRange, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                stringResource(R.string.edit_timeslot_week),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
                     }) {
                     Text(
                         text = timeSlot.dayOfWeek?.toDisplayString(TextStyle.FULL_STANDALONE)
@@ -113,10 +135,14 @@ fun EditTimeSlotMainPager(
             item {
                 TitleCard(
                     onClick = onRecurrenceClick, title = {
-                        Text(
-                            stringResource(R.string.edit_timeslot_repeat),
-                            style = MaterialTheme.typography.labelLarge
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.Refresh, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                stringResource(R.string.edit_timeslot_repeat),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
                     }) {
                     Text(
                         text = timeSlot.recurrence.toDisplayString(),
@@ -132,10 +158,14 @@ fun EditTimeSlotMainPager(
                     onLongClick = onRemarkLongClick,
                     subtitle = { if (timeSlot.remark != null) Text(stringResource(R.string.clear_long_press)) },
                     title = {
-                        Text(
-                            stringResource(R.string.edit_timeslot_remark),
-                            style = MaterialTheme.typography.labelLarge
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.AutoMirrored.Rounded.Notes, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                stringResource(R.string.edit_timeslot_remark),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
                     }) {
                     Text(
                         text = timeSlot.displayRemark, style = MaterialTheme.typography.labelLarge

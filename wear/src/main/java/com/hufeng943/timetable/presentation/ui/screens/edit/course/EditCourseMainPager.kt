@@ -1,10 +1,19 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit.course
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Book
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Place
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.EdgeButton
@@ -58,10 +67,14 @@ fun EditCourseMainPager(
                 TitleCard(
                     onClick = onNameClick,
                     title = {
-                        Text(
-                            stringResource(R.string.edit_course_name),
-                            style = MaterialTheme.typography.labelLarge
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.Book, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                stringResource(R.string.edit_course_name),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
                     },
                 ) {
                     Text(course.displayName, style = MaterialTheme.typography.labelLarge)
@@ -74,10 +87,14 @@ fun EditCourseMainPager(
                     onLongClick = onLocationLongClick,
                     subtitle = { if (course.location != null) Text(stringResource(R.string.clear_long_press)) },
                     title = {
-                        Text(
-                            stringResource(R.string.edit_course_location),
-                            style = MaterialTheme.typography.labelLarge
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.Place, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                stringResource(R.string.edit_course_location),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
                     },
                 ) {
                     Text(
@@ -93,10 +110,14 @@ fun EditCourseMainPager(
                     onLongClick = onTeacherLongClick,
                     subtitle = { if (course.teacher != null) Text(stringResource(R.string.clear_long_press)) },
                     title = {
-                        Text(
-                            stringResource(R.string.edit_course_teacher),
-                            style = MaterialTheme.typography.labelLarge
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.Person, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                stringResource(R.string.edit_course_teacher),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
                     },
                 ) {
                     Text(

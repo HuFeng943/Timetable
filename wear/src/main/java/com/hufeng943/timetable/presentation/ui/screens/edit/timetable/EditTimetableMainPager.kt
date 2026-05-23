@@ -1,10 +1,19 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit.timetable
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CalendarMonth
+import androidx.compose.material.icons.rounded.CalendarToday
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.CollectionsBookmark
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.EdgeButton
@@ -59,10 +68,14 @@ fun EditTimetableMainPager(
                 TitleCard(
                     onClick = onNameClick,
                     title = {
-                        Text(
-                            stringResource(R.string.edit_timetable_name),
-                            style = MaterialTheme.typography.labelLarge
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.CollectionsBookmark, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                stringResource(R.string.edit_timetable_name),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
                     },
                 ) {
                     Text(
@@ -76,7 +89,16 @@ fun EditTimetableMainPager(
                     onClick = onStartDateClick,
                     onLongClick = onStartDateLongClick,
                     subtitle = { if (!startDateIsToday) Text(stringResource(R.string.set_current_date_long_press)) },
-                    title = { Text(stringResource(R.string.edit_timetable_start)) },
+                    title = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.CalendarToday, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                stringResource(R.string.edit_timetable_start),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
+                    },
                 ) {
                     Text(
                         timetable.semesterStart.toDisplayString(),
@@ -90,7 +112,16 @@ fun EditTimetableMainPager(
                     onClick = onEndDateClick,
                     onLongClick = onEndDateLongClick,
                     subtitle = { if (timetable.semesterEnd != null) Text(stringResource(R.string.set_never_ends_long_press)) },
-                    title = { Text(stringResource(R.string.edit_timetable_end)) },
+                    title = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.CalendarMonth, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                stringResource(R.string.edit_timetable_end),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
+                    },
                 ) {
                     Text(
                         timetable.semesterEnd?.toDisplayString()
