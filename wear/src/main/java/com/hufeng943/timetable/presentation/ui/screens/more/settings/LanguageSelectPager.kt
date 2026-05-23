@@ -15,14 +15,14 @@ import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.RadioButton
+import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.AppConfig
 
 @Composable
 fun LanguageSelectPager(
-    config: AppConfig,
-    onLanguageSelect: (String?) -> Unit
+    config: AppConfig, onLanguageSelect: (String?) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -41,43 +41,43 @@ fun LanguageSelectPager(
     val scrollState = rememberScalingLazyListState(
         initialCenterItemIndex = initialIndex
     )
-
-    ScalingLazyColumn(
-        state = scrollState,
-        modifier = Modifier
-            .fillMaxSize()
-            .selectableGroup()
-    ) {
-        item {
-            ListHeader {
-                Text(stringResource(R.string.settings_language))
+    ScreenScaffold(
+        scrollState = scrollState
+    ) { contentPadding ->
+        ScalingLazyColumn(
+            state = scrollState,
+            modifier = Modifier
+                .fillMaxSize()
+                .selectableGroup(),
+            contentPadding = contentPadding
+        ) {
+            item {
+                ListHeader {
+                    Text(stringResource(R.string.settings_language))
+                }
             }
-        }
 
-        items(languageValues.size) { index ->
-            val rawTag = languageValues[index]
-            val label = languageLabels[index]
+            items(languageValues.size) { index ->
+                val rawTag = languageValues[index]
+                val label = languageLabels[index]
 
-            val tag: String? = if (rawTag == "@null") null else rawTag
+                val tag: String? = if (rawTag == "@null") null else rawTag
 
-            // 判断当前选项是否被选中
-            val isSelected = (tag == currentTag)
+                // 判断当前选项是否被选中
+                val isSelected = (tag == currentTag)
 
-            RadioButton(
-                selected = isSelected,
-                onSelect = {
+                RadioButton(
+                    selected = isSelected, onSelect = {
                     onLanguageSelect(tag)
-                },
-                label = {
+                    }, label = {
                     Text(text = label)
                 }, icon = {
                     Icon(
-                        imageVector = Icons.Default.Language,
-                        contentDescription = null
+                        imageVector = Icons.Default.Language, contentDescription = null
                     )
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
+                    }, modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
     }
 }

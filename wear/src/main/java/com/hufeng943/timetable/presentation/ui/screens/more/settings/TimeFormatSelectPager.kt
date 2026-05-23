@@ -13,6 +13,7 @@ import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.RadioButton
+import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.data.TimeFormat
@@ -20,8 +21,7 @@ import com.hufeng943.timetable.presentation.ui.common.AppConfig
 
 @Composable
 fun TimeFormatSelectPager(
-    config: AppConfig,
-    onTimeFormatSelect: (TimeFormat) -> Unit
+    config: AppConfig, onTimeFormatSelect: (TimeFormat) -> Unit
 ) {
     val timeFormats = listOf(
         TimeFormat.SYSTEM to stringResource(R.string.settings_time_format_system),
@@ -36,39 +36,38 @@ fun TimeFormatSelectPager(
     val scrollState = rememberScalingLazyListState(
         initialCenterItemIndex = initialIndex
     )
-
-    ScalingLazyColumn(
-        state = scrollState,
-        modifier = Modifier
-            .fillMaxSize()
-            .selectableGroup()
-    ) {
-        item {
-            ListHeader {
-                Text(stringResource(R.string.settings_time_format))
+    ScreenScaffold(
+        scrollState = scrollState
+    ) { contentPadding ->
+        ScalingLazyColumn(
+            state = scrollState,
+            modifier = Modifier
+                .fillMaxSize()
+                .selectableGroup(),
+            contentPadding = contentPadding
+        ) {
+            item {
+                ListHeader {
+                    Text(stringResource(R.string.settings_time_format))
+                }
             }
-        }
 
-        items(timeFormats.size) { index ->
-            val (format, label) = timeFormats[index]
-            val isSelected = (format == currentFormat)
+            items(timeFormats.size) { index ->
+                val (format, label) = timeFormats[index]
+                val isSelected = (format == currentFormat)
 
-            RadioButton(
-                selected = isSelected,
-                onSelect = {
+                RadioButton(
+                    selected = isSelected, onSelect = {
                     onTimeFormatSelect(format)
-                },
-                label = {
+                    }, label = {
                     Text(text = label)
-                },
-                icon = {
+                    }, icon = {
                     Icon(
-                        imageVector = Icons.Default.AccessTime,
-                        contentDescription = null
+                        imageVector = Icons.Default.AccessTime, contentDescription = null
                     )
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
+                    }, modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
     }
 }
