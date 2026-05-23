@@ -2,6 +2,7 @@ package com.hufeng943.timetable.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hufeng943.timetable.data.FirstDayOfTheWeek
 import com.hufeng943.timetable.data.PreferenceStorage
 import com.hufeng943.timetable.data.TimeFormat
 import com.hufeng943.timetable.presentation.ui.common.AppConfig
@@ -39,6 +40,12 @@ class AppConfigViewModel @Inject constructor(
         viewModelScope.launch {
             preferenceStorage.setLanguage(languageTag)
             _localeRecreateEvent.emit(Unit)
+        }
+    }
+
+    fun updateFirstDayOfTheWeek(firstDay: FirstDayOfTheWeek) {
+        viewModelScope.launch {
+            preferenceStorage.setFirstDayOfTheWeek(firstDay)
         }
     }
 }
