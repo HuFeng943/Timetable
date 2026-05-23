@@ -1,12 +1,15 @@
 package com.hufeng943.timetable.presentation.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -34,6 +37,8 @@ fun CourseCard(course: CourseUi, onClick: () -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .heightIn(min = 48.dp)
                 .padding(horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically
 
@@ -42,11 +47,12 @@ fun CourseCard(course: CourseUi, onClick: () -> Unit) {
             Column(
                 modifier = Modifier
                     .width(IntrinsicSize.Min)
+                    .fillMaxHeight()
                     .padding(top = 3.dp),
                 horizontalAlignment = Alignment.End, // 右对齐
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
                 TimeText(time = course.timeSlot.startTime)
-                Spacer(modifier = Modifier.height(2.dp)) // 垂直间距
                 TimeText(time = course.timeSlot.endTime)
             }
             // 区域 2 名称
@@ -66,6 +72,7 @@ fun CourseCard(course: CourseUi, onClick: () -> Unit) {
             Text(
                 text = course.dailyOrder.toString(),
                 style = MaterialTheme.typography.displaySmall,
+                modifier = Modifier.padding(horizontal = 4.dp)
             )
         }
     }

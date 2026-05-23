@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -42,6 +44,8 @@ fun EditTimeSlotCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .heightIn(min = 48.dp)
                 .padding(horizontal = 8.dp),
             verticalAlignment = Alignment.Top
         ) {
@@ -49,12 +53,14 @@ fun EditTimeSlotCard(
             Column(
                 modifier = Modifier
                     .width(IntrinsicSize.Min)
+                    .fillMaxHeight()
                     .padding(top = 3.dp),
                 horizontalAlignment = Alignment.End, // 右对齐
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
                 TimeText(time = timeSlot.startTime)
-                Spacer(modifier = Modifier.height(2.dp))
                 TimeText(time = timeSlot.endTime)
+                Spacer(modifier = Modifier.height(2.dp))
             }
 
             Spacer(modifier = Modifier.width(12.dp))
