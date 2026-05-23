@@ -12,6 +12,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.DayOfWeek
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,7 +39,7 @@ class PreferenceStorage @Inject constructor(
             )
         }.getOrDefault(FirstDayOfTheWeek.SYSTEM)
         // 如果设置了跟随系统，则根据系统区域设置确定每周的第一天
-        val effectiveFirstDay = if (firstDaySetting == FirstDayOfTheWeek.SYSTEM) {
+        val effectiveFirstDay: DayOfWeek = if (firstDaySetting == FirstDayOfTheWeek.SYSTEM) {
             val locale = context.resources.configuration.locales[0]
 
             // 获取系统日历中每周的第一天
@@ -47,13 +48,13 @@ class PreferenceStorage @Inject constructor(
 
             // 常量转换
             when (systemFirstDay) {
-                java.util.Calendar.MONDAY -> FirstDayOfTheWeek.MONDAY
-                java.util.Calendar.SUNDAY -> FirstDayOfTheWeek.SUNDAY
-                java.util.Calendar.SATURDAY -> FirstDayOfTheWeek.SATURDAY
-                else -> FirstDayOfTheWeek.MONDAY
+                java.util.Calendar.MONDAY -> DayOfWeek.MONDAY
+                java.util.Calendar.SUNDAY -> DayOfWeek.SUNDAY
+                java.util.Calendar.SATURDAY -> DayOfWeek.SATURDAY
+                else -> DayOfWeek.MONDAY
             }
         } else {
-            firstDaySetting
+            firstDaySetting.dayOfWeek ?: DayOfWeek.MONDAY
         }
 
         val finalIs24Hour = when (formatSetting) {
