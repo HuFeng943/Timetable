@@ -17,6 +17,7 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.RadioButton
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
+import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
 import com.hufeng943.timetable.presentation.ui.common.toDisplayString
 import kotlinx.datetime.DayOfWeek
 import java.time.format.TextStyle
@@ -25,7 +26,11 @@ import java.time.format.TextStyle
 fun DayOfWeekSelectionScreen(
     initialDay: DayOfWeek?, onDaySelected: (DayOfWeek) -> Unit
 ) {
-    val days = remember { DayOfWeek.entries }
+    val appConfig = LocalAppConfig.current
+    val firstDay = appConfig.effectiveFirstDayOfTheWeek
+    val days = remember(firstDay) {
+        DayOfWeek.entries.sortedBy { (it.ordinal - firstDay.ordinal + 7) % 7 }
+    }
 
     val initialIndex = remember(days, initialDay) {
         days.indexOf(initialDay).coerceAtLeast(0) + 1
