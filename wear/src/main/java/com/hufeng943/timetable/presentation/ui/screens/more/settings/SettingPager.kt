@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccessTime
+import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Language
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
+import com.hufeng943.timetable.data.FirstDayOfTheWeek
 import com.hufeng943.timetable.data.TimeFormat
 import com.hufeng943.timetable.presentation.ui.common.AppConfig
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
@@ -33,7 +35,8 @@ import kotlinx.coroutines.launch
 fun SettingPager(
     config: AppConfig,
     onLanguageSelectClick: () -> Unit,
-    onTimeFormatSelectClick: () -> Unit
+    onTimeFormatSelectClick: () -> Unit,
+    onFirstDaySelectClick: () -> Unit
 ) {
     val scrollState = rememberScalingLazyListState()
     val navController = LocalNavController.current
@@ -56,6 +59,14 @@ fun SettingPager(
         TimeFormat.SYSTEM -> stringResource(R.string.settings_time_format_system)
         TimeFormat.H12 -> stringResource(R.string.settings_time_format_12h)
         TimeFormat.H24 -> stringResource(R.string.settings_time_format_24h)
+    }
+
+    // 获取当前每周第一天显示文本
+    val currentFirstDayLabel = when (config.firstDayOfTheWeekSetting) {
+        FirstDayOfTheWeek.SYSTEM -> stringResource(R.string.settings_first_day_system)
+        FirstDayOfTheWeek.MONDAY -> stringResource(R.string.settings_first_day_monday)
+        FirstDayOfTheWeek.SUNDAY -> stringResource(R.string.settings_first_day_sunday)
+        FirstDayOfTheWeek.SATURDAY -> stringResource(R.string.settings_first_day_saturday)
     }
 
     ScreenScaffold(
@@ -97,6 +108,16 @@ fun SettingPager(
                     title = stringResource(R.string.settings_time_format),
                     value = currentTimeFormatLabel,
                     onClick = onTimeFormatSelectClick
+                )
+            }
+
+            // 每周第一天设置
+            item {
+                SettingItemCard(
+                    icon = Icons.Rounded.DateRange,
+                    title = stringResource(R.string.settings_first_day),
+                    value = currentFirstDayLabel,
+                    onClick = onFirstDaySelectClick
                 )
             }
         }

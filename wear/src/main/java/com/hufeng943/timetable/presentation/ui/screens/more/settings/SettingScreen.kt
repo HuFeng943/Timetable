@@ -25,7 +25,8 @@ fun SettingScreen(
             SettingPager(
                 config = config,
                 onLanguageSelectClick = { internalNavController.navigateSingle(InternalNavRoutes.LANGUAGE_SELECT) },
-                onTimeFormatSelectClick = { internalNavController.navigateSingle(InternalNavRoutes.TIME_FORMAT_SELECT) })
+                onTimeFormatSelectClick = { internalNavController.navigateSingle(InternalNavRoutes.TIME_FORMAT_SELECT) },
+                onFirstDaySelectClick = { internalNavController.navigateSingle(InternalNavRoutes.FIRST_DAY_SELECT) })
         }
 
         composable(InternalNavRoutes.LANGUAGE_SELECT) {
@@ -40,6 +41,12 @@ fun SettingScreen(
                 config = config, onTimeFormatSelect = { timeFormat ->
                     appConfigViewModel.updateFormat(timeFormat)
                 })
+        }
+
+        composable(InternalNavRoutes.FIRST_DAY_SELECT) {
+            FirstDaySelectPager(config) { firstDay ->
+                appConfigViewModel.updateFirstDayOfTheWeek(firstDay)
+            }
         }
     }
 }

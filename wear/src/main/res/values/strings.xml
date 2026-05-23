@@ -111,6 +111,11 @@
     <string name="settings_time_format_system">Follow system</string>
     <string name="settings_time_format_12h">12-Hour</string>
     <string name="settings_time_format_24h">24-Hour</string>
+    <string name="settings_first_day">First day of the week</string>
+    <string name="settings_first_day_system">Follow system</string>
+    <string name="settings_first_day_monday">Monday</string>
+    <string name="settings_first_day_sunday">Sunday</string>
+    <string name="settings_first_day_saturday">Saturday</string>
     <!-- Language -->
     <string-array name="language_values" translatable="false">
         <item>@null</item>
