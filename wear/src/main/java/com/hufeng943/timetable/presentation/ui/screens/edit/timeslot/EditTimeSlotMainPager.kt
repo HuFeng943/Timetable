@@ -15,10 +15,10 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
 import com.hufeng943.timetable.presentation.ui.common.toDisplayString
 import com.hufeng943.timetable.presentation.ui.common.ui.TimeSlotUi
 import com.hufeng943.timetable.presentation.ui.components.DeleteButton
+import com.hufeng943.timetable.presentation.ui.components.TimeText
 import kotlinx.datetime.toJavaDayOfWeek
 import java.time.format.TextStyle
 
@@ -34,7 +34,6 @@ fun EditTimeSlotMainPager(
     onRemarkLongClick: () -> Unit,
     onDelete: () -> Unit,
 ) {
-    val config = LocalAppConfig.current
     val scrollState = rememberScalingLazyListState()
 
     val canSave = timeSlot.startTime != null
@@ -74,11 +73,11 @@ fun EditTimeSlotMainPager(
                         )
                     }
                 ) {
-                    Text(
-                        timeSlot.startTime?.toDisplayString(config.is24HourFormat)
-                            ?: stringResource(
-                                R.string.not_set
-                            )
+                    TimeText(
+                        time = timeSlot.startTime,
+                        style = MaterialTheme.typography.labelLarge,
+                        placeholder = stringResource(R.string.not_set),
+                        isVertical = false
                     )
                 }
             }
@@ -94,10 +93,11 @@ fun EditTimeSlotMainPager(
                         )
                     }
                 ) {
-                    Text(
-                        timeSlot.endTime?.toDisplayString(config.is24HourFormat) ?: stringResource(
-                            R.string.not_set
-                        )
+                    TimeText(
+                        time = timeSlot.endTime,
+                        style = MaterialTheme.typography.labelLarge,
+                        placeholder = stringResource(R.string.not_set),
+                        isVertical = false
                     )
                 }
             }
