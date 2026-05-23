@@ -19,7 +19,7 @@ data class CourseUi(
     val location: String?,
     val teacher: String?,
     val dailyOrder: Int? = null,
-    val selectedTimeSlot: TimeSlotUi? = null
+    private val selectedTimeSlot: TimeSlotUi? = null
 ) {
     /**
      * 为保持兼容性提供的便捷属性。
