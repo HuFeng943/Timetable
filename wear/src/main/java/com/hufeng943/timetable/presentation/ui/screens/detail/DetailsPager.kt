@@ -18,12 +18,12 @@ fun DetailsPager(courseUi: CourseUi) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = courseUi.name,
+                    text = courseUi.displayName,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleLarge
                 )
-                Text(text = "教师：${courseUi.teacher ?: "无"}")
-                Text(text = "地点：${courseUi.location ?: "未填写"}")
+                Text(text = "教师：${courseUi.displayTeacher}")
+                Text(text = "地点：${courseUi.displayLocation}")
                 Text(
                     text = "时间：${
                         courseUi.timeSlot.dayOfWeek?.name?.substring(

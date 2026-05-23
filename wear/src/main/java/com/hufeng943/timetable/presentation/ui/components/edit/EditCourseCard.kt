@@ -19,12 +19,12 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.ui.common.ui.CourseEditUi
+import com.hufeng943.timetable.presentation.ui.common.ui.CourseUi
 
 
 @Composable
 fun EditCourseCard(
-    course: CourseEditUi,
+    course: CourseUi,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier

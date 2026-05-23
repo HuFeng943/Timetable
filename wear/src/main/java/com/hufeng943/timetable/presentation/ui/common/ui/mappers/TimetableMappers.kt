@@ -6,6 +6,7 @@ import com.hufeng943.timetable.presentation.ui.common.ui.CourseUi
 import com.hufeng943.timetable.presentation.ui.common.ui.TimetableUi
 import com.hufeng943.timetable.shared.model.Course
 import com.hufeng943.timetable.shared.model.Timetable
+import com.hufeng943.timetable.shared.model.WeekPattern
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
@@ -13,8 +14,7 @@ import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.minus
 
 fun Timetable.toTimetableUi(courses: List<Course>): TimetableUi = TimetableUi(
-    allCourses = courses.flatMap { it.toListCoursesUi() },
-    courses = courses.map { it.toCourseEditUi() },
+    courses = courses.map { it.toCourseUi() },
     timetableId = timetableId,
     semesterName = semesterName,
     createdAt = createdAt,
@@ -63,13 +63,16 @@ fun TimetableUi.toDayCoursesUi(
 ): List<CourseUi> {
     if (weekIndex == 0) return emptyList()
 
-    // Filter courses that happen on this day of week and week index
-    return allCourses.filter { it.timeSlot.dayOfWeek == targetDayOfWeek }.filter { ui ->
-        val isOddWeek = weekIndex % 2 != 0
-        when (ui.timeSlot.recurrence) {
-            com.hufeng943.timetable.shared.model.WeekPattern.EVERY_WEEK -> true
-            com.hufeng943.timetable.shared.model.WeekPattern.ODD_WEEK -> isOddWeek
-            com.hufeng943.timetable.shared.model.WeekPattern.EVEN_WEEK -> !isOddWeek
+    return courses.flatMap { course ->
+        course.timeSlots.filter { slot ->
+            slot.dayOfWeek == targetDayOfWeek &&
+                    when (slot.recurrence) {
+                        WeekPattern.EVERY_WEEK -> true
+                        WeekPattern.ODD_WEEK -> weekIndex % 2 != 0
+                        WeekPattern.EVEN_WEEK -> weekIndex % 2 == 0
+                    }
+        }.map { slot ->
+            course.copy(selectedTimeSlot = slot)
         }
     }
 }

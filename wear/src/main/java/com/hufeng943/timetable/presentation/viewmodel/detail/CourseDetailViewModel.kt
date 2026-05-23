@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.presentation.ui.NavArgs
 import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toCourseUi
-import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toListCoursesUi
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toFlattenedCourseUiList
 import com.hufeng943.timetable.presentation.ui.screens.detail.DetailPageData
 import com.hufeng943.timetable.presentation.viewmodel.AppError
 import com.hufeng943.timetable.presentation.viewmodel.UiState
@@ -31,8 +31,8 @@ class CourseDetailViewModel @Inject constructor(
         if (currentSlot == null) throw AppError.TimeSlotNotFound(sId)
 
         val currentCourseUi = course.toCourseUi(currentSlot)
-        val listCourseUi = course.toListCoursesUi()
+        val flattenedCourseUiList = course.toFlattenedCourseUiList()
 
-        UiState.Success(DetailPageData(currentCourseUi, listCourseUi))
+        UiState.Success(DetailPageData(currentCourseUi, flattenedCourseUiList))
     }.toSafeStateFlow(viewModelScope)
 }

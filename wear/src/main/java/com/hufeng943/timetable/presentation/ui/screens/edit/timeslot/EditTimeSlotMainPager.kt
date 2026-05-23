@@ -156,7 +156,7 @@ fun EditTimeSlotMainPager(
                     }
                 ) {
                     Text(
-                        text = timeSlot.remark ?: stringResource(R.string.not_set),
+                        text = timeSlot.displayRemark,
                         style = MaterialTheme.typography.labelLarge
                     )
                 }

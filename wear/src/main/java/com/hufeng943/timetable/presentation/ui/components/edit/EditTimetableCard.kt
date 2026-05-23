@@ -52,7 +52,7 @@ fun EditTimetableCard(
         subtitle = {
             Text(
                 text = stringResource(
-                    R.string.edit_timetable_number, timetable.allCourses.size
+                    R.string.edit_timetable_number, timetable.courses.size
                 ), maxLines = 1, modifier = Modifier.basicMarquee(
                     iterations = Int.MAX_VALUE
                 )

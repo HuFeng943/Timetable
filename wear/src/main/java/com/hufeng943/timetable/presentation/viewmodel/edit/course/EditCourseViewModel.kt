@@ -5,9 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.presentation.ui.NavArgs
-import com.hufeng943.timetable.presentation.ui.common.ui.CourseEditUi
+import com.hufeng943.timetable.presentation.ui.common.ui.CourseUi
 import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toCourse
-import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toCourseEditUi
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toCourseUi
 import com.hufeng943.timetable.presentation.viewmodel.AppError
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
@@ -25,14 +25,14 @@ class EditCourseViewModel @Inject constructor(
 ) : ViewModel() {
     private val cId: Long? = savedStateHandle.get<String>(NavArgs.COURSE_ID)?.toLongOrNull()
     private val tId: Long? = savedStateHandle.get<String>(NavArgs.TABLE_ID)?.toLongOrNull()
-    private val _uiState = MutableStateFlow<UiState<CourseEditUi>>(UiState.Loading)
+    private val _uiState = MutableStateFlow<UiState<CourseUi>>(UiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
             try {
                 val domainData = cId?.let { repository.getCourseById(it).firstOrNull() } ?: Course()
-                _uiState.value = UiState.Success(domainData.toCourseEditUi())
+                _uiState.value = UiState.Success(domainData.toCourseUi())
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e)
             }
@@ -53,7 +53,7 @@ class EditCourseViewModel @Inject constructor(
         }
     }
 
-    private inline fun updateSuccessState(crossinline transform: (CourseEditUi) -> CourseEditUi) {
+    private inline fun updateSuccessState(crossinline transform: (CourseUi) -> CourseUi) {
         val current = _uiState.value
         if (current is UiState.Success) {
             _uiState.value = UiState.Success(transform(current.data))

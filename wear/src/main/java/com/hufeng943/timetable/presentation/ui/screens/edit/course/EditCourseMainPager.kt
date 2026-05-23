@@ -15,13 +15,13 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.ui.common.ui.CourseEditUi
+import com.hufeng943.timetable.presentation.ui.common.ui.CourseUi
 import com.hufeng943.timetable.presentation.ui.components.ColorPickerCard
 import com.hufeng943.timetable.presentation.ui.components.DeleteButton
 
 @Composable
 fun EditCourseMainPager(
-    course: CourseEditUi,
+    course: CourseUi,
     onSave: () -> Unit,
     onNameClick: () -> Unit,
     onLocationClick: () -> Unit,
@@ -81,7 +81,7 @@ fun EditCourseMainPager(
                     },
                 ) {
                     Text(
-                        course.location ?: stringResource(R.string.not_set),
+                        course.displayLocation,
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
@@ -100,7 +100,7 @@ fun EditCourseMainPager(
                     },
                 ) {
                     Text(
-                        course.teacher ?: stringResource(R.string.not_set),
+                        course.displayTeacher,
                         style = MaterialTheme.typography.labelLarge
                     )
                 }

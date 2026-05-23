@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.presentation.ui.NavArgs
-import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toCourseEditUi
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toCourseUi
 import com.hufeng943.timetable.presentation.viewmodel.AppError
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.toSafeStateFlow
@@ -27,7 +27,7 @@ class TimeSlotListViewModel @Inject constructor(
         if (course == null) {
             throw AppError.CourseNotFound(cId)
         } else {
-            UiState.Success(course.toCourseEditUi())
+            UiState.Success(course.toCourseUi())
         }
     }.toSafeStateFlow(viewModelScope)
 }

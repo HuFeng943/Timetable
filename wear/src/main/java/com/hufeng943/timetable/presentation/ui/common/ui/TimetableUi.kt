@@ -9,8 +9,7 @@ import kotlinx.datetime.LocalDate
 import kotlin.time.Instant
 
 data class TimetableUi(
-    val allCourses: List<CourseUi> = emptyList(), // 所有课程的节次（用于主页展示）
-    val courses: List<CourseEditUi> = emptyList(), // 所有的课程（用于列表展示和编辑）
+    val courses: List<CourseUi> = emptyList(), // 所有的课程
     val timetableId: Long = 0,
     val semesterName: String,
     val createdAt: Instant,
