@@ -24,6 +24,7 @@ class PreferenceStorage @Inject constructor(
     private object Keys {
         val TIME_FORMAT = stringPreferencesKey("time_format")
         val APP_LANGUAGE = stringPreferencesKey("app_language")
+        val FIRST_DAY_OF_THE_WEEK = stringPreferencesKey("first_day_of_the_week")
     }
 
     val appConfigFlow: Flow<AppConfig> = context.dataStore.data.map { prefs ->
@@ -31,7 +32,29 @@ class PreferenceStorage @Inject constructor(
         val formatSetting = runCatching {
             TimeFormat.valueOf(prefs[Keys.TIME_FORMAT] ?: TimeFormat.SYSTEM.name)
         }.getOrDefault(TimeFormat.SYSTEM)
+        val firstDaySetting = runCatching {
+            FirstDayOfTheWeek.valueOf(
+                prefs[Keys.FIRST_DAY_OF_THE_WEEK] ?: FirstDayOfTheWeek.SYSTEM.name
+            )
+        }.getOrDefault(FirstDayOfTheWeek.SYSTEM)
+        // 如果设置了跟随系统，则根据系统区域设置确定每周的第一天
+        val effectiveFirstDay = if (firstDaySetting == FirstDayOfTheWeek.SYSTEM) {
+            val locale = context.resources.configuration.locales[0]
 
+            // 获取系统日历中每周的第一天
+            val calendar = java.util.Calendar.getInstance(java.util.Locale.getDefault())
+            val systemFirstDay = calendar.firstDayOfWeek
+
+            // 常量转换
+            when (systemFirstDay) {
+                java.util.Calendar.MONDAY -> FirstDayOfTheWeek.MONDAY
+                java.util.Calendar.SUNDAY -> FirstDayOfTheWeek.SUNDAY
+                java.util.Calendar.SATURDAY -> FirstDayOfTheWeek.SATURDAY
+                else -> FirstDayOfTheWeek.MONDAY
+            }
+        } else {
+            firstDaySetting
+        }
 
         val finalIs24Hour = when (formatSetting) {
             TimeFormat.H12 -> false
@@ -42,7 +65,9 @@ class PreferenceStorage @Inject constructor(
         AppConfig(
             languageTag = langSetting,
             is24HourFormat = finalIs24Hour,
-            timeFormatSetting = formatSetting
+            timeFormatSetting = formatSetting,
+            firstDayOfTheWeekSetting = firstDaySetting,
+            effectiveFirstDayOfTheWeek = effectiveFirstDay
         )
     }
 
@@ -52,6 +77,10 @@ class PreferenceStorage @Inject constructor(
 
     suspend fun setLanguage(languageTag: String?) {
         context.dataStore.edit { it[Keys.APP_LANGUAGE] = languageTag ?: "system" }
+    }
+
+    suspend fun setFirstDayOfTheWeek(firstDay: FirstDayOfTheWeek) {
+        context.dataStore.edit { it[Keys.FIRST_DAY_OF_THE_WEEK] = firstDay.name }
     }
 }
 
