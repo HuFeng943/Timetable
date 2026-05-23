@@ -91,7 +91,10 @@ fun DetailsPager(courseUi: CourseUi) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 12.dp),
+                            .padding(horizontal = 8.dp, vertical = 12.dp)
+                            .basicMarquee(
+                                iterations = Int.MAX_VALUE, // 无限循环滚动
+                            ),
                         verticalAlignment = Alignment.Bottom
                     ) {
                         if (dayStr.isNotEmpty()) {
@@ -150,7 +153,8 @@ fun DetailsPager(courseUi: CourseUi) {
                 item {
                     DetailListItem(
                         icon = Icons.AutoMirrored.Rounded.Notes,
-                        text = remark
+                        text = remark,
+                        enableMarquee = false
                     )
                 }
             }
@@ -183,26 +187,37 @@ fun DetailsPager(courseUi: CourseUi) {
 }
 
 @Composable
-fun DetailListItem(icon: ImageVector, text: String) {
+fun DetailListItem(
+    icon: ImageVector,
+    text: String,
+    enableMarquee: Boolean = true
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 6.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = if (enableMarquee) Alignment.CenterVertically else Alignment.Top
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(28.dp)
+            modifier = Modifier
+                .run { if (!enableMarquee) padding(top = 2.dp) else this }
+                .size(28.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
+
         Text(
             text = text,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground,
-            maxLines = 1,
-            modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
+            maxLines = if (enableMarquee) 1 else Int.MAX_VALUE,
+            modifier = Modifier
+                .weight(1f)
+                .run {
+                    if (enableMarquee) basicMarquee(iterations = Int.MAX_VALUE) else this
+                }
         )
     }
 }
