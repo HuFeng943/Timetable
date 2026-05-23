@@ -15,13 +15,13 @@ import kotlin.time.Instant
  */
 @Serializable
 data class Timetable(
-    val allCourses: List<Course> = emptyList(),
     val timetableId: Long = 0,
     val semesterName: String = "", // 课程表的名称
     @Serializable(with = InstantAsLongSerializer::class)// 这是kotlin.time.Instant
     val createdAt: Instant,
     val semesterStart: LocalDate, // 课表开始日期
     val semesterEnd: LocalDate? = null, // 课表结束日期,有可能永不结束
+    val allCourses: List<Course> = emptyList(),
     val color: Long = -1L
 ) {
     init {
@@ -38,25 +38,5 @@ data class Timetable(
         val offsetDays =
             (semesterStart.dayOfWeek.isoDayNumber - DayOfWeek.MONDAY.isoDayNumber).mod(7)
         semesterStart.minus(offsetDays.toLong(), DateTimeUnit.DAY)
-    }
-
-    /**
-     * 一个用于通过CourseId快速查找Course对象的Map
-     * 比遍历效率高
-     */
-    internal val courseMap: Map<Long, Course> by lazy {
-        allCourses.associateBy { it.id }
-    }
-
-    /**
-     * 类似courseMap
-     * 用TimeSlotId查找
-     */
-    internal val timeSlotsMap: Map<Long, TimeSlot> by lazy {
-        allCourses.flatMap { course ->
-            course.timeSlots.map { slot ->
-                slot.id to slot
-            }
-        }.toMap()
     }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.presentation.ui.NavArgs
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toTimetableUi
 import com.hufeng943.timetable.presentation.viewmodel.AppError
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.toSafeStateFlow
@@ -26,7 +27,7 @@ class CourseListViewModel @Inject constructor(
         if (timetable == null) {
             throw AppError.TimetableNotFound(tId)
         } else {
-            UiState.Success(timetable)
+            UiState.Success(timetable.toTimetableUi(timetable.allCourses))
         }
     }.toSafeStateFlow(viewModelScope)
 }

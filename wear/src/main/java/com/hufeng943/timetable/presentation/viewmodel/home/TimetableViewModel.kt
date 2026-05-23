@@ -4,11 +4,12 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.getWeekIndexForDate
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toDayCoursesUi
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toTimetableUi
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.toSafeStateFlow
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
-import com.hufeng943.timetable.shared.ui.mappers.getWeekIndexForDate
-import com.hufeng943.timetable.shared.ui.mappers.toDayCoursesUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.combine
@@ -19,20 +20,21 @@ import kotlinx.datetime.todayIn
 import kotlin.time.Clock
 
 @HiltViewModel
-class TimetableViewModel @Inject constructor(// TODO 待重构
+class TimetableViewModel @Inject constructor(
     repository: TimetableRepository, private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     companion object {
         const val KEY_SELECTED_DATE = "selected_date"
     }
 
-    // 全部课表
+    // 全部课表 (UI 层)
     val allTimetables = repository.getAllTimetables().map { list ->
         if (list.isEmpty()) UiState.Empty
-        else UiState.Success(list)
+        else {
+            val uiList = list.map { it.toTimetableUi(it.allCourses) }
+            UiState.Success(uiList)
+        }
     }.toSafeStateFlow(viewModelScope)
-
-    // TODO 在 room 保存是否要显示的课表
 
     private val _selectedDate = savedStateHandle.getStateFlow<LocalDate>(
         KEY_SELECTED_DATE, Clock.System.todayIn(TimeZone.currentSystemDefault())
@@ -45,12 +47,12 @@ class TimetableViewModel @Inject constructor(// TODO 待重构
             is UiState.Empty -> UiState.Empty
             is UiState.Error -> UiState.Error(state.throwable)
             is UiState.Success -> {
-                val allTables = state.data
-                val allDailyCourses = allTables.flatMap { table ->
-                    val weekIndex = table.getWeekIndexForDate(selectedDate)
+                val allTablesUi = state.data
+                val allDailyCourses = allTablesUi.flatMap { tableUi ->
+                    val weekIndex = tableUi.getWeekIndexForDate(selectedDate)
                     Log.d("weekIndex", weekIndex.toString())
                     Log.d("selectedDate.dayOfWeek", selectedDate.dayOfWeek.toString())
-                    table.toDayCoursesUi(selectedDate.dayOfWeek, weekIndex)
+                    tableUi.toDayCoursesUi(selectedDate.dayOfWeek, weekIndex)
                 }
                 // 统一排序并重新编号
                 val sortedCoursesUi =

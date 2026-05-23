@@ -3,6 +3,7 @@ package com.hufeng943.timetable.presentation.ui.screens.edit.course
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
@@ -14,15 +15,13 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.ui.common.displayName
-import com.hufeng943.timetable.presentation.ui.common.toColor
+import com.hufeng943.timetable.presentation.ui.common.ui.CourseEditUi
 import com.hufeng943.timetable.presentation.ui.components.ColorPickerCard
 import com.hufeng943.timetable.presentation.ui.components.DeleteButton
-import com.hufeng943.timetable.shared.model.Course
 
 @Composable
 fun EditCourseMainPager(
-    course: Course,
+    course: CourseEditUi,
     onSave: () -> Unit,
     onNameClick: () -> Unit,
     onLocationClick: () -> Unit,
@@ -110,10 +109,10 @@ fun EditCourseMainPager(
             item { // 颜色
                 ColorPickerCard(
                     label = stringResource(R.string.edit_course_color),
-                    color = course.color.toColor(),
+                    color = course.displayColor,
                     onClick = onColorClick,
                     onLongClick = onColorLongClick,
-                    isNull = course.color == -1L
+                    isNull = course.color == Color.Unspecified
                 )
             }
 

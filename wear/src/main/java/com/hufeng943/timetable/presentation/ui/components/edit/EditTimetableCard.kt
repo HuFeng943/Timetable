@@ -19,13 +19,12 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.ui.common.displayName
-import com.hufeng943.timetable.shared.model.Timetable
+import com.hufeng943.timetable.presentation.ui.common.ui.TimetableUi
 
 @Composable
 fun EditTimetableCard(
     onTimetableClick: (Long) -> Unit,
-    timetable: Timetable,
+    timetable: TimetableUi,
     onTimetableLongClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -34,12 +33,12 @@ fun EditTimetableCard(
         onLongClick = { onTimetableLongClick(timetable.timetableId) },
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (timetable.color != -1L) {
+                if (timetable.color != Color.Unspecified) {
                     Box(
                         modifier = Modifier
                             .size(8.dp)
                             .clip(CircleShape)
-                            .background(Color(timetable.color))
+                            .background(timetable.color)
                     )
                     Spacer(Modifier.width(8.dp))
                 }

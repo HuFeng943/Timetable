@@ -23,7 +23,7 @@ fun TimetableWithCourses.toTimetable(): Timetable {
         semesterStart = semesterStart,
         semesterEnd = semesterEnd,
         allCourses = this.courses.map { it.toCourse() },
-        color = tableEntity.color
+        color = tableEntity.color,
     )
 }
 

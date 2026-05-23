@@ -19,9 +19,7 @@ import androidx.wear.compose.material3.Card
 import androidx.wear.compose.material3.CardDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
-import com.hufeng943.timetable.presentation.ui.common.displayName
-import com.hufeng943.timetable.presentation.ui.common.toColor
-import com.hufeng943.timetable.shared.ui.CourseUi
+import com.hufeng943.timetable.presentation.ui.common.ui.CourseUi
 
 
 @Composable
@@ -30,7 +28,7 @@ fun CourseCard(course: CourseUi, onClick: () -> Unit) {
         onClick = onClick,
         contentPadding = PaddingValues(vertical = 4.dp, horizontal = 10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = course.color.toColor(),// 卡片背景色
+            containerColor = course.displayColor,// 卡片背景色
         )
     ) {
         Row(

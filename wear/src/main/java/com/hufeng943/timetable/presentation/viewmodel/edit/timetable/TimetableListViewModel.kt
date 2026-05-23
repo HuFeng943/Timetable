@@ -2,6 +2,7 @@ package com.hufeng943.timetable.presentation.viewmodel.edit.timetable
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toTimetableUi
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.toSafeStateFlow
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
@@ -15,6 +16,6 @@ class TimetableListViewModel @Inject constructor(
 ) : ViewModel() {
     val uiState = repository.getAllTimetables().map { list ->
         if (list.isEmpty()) UiState.Empty
-        else UiState.Success(list)
+        else UiState.Success(list.map { it.toTimetableUi(it.allCourses) })
     }.toSafeStateFlow(viewModelScope)
 }

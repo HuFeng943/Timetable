@@ -19,13 +19,15 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.ui.common.displayName
-import com.hufeng943.timetable.shared.model.Course
+import com.hufeng943.timetable.presentation.ui.common.ui.CourseEditUi
 
 
 @Composable
 fun EditCourseCard(
-    course: Course, onClick: () -> Unit, onLongClick: () -> Unit, modifier: Modifier = Modifier
+    course: CourseEditUi,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     TitleCard(
         onClick = onClick,
@@ -33,12 +35,12 @@ fun EditCourseCard(
         modifier = modifier.fillMaxWidth(),
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (course.color != -1L) {
+                if (course.color != Color.Unspecified) {
                     Box(
                         modifier = Modifier
                             .size(8.dp)
                             .clip(CircleShape)
-                            .background(Color(course.color))
+                            .background(course.color)
                     )
                     Spacer(Modifier.width(8.dp))
                 }

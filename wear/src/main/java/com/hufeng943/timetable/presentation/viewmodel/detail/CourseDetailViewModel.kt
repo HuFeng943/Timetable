@@ -4,13 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.presentation.ui.NavArgs
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toCourseUi
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toListCoursesUi
 import com.hufeng943.timetable.presentation.ui.screens.detail.DetailPageData
 import com.hufeng943.timetable.presentation.viewmodel.AppError
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.toSafeStateFlow
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
-import com.hufeng943.timetable.shared.ui.mappers.toCourseUi
-import com.hufeng943.timetable.shared.ui.mappers.toListCoursesUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.map

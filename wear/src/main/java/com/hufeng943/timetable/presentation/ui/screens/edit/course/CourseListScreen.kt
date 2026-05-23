@@ -26,7 +26,7 @@ fun CourseListScreen(
         is UiState.Error -> ErrorScreen(state.throwable)
         is UiState.Empty -> ErrorScreen(AppError.UnexpectedEmpty())
         is UiState.Success -> {
-            CourseListPager(courses = state.data.allCourses, onAddCourse = {
+            CourseListPager(courses = state.data.courses, onAddCourse = {
                 navController.navigateSingle(editCourse(state.data.timetableId))
             }, onCourseClick = { courseId ->
                 navController.navigateSingle(listTimeSlot(courseId))

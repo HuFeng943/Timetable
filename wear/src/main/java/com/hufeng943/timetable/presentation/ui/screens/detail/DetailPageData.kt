@@ -1,6 +1,6 @@
 package com.hufeng943.timetable.presentation.ui.screens.detail
 
-import com.hufeng943.timetable.shared.ui.CourseUi
+import com.hufeng943.timetable.presentation.ui.common.ui.CourseUi
 
 data class DetailPageData(
     val currentCourseUi: CourseUi,

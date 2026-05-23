@@ -1,10 +1,13 @@
 package com.hufeng943.timetable.presentation.viewmodel.edit.timetable
 
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.presentation.ui.NavArgs
+import com.hufeng943.timetable.presentation.ui.common.ui.TimetableUi
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toTimetable
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toTimetableUi
 import com.hufeng943.timetable.presentation.viewmodel.AppError
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
@@ -26,17 +29,18 @@ class EditTimetableViewModel @Inject constructor(
     private val tId: Long? = savedStateHandle.get<String>(NavArgs.TABLE_ID)?.toLongOrNull()
     val toDay = Clock.System.todayIn(TimeZone.currentSystemDefault())
 
-    private val _uiState = MutableStateFlow<UiState<Timetable>>(UiState.Loading)
+    private val _uiState = MutableStateFlow<UiState<TimetableUi>>(UiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
             try {
-                val data = tId?.let { repository.getTimetableById(it).firstOrNull() } ?: Timetable(
-                    createdAt = Clock.System.now(),
-                    semesterStart = Clock.System.todayIn(TimeZone.currentSystemDefault())
-                )
-                _uiState.value = UiState.Success(data)
+                val domainData = tId?.let { repository.getTimetableById(it).firstOrNull() }
+                    ?: Timetable(
+                        createdAt = Clock.System.now(),
+                        semesterStart = Clock.System.todayIn(TimeZone.currentSystemDefault())
+                    )
+                _uiState.value = UiState.Success(domainData.toTimetableUi(domainData.allCourses))
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e)
             }
@@ -47,7 +51,6 @@ class EditTimetableViewModel @Inject constructor(
         when (action) {
             is EditTimetableAction.UpdateName -> updateSuccessState { it.copy(semesterName = action.name) }
 
-            // 确保 semesterEnd semesterStart 别出错
             is EditTimetableAction.UpdateStartDate -> updateSuccessState { current ->
                 val newEndDate = current.semesterEnd?.let { end ->
                     if ((action.date ?: toDay) > end) action.date else end
@@ -63,9 +66,7 @@ class EditTimetableViewModel @Inject constructor(
             }
 
             is EditTimetableAction.UpdateColor -> updateSuccessState {
-                it.copy(color = action.color?.let { color ->
-                    (color.toArgb().toLong() and 0xFFFFFFFFL)
-                } ?: -1L)
+                it.copy(color = action.color ?: Color.Unspecified)
             }
 
             EditTimetableAction.Upsert -> upsertTimetable()
@@ -73,21 +74,19 @@ class EditTimetableViewModel @Inject constructor(
         }
     }
 
-    // 用来更新 Success 状态
-    private inline fun updateSuccessState(crossinline transform: (Timetable) -> Timetable) {
+    private inline fun updateSuccessState(crossinline transform: (TimetableUi) -> TimetableUi) {
         val current = _uiState.value
         if (current is UiState.Success) {
             _uiState.value = UiState.Success(transform(current.data))
         }
     }
 
-
     private fun upsertTimetable() {
         viewModelScope.launch {
             try {
-                val current =
+                val currentUi =
                     (uiState.value as? UiState.Success)?.data ?: throw AppError.UnexpectedEmpty()
-                repository.upsertTimetable(current)
+                repository.upsertTimetable(currentUi.toTimetable())
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e)
             }
@@ -108,4 +107,3 @@ class EditTimetableViewModel @Inject constructor(
         }
     }
 }
-

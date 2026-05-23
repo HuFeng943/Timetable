@@ -21,6 +21,7 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.NavRoutes.courseDetail
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
+import com.hufeng943.timetable.presentation.ui.common.ui.CourseUi
 import com.hufeng943.timetable.presentation.ui.components.CourseCard
 import com.hufeng943.timetable.presentation.ui.components.PullToDatePicker
 import com.hufeng943.timetable.presentation.ui.components.PullToDatePickerState
@@ -31,7 +32,6 @@ import com.hufeng943.timetable.presentation.ui.screens.common.ErrorScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.home.TimetableViewModel
-import com.hufeng943.timetable.shared.ui.CourseUi
 
 @Composable
 fun TimetablePager(

@@ -4,6 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.presentation.ui.NavArgs
+import com.hufeng943.timetable.presentation.ui.common.ui.TimeSlotUi
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toTimeSlot
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toTimeSlotUi
 import com.hufeng943.timetable.presentation.viewmodel.AppError
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
@@ -23,14 +26,15 @@ class EditTimeSlotViewModel @Inject constructor(
     private val cId: Long? = savedStateHandle.get<String>(NavArgs.COURSE_ID)?.toLongOrNull()
     private val sId: Long? = savedStateHandle.get<String>(NavArgs.TIME_SLOT_ID)?.toLongOrNull()
 
-    private val _uiState = MutableStateFlow<UiState<TimeSlot>>(UiState.Loading)
+    private val _uiState = MutableStateFlow<UiState<TimeSlotUi>>(UiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
             try {
-                val data = sId?.let { repository.getTimeSlotById(it).firstOrNull() } ?: TimeSlot()
-                _uiState.value = UiState.Success(data)
+                val domainData =
+                    sId?.let { repository.getTimeSlotById(it).firstOrNull() } ?: TimeSlot()
+                _uiState.value = UiState.Success(domainData.toTimeSlotUi())
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e)
             }
@@ -61,8 +65,7 @@ class EditTimeSlotViewModel @Inject constructor(
         }
     }
 
-    // 用来更新 Success 状态
-    private inline fun updateSuccessState(crossinline transform: (TimeSlot) -> TimeSlot) {
+    private inline fun updateSuccessState(crossinline transform: (TimeSlotUi) -> TimeSlotUi) {
         val current = _uiState.value
         if (current is UiState.Success) {
             _uiState.value = UiState.Success(transform(current.data))
@@ -72,11 +75,11 @@ class EditTimeSlotViewModel @Inject constructor(
     private fun upsertTimeSlot() {
         viewModelScope.launch {
             try {
-                val current =
+                val currentUi =
                     (uiState.value as? UiState.Success)?.data ?: throw AppError.UnexpectedEmpty()
                 val courseId = cId ?: throw AppError.InvalidParameter(NavArgs.COURSE_ID)
 
-                repository.upsertTimeSlot(current, courseId)
+                repository.upsertTimeSlot(currentUi.toTimeSlot(), courseId)
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e)
             }

@@ -15,12 +15,12 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
+import com.hufeng943.timetable.presentation.ui.common.ui.TimetableUi
 import com.hufeng943.timetable.presentation.ui.components.edit.EditTimetableCard
-import com.hufeng943.timetable.shared.model.Timetable
 
 @Composable
 fun TimetableListPager(
-    timetables: List<Timetable>,
+    timetables: List<TimetableUi>,
     onAddTimetable: () -> Unit,
     onTimetableClick: (Long) -> Unit,
     onTimetableLongClick: (Long) -> Unit

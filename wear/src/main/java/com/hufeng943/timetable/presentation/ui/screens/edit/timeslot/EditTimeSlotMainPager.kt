@@ -17,14 +17,14 @@ import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
 import com.hufeng943.timetable.presentation.ui.common.toDisplayString
+import com.hufeng943.timetable.presentation.ui.common.ui.TimeSlotUi
 import com.hufeng943.timetable.presentation.ui.components.DeleteButton
-import com.hufeng943.timetable.shared.model.TimeSlot
 import kotlinx.datetime.toJavaDayOfWeek
 import java.time.format.TextStyle
 
 @Composable
 fun EditTimeSlotMainPager(
-    timeSlot: TimeSlot,
+    timeSlot: TimeSlotUi,
     onSave: () -> Unit,
     onStartTimeClick: () -> Unit,
     onEndTimeClick: () -> Unit,

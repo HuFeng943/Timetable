@@ -2,14 +2,9 @@ package com.hufeng943.timetable.presentation.ui.common
 
 import android.text.format.DateFormat
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.wear.compose.material3.MaterialTheme
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.shared.model.Course
-import com.hufeng943.timetable.shared.model.Timetable
 import com.hufeng943.timetable.shared.model.WeekPattern
-import com.hufeng943.timetable.shared.ui.CourseUi
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
@@ -45,22 +40,3 @@ fun LocalDate.toDisplayString(): String {
     return java.time.LocalDate.of(year, month.number, day)
         .format(DateTimeFormatter.ofPattern(pattern))
 }
-
-@Composable
-fun Long.toColor(): Color = if (this == -1L) {
-    MaterialTheme.colorScheme.primaryContainer
-} else {
-    Color(this)
-}// TODO 废除
-
-val Timetable.displayName: String
-    @Composable
-    get() = semesterName.ifBlank { stringResource(R.string.default_semester_name) }
-
-val Course.displayName: String
-    @Composable
-    get() = name.ifBlank { stringResource(R.string.default_course_name) }
-
-val CourseUi.displayName: String
-    @Composable
-    get() = name.ifBlank { stringResource(R.string.default_course_name) }

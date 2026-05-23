@@ -10,7 +10,6 @@ import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
-import com.hufeng943.timetable.presentation.ui.common.displayName
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 import com.hufeng943.timetable.presentation.ui.common.popSafe
 import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState

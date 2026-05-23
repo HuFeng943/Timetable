@@ -1,10 +1,13 @@
 package com.hufeng943.timetable.presentation.viewmodel.edit.course
 
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.presentation.ui.NavArgs
+import com.hufeng943.timetable.presentation.ui.common.ui.CourseEditUi
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toCourse
+import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toCourseEditUi
 import com.hufeng943.timetable.presentation.viewmodel.AppError
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
@@ -22,14 +25,14 @@ class EditCourseViewModel @Inject constructor(
 ) : ViewModel() {
     private val cId: Long? = savedStateHandle.get<String>(NavArgs.COURSE_ID)?.toLongOrNull()
     private val tId: Long? = savedStateHandle.get<String>(NavArgs.TABLE_ID)?.toLongOrNull()
-    private val _uiState = MutableStateFlow<UiState<Course>>(UiState.Loading)
+    private val _uiState = MutableStateFlow<UiState<CourseEditUi>>(UiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
             try {
-                val data = cId?.let { repository.getCourseById(it).firstOrNull() } ?: Course()
-                _uiState.value = UiState.Success(data)
+                val domainData = cId?.let { repository.getCourseById(it).firstOrNull() } ?: Course()
+                _uiState.value = UiState.Success(domainData.toCourseEditUi())
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e)
             }
@@ -42,9 +45,7 @@ class EditCourseViewModel @Inject constructor(
             is EditCourseAction.UpdateLocation -> updateSuccessState { it.copy(location = action.location) }
             is EditCourseAction.UpdateTeacher -> updateSuccessState { it.copy(teacher = action.teacher) }
             is EditCourseAction.UpdateColor -> updateSuccessState {
-                it.copy(color = action.color?.let { color ->
-                    (color.toArgb().toLong() and 0xFFFFFFFFL)
-                } ?: -1L)
+                it.copy(color = action.color ?: Color.Unspecified)
             }
 
             EditCourseAction.Upsert -> upsertCourse()
@@ -52,8 +53,7 @@ class EditCourseViewModel @Inject constructor(
         }
     }
 
-    // 用来更新 Success 状态
-    private inline fun updateSuccessState(crossinline transform: (Course) -> Course) {
+    private inline fun updateSuccessState(crossinline transform: (CourseEditUi) -> CourseEditUi) {
         val current = _uiState.value
         if (current is UiState.Success) {
             _uiState.value = UiState.Success(transform(current.data))
@@ -63,11 +63,11 @@ class EditCourseViewModel @Inject constructor(
     private fun upsertCourse() {
         viewModelScope.launch {
             try {
-                val current =
+                val currentUi =
                     (uiState.value as? UiState.Success)?.data ?: throw AppError.UnexpectedEmpty()
                 val tableId = tId ?: throw AppError.InvalidParameter(NavArgs.TABLE_ID)
 
-                repository.upsertCourse(current, tableId)
+                repository.upsertCourse(currentUi.toCourse(), tableId)
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e)
             }
@@ -90,4 +90,3 @@ class EditCourseViewModel @Inject constructor(
         }
     }
 }
-
