@@ -1,6 +1,7 @@
 package com.hufeng943.timetable.presentation.ui.screens.detail
 
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Notes
-import androidx.compose.material.icons.rounded.DeleteOutline
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.rounded.FormatListNumbered
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Place
@@ -25,8 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
-import androidx.wear.compose.material3.Button
-import androidx.wear.compose.material3.ButtonDefaults
+import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
@@ -94,8 +94,7 @@ fun DetailsPager(courseUi: CourseUi) {
                             .padding(horizontal = 8.dp, vertical = 12.dp)
                             .basicMarquee(
                                 iterations = Int.MAX_VALUE, // 无限循环滚动
-                            ),
-                        verticalAlignment = Alignment.Bottom
+                            ), verticalAlignment = Alignment.Bottom
                     ) {
                         if (dayStr.isNotEmpty()) {
                             Text(
@@ -161,26 +160,29 @@ fun DetailsPager(courseUi: CourseUi) {
 
             item {
                 DetailListItem(
-                    icon = Icons.Rounded.Sync,
-                    text = courseUi.timeSlot.recurrence.toDisplayString()
+                    icon = Icons.Rounded.Sync, text = courseUi.timeSlot.recurrence.toDisplayString()
                 )
             }
 
             item { Spacer(modifier = Modifier.height(16.dp)) }
 
             item {
-                Button(
+                FilledTonalButton(
                     onClick = { /* TODO: 处理删除等逻辑 */ },
+                    onLongClick = { /* TODO: 处理长按逻辑 */ },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error,
-                        contentColor = MaterialTheme.colorScheme.onError
-                    )
-                ) {
-                    Icon(imageVector = Icons.Rounded.DeleteOutline, contentDescription = null)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("删除课程")
-                }
+                    icon = {
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = null)
+                    },
+                    label = {
+                        Column(
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("编辑课程")
+                            Text("长按编辑课时", style = MaterialTheme.typography.labelSmall)
+                        }
+                    })
+
             }
         }
     }
@@ -188,9 +190,7 @@ fun DetailsPager(courseUi: CourseUi) {
 
 @Composable
 fun DetailListItem(
-    icon: ImageVector,
-    text: String,
-    enableMarquee: Boolean = true
+    icon: ImageVector, text: String, enableMarquee: Boolean = true
 ) {
     Row(
         modifier = Modifier
@@ -204,8 +204,7 @@ fun DetailListItem(
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .run { if (!enableMarquee) padding(top = 2.dp) else this }
-                .size(28.dp)
-        )
+                .size(28.dp))
         Spacer(modifier = Modifier.width(16.dp))
 
         Text(
@@ -213,11 +212,8 @@ fun DetailListItem(
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground,
             maxLines = if (enableMarquee) 1 else Int.MAX_VALUE,
-            modifier = Modifier
-                .weight(1f)
-                .run {
-                    if (enableMarquee) basicMarquee(iterations = Int.MAX_VALUE) else this
-                }
-        )
+            modifier = Modifier.weight(1f).run {
+                if (enableMarquee) basicMarquee(iterations = Int.MAX_VALUE) else this
+            })
     }
 }
