@@ -26,7 +26,6 @@ import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.toDisplayString
 import com.hufeng943.timetable.presentation.ui.common.ui.TimeSlotUi
 import com.hufeng943.timetable.presentation.ui.components.TimeText
-import kotlinx.datetime.toJavaDayOfWeek
 import java.time.format.TextStyle
 
 @Composable
@@ -62,8 +61,8 @@ fun EditTimeSlotCard(
 
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Top) {
                 val dayText = remember(timeSlot.dayOfWeek, locale) {
-                    timeSlot.dayOfWeek?.toJavaDayOfWeek()?.getDisplayName(
-                        TextStyle.SHORT, locale
+                    timeSlot.dayOfWeek?.toDisplayString(
+                        TextStyle.SHORT_STANDALONE
                     )
                 } ?: stringResource(R.string.unknown)
                 val info = listOfNotNull(

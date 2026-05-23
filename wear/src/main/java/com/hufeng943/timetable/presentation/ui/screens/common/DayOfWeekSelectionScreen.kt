@@ -46,7 +46,7 @@ fun DayOfWeekSelectionScreen(
         items(days) { day ->
             RadioButton(
                 selected = (day == initialDay), onSelect = { onDaySelected(day) }, label = {
-                    Text(text = day.toDisplayString(TextStyle.FULL))
+                    Text(text = day.toDisplayString(TextStyle.FULL_STANDALONE))
                 }, icon = {
                     Icon(Icons.Default.DateRange, contentDescription = null)
                 }, modifier = Modifier.fillMaxWidth()
