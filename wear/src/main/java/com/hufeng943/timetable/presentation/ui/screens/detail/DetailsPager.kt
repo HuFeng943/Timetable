@@ -39,7 +39,9 @@ import com.hufeng943.timetable.presentation.ui.components.TimeText
 import java.time.format.TextStyle
 
 @Composable
-fun DetailsPager(courseUi: CourseUi) {
+fun DetailsPager(
+    courseUi: CourseUi, onCourseClick: () -> Unit, onCourseLongClick: () -> Unit
+) {
     val scrollState = rememberScalingLazyListState()
 
     ScreenScaffold(
@@ -168,8 +170,8 @@ fun DetailsPager(courseUi: CourseUi) {
 
             item {
                 FilledTonalButton(
-                    onClick = { /* TODO: 处理删除等逻辑 */ },
-                    onLongClick = { /* TODO: 处理长按逻辑 */ },
+                    onClick = onCourseClick,
+                    onLongClick = onCourseLongClick,
                     modifier = Modifier.fillMaxWidth(),
                     icon = {
                         Icon(imageVector = Icons.Rounded.Edit, contentDescription = null)

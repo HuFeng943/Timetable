@@ -6,13 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.hufeng943.timetable.presentation.ui.NavArgs
 import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toCourseUi
 import com.hufeng943.timetable.presentation.ui.common.ui.mappers.toFlattenedCourseUiList
-import com.hufeng943.timetable.presentation.ui.screens.detail.DetailPageData
 import com.hufeng943.timetable.presentation.viewmodel.AppError
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.toSafeStateFlow
 import com.hufeng943.timetable.shared.data.repository.TimetableRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 @HiltViewModel
@@ -23,16 +24,28 @@ class CourseDetailViewModel @Inject constructor(
         ?: throw AppError.InvalidParameter(
             NavArgs.TIME_SLOT_ID
         )
-    val detailState = repository.getCourseByTimeSlotId(sId).map { course ->
-        if (course == null) throw AppError.CourseNotFound(sId)
 
-        val currentSlot = course.timeSlots.find { it.id == sId }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val detailState = repository.getCourseByTimeSlotId(sId).flatMapLatest { course ->
+        if (course == null) {
+            throw AppError.TimeSlotNotFound(sId)
+        } else {
+            repository.getTimetableByCourseId(course.id).map { timetable ->
+                val currentSlot =
+                    course.timeSlots.find { it.id == sId } ?: throw AppError.TimeSlotNotFound(sId)
 
-        if (currentSlot == null) throw AppError.TimeSlotNotFound(sId)
+                val currentCourseUi = course.toCourseUi(currentSlot)
+                val flattenedCourseUiList = course.toFlattenedCourseUiList()
 
-        val currentCourseUi = course.toCourseUi(currentSlot)
-        val flattenedCourseUiList = course.toFlattenedCourseUiList()
-
-        UiState.Success(DetailPageData(currentCourseUi, flattenedCourseUiList))
+                UiState.Success(
+                    DetailPageData(
+                        timetableId = timetable?.timetableId
+                            ?: throw AppError.CourseNotFound(course.id),
+                        currentCourseUi = currentCourseUi,
+                        listCourseUi = flattenedCourseUiList
+                    )
+                )
+            }
+        }
     }.toSafeStateFlow(viewModelScope)
 }

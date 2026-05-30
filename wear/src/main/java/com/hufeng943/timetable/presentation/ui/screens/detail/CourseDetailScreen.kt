@@ -12,6 +12,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
 import androidx.wear.compose.material3.Text
+import com.hufeng943.timetable.presentation.ui.NavRoutes.editCourse
+import com.hufeng943.timetable.presentation.ui.NavRoutes.listTimeSlot
+import com.hufeng943.timetable.presentation.ui.common.LocalNavController
+import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 import com.hufeng943.timetable.presentation.ui.screens.common.ErrorScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
@@ -22,6 +26,7 @@ fun CourseDetailScreen(
     viewModel: CourseDetailViewModel = hiltViewModel()
 ) {
     val uiDetailState by viewModel.detailState.collectAsStateWithLifecycle()
+    val navController = LocalNavController.current
 
     when (val state = uiDetailState) {
         is UiState.Loading -> LoadingScreen()
@@ -36,11 +41,23 @@ fun CourseDetailScreen(
             val pagerState = rememberPagerState { 2 }
 
             HorizontalPager(
-                modifier = Modifier.fillMaxSize(),
-                state = pagerState
+                modifier = Modifier.fillMaxSize(), state = pagerState
             ) { page ->
                 when (page) {
-                    0 -> DetailsPager(state.data.currentCourseUi)
+                    0 -> DetailsPager(courseUi = state.data.currentCourseUi, onCourseClick = {
+                        navController.navigateSingle(
+                            editCourse(
+                                state.data.timetableId, state.data.currentCourseUi.id
+                            )
+                        )
+                    }, onCourseLongClick = {
+                        navController.navigateSingle(
+                            listTimeSlot(
+                                state.data.currentCourseUi.id
+                            )
+                        )
+                    })
+
                     1 -> CourseListPager(state.data.listCourseUi)
                 }
             }
