@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -22,10 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.presentation.ui.common.toDisplayString
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.plus
 import kotlinx.datetime.todayIn
 import java.time.format.TextStyle
 import kotlin.time.Clock
@@ -34,18 +31,20 @@ import kotlin.time.Clock
 fun HorizontalDatePicker(
     selectedDate: LocalDate, onDateSelected: (LocalDate) -> Unit, modifier: Modifier = Modifier
 ) {
-    val dates = remember {
-        val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
-        (-7..7).map { today.plus(it, DateTimeUnit.DAY) }
+    val totalDaysCount = Int.MAX_VALUE
+    val todayEpochDays =
+        remember { Clock.System.todayIn(TimeZone.currentSystemDefault()).toEpochDays() }
+
+    // 计算索引
+    val selectedIndex = remember(selectedDate, todayEpochDays) {
+        (totalDaysCount / 2) + (selectedDate.toEpochDays() - todayEpochDays)
     }
 
-    // 自动定位到当前选中日期的索引
-    val selectedIndex = remember(selectedDate) { dates.indexOf(selectedDate).coerceAtLeast(0) }
     val listState = rememberLazyListState()
 
     LaunchedEffect(selectedIndex) {
         if (selectedIndex >= 2) {
-            listState.scrollToItem(selectedIndex - 2)
+            listState.scrollToItem((selectedIndex - 2).toInt())
         }
     }
 
@@ -56,7 +55,11 @@ fun HorizontalDatePicker(
         contentPadding = PaddingValues(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        items(dates) { date ->
+        items(count = totalDaysCount) { index ->
+            val date = remember(index, todayEpochDays) {
+                LocalDate.fromEpochDays(todayEpochDays + (index - totalDaysCount / 2))
+            }
+
             val isSelected = date == selectedDate
             val backgroundColor = if (isSelected) {
                 MaterialTheme.colorScheme.primary
