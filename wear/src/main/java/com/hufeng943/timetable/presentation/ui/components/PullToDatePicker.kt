@@ -27,8 +27,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun rememberPullToDatePickerState(
-    maxDragDistanceDp: Dp = 120.dp,
-    refreshThresholdDp: Dp = 80.dp
+    maxDragDistanceDp: Dp = 120.dp, refreshThresholdDp: Dp = 80.dp
 ): PullToDatePickerState {
     val density = LocalDensity.current
     val maxDragDistance = remember(density) { with(density) { maxDragDistanceDp.toPx() } }
@@ -43,30 +42,28 @@ fun rememberPullToDatePickerState(
 
 fun Modifier.pullToDatePickerDrag(state: PullToDatePickerState): Modifier = this.then(
     Modifier.pointerInput(Unit) {
-        detectVerticalDragGestures(
-            onVerticalDrag = { _, dragAmount ->
-                val currentOffset = state.dragOffset
-                if (dragAmount > 0) {
-                    val newOffset = (currentOffset + dragAmount).coerceIn(0f, state.maxDragDistance)
-                    state.snapTo(newOffset)
-                } else if (dragAmount < 0 && currentOffset > 0) {
-                    val newOffset = (currentOffset + dragAmount).coerceAtLeast(0f)
-                    state.snapTo(newOffset)
-                }
-            },
-            onDragEnd = { state.animateToTarget() }
-        )
-    }
-)
+        detectVerticalDragGestures(onVerticalDrag = { _, dragAmount ->
+            val currentOffset = state.dragOffset
+            if (dragAmount > 0) {
+                val newOffset = (currentOffset + dragAmount).coerceIn(0f, state.maxDragDistance)
+                state.snapTo(newOffset)
+            } else if (dragAmount < 0 && currentOffset > 0) {
+                val newOffset = (currentOffset + dragAmount).coerceAtLeast(0f)
+                state.snapTo(newOffset)
+            }
+        }, onDragEnd = { state.animateToTarget() })
+    })
 
 @Composable
 fun rememberPullToRefreshConnection(
-    scrollState: ScalingLazyListState,
-    state: PullToDatePickerState
+    scrollState: ScalingLazyListState, state: PullToDatePickerState, isTouching: () -> Boolean
 ): NestedScrollConnection {
     return remember(scrollState, state) {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                if (!isTouching()) {
+                    return Offset.Zero
+                }
                 val firstVisibleItem = scrollState.layoutInfo.visibleItemsInfo.firstOrNull()
                 val isAtTop = firstVisibleItem?.index == 0 && (firstVisibleItem.offset) > -100
                 val currentOffset = state.dragOffset
@@ -96,9 +93,7 @@ fun rememberPullToRefreshConnection(
 
 @Composable
 fun PullToDatePicker(
-    dragOffset: Float,
-    refreshThreshold: Float,
-    content: @Composable () -> Unit
+    dragOffset: Float, refreshThreshold: Float, content: @Composable () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         if (dragOffset > 0) {
@@ -126,8 +121,7 @@ fun PullToDatePicker(
         Box(
             modifier = Modifier.offset {
                 IntOffset(0, dragOffset.roundToInt())
-            }
-        ) {
+            }) {
             content()
         }
     }

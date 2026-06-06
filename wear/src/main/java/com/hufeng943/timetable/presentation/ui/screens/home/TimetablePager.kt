@@ -3,11 +3,18 @@ package com.hufeng943.timetable.presentation.ui.screens.home
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.rotary.onPreRotaryScrollEvent
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
@@ -35,18 +42,36 @@ import com.hufeng943.timetable.presentation.viewmodel.home.TimetableViewModel
 
 @Composable
 fun TimetablePager(
-    viewModel: TimetableViewModel = hiltViewModel()
+    viewModel: TimetableViewModel = hiltViewModel(),
+    onOpenStateChanged: (Boolean) -> Unit = {} // 👈 1. 新增：状态变更回调
 ) {
     val uiState by viewModel.dateCoursesUi.collectAsState()
     val navController = LocalNavController.current
 
     when (val state = uiState) {
-        is UiState.Loading -> LoadingScreen()
-        is UiState.Empty -> EmptyPager()
-        is UiState.Error -> ErrorScreen(state.throwable)
+        is UiState.Loading -> {
+            LaunchedEffect(Unit) { onOpenStateChanged(false) } // 安全重置
+            LoadingScreen()
+        }
+
+        is UiState.Empty -> {
+            LaunchedEffect(Unit) { onOpenStateChanged(false) } // 安全重置
+            EmptyPager()
+        }
+
+        is UiState.Error -> {
+            LaunchedEffect(Unit) { onOpenStateChanged(false) } // 安全重置
+            ErrorScreen(state.throwable)
+        }
+
         is UiState.Success -> {
             val coursesUi = state.data
             val pullToDatePickerState = rememberPullToDatePickerState()
+
+            // 👈 2. 核心监听：只要偏移量大于0，说明组件被拉出，通知上层锁定 Pager
+            LaunchedEffect(pullToDatePickerState.dragOffset) {
+                onOpenStateChanged(pullToDatePickerState.dragOffset > 0)
+            }
 
             if (coursesUi.isEmpty()) {
                 EmptyCoursePager(state = pullToDatePickerState)
@@ -54,8 +79,7 @@ fun TimetablePager(
                 CourseListPager(
                     coursesUi = coursesUi,
                     state = pullToDatePickerState,
-                    itemKey = { courseUi -> courseUi.timeSlot.id }
-                ) { courseUi ->
+                    itemKey = { courseUi -> courseUi.timeSlot.id }) { courseUi ->
                     CourseCard(courseUi) {
                         navController.navigateSingle(courseDetail(courseUi.timeSlot.id))
                     }
@@ -103,9 +127,10 @@ private fun CourseListPager(
     itemContent: @Composable (CourseUi) -> Unit
 ) {
     val scrollState = rememberScalingLazyListState(initialCenterItemIndex = 0)
+    var isTouching by remember { mutableStateOf(false) }
+
     val nestedScrollConnection = rememberPullToRefreshConnection(
-        scrollState = scrollState, state = state
-    )
+        scrollState = scrollState, state = state, isTouching = { isTouching })
 
     ScreenScaffold(scrollState = scrollState) { contentPadding ->
         PullToDatePicker(
@@ -114,10 +139,20 @@ private fun CourseListPager(
             ScalingLazyColumn(
                 modifier = modifier
                     .fillMaxSize()
+                    .onPreRotaryScrollEvent {
+                        state.dragOffset > 0 // 直接消费掉表冠事件
+                    }
+                    .pointerInput(Unit) {
+                        awaitPointerEventScope {
+                            while (true) {
+                                val event = awaitPointerEvent(PointerEventPass.Initial)
+                                isTouching = event.changes.any { it.pressed }
+                            }
+                        }
+                    }
                     .nestedScroll(nestedScrollConnection),
                 state = scrollState,
-                contentPadding = contentPadding
-            ) {
+                contentPadding = contentPadding) {
                 item {
                     ListHeader {
                         Text(
