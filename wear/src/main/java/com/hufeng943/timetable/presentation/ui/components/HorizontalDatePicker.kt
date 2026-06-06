@@ -15,7 +15,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,6 +51,10 @@ fun HorizontalDatePicker(
 
     val listState = rememberLazyListState()
 
+    // 加两个缓存防止乱跳
+    var isInitialLayout by remember { mutableStateOf(true) }
+    var lastScrolledIndex by remember { mutableIntStateOf(-1) }
+
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
         val density = LocalDensity.current
         val itemWidth = 46.dp // 单个日期组件的宽度
@@ -57,7 +65,14 @@ fun HorizontalDatePicker(
         LaunchedEffect(selectedIndex, centerOffsetPx) {
             if (centerOffsetPx > 0f) {
                 // 传入负的 centerOffsetPx 把条目向右反向推到正中心
-                listState.scrollToItem(selectedIndex, -centerOffsetPx.roundToInt())
+                if (isInitialLayout) {
+                    listState.scrollToItem(selectedIndex, -centerOffsetPx.roundToInt())
+                    lastScrolledIndex = selectedIndex
+                    isInitialLayout = false
+                } else if (lastScrolledIndex != selectedIndex) {
+                    listState.animateScrollToItem(selectedIndex, -centerOffsetPx.roundToInt())
+                    lastScrolledIndex = selectedIndex
+                }
             }
         }
 
