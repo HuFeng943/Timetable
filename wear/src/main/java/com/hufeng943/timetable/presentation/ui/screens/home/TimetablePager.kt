@@ -39,13 +39,15 @@ import com.hufeng943.timetable.presentation.ui.screens.common.ErrorScreen
 import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.home.TimetableViewModel
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun TimetablePager(
     viewModel: TimetableViewModel = hiltViewModel(),
-    onOpenStateChanged: (Boolean) -> Unit = {} // 👈 1. 新增：状态变更回调
+    onOpenStateChanged: (Boolean) -> Unit = {}
 ) {
     val uiState by viewModel.dateCoursesUi.collectAsState()
+    val selectedDate by viewModel.selectedDate.collectAsState()
     val navController = LocalNavController.current
 
     when (val state = uiState) {
@@ -68,18 +70,29 @@ fun TimetablePager(
             val coursesUi = state.data
             val pullToDatePickerState = rememberPullToDatePickerState()
 
-            // 👈 2. 核心监听：只要偏移量大于0，说明组件被拉出，通知上层锁定 Pager
+            val handleDateSelected: (LocalDate) -> Unit = { date ->
+                viewModel.updateSelectedDate(date)
+            }
+
+            // 组件被拉出时通知上层锁定 Pager
             LaunchedEffect(pullToDatePickerState.dragOffset) {
                 onOpenStateChanged(pullToDatePickerState.dragOffset > 0)
             }
 
             if (coursesUi.isEmpty()) {
-                EmptyCoursePager(state = pullToDatePickerState)
+                EmptyCoursePager(
+                    state = pullToDatePickerState,
+                    selectedDate = selectedDate,
+                    onDateSelected = handleDateSelected
+                )
             } else {
                 CourseListPager(
                     coursesUi = coursesUi,
                     state = pullToDatePickerState,
-                    itemKey = { courseUi -> courseUi.timeSlot.id }) { courseUi ->
+                    itemKey = { courseUi -> courseUi.timeSlot.id },
+                    selectedDate = selectedDate,
+                    onDateSelected = handleDateSelected
+                ) { courseUi ->
                     CourseCard(courseUi) {
                         navController.navigateSingle(courseDetail(courseUi.timeSlot.id))
                     }
@@ -94,11 +107,17 @@ fun TimetablePager(
  */
 @Composable
 private fun EmptyCoursePager(
-    state: PullToDatePickerState, modifier: Modifier = Modifier
+    state: PullToDatePickerState,
+    modifier: Modifier = Modifier,
+    selectedDate: LocalDate,
+    onDateSelected: (LocalDate) -> Unit
 ) {
     ScreenScaffold {
         PullToDatePicker(
-            dragOffset = state.dragOffset, refreshThreshold = state.refreshThreshold
+            dragOffset = state.dragOffset,
+            refreshThreshold = state.refreshThreshold,
+            selectedDate = selectedDate,
+            onDateSelected = onDateSelected
         ) {
             Box(
                 modifier = modifier
@@ -123,6 +142,8 @@ private fun CourseListPager(
     coursesUi: List<CourseUi>,
     state: PullToDatePickerState,
     itemKey: (CourseUi) -> Any,
+    selectedDate: LocalDate,
+    onDateSelected: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
     itemContent: @Composable (CourseUi) -> Unit
 ) {
@@ -134,7 +155,10 @@ private fun CourseListPager(
 
     ScreenScaffold(scrollState = scrollState) { contentPadding ->
         PullToDatePicker(
-            dragOffset = state.dragOffset, refreshThreshold = state.refreshThreshold
+            dragOffset = state.dragOffset,
+            refreshThreshold = state.refreshThreshold,
+            selectedDate = selectedDate,
+            onDateSelected = onDateSelected
         ) {
             ScalingLazyColumn(
                 modifier = modifier

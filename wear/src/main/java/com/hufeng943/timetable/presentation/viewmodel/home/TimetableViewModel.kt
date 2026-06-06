@@ -40,6 +40,8 @@ class TimetableViewModel @Inject constructor(
         KEY_SELECTED_DATE, Clock.System.todayIn(TimeZone.currentSystemDefault())
     )
 
+    val selectedDate = _selectedDate
+
     // 当前选中的课表要展示 UI 数据
     val dateCoursesUi = combine(allTimetables, _selectedDate) { state, selectedDate ->
         when (state) {
