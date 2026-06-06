@@ -1,6 +1,9 @@
 package com.hufeng943.timetable.presentation.ui.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
@@ -13,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -26,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.pointer.pointerInput
@@ -49,7 +54,7 @@ import kotlin.time.Clock
 
 @Composable
 fun rememberPullToDatePickerState(
-    maxDragDistanceDp: Dp = 120.dp, refreshThresholdDp: Dp = 80.dp
+    maxDragDistanceDp: Dp = 120.dp, refreshThresholdDp: Dp = 110.dp
 ): PullToDatePickerState {
     val density = LocalDensity.current
     val maxDragDistance = remember(density) { with(density) { maxDragDistanceDp.toPx() } }
@@ -179,21 +184,47 @@ fun HorizontalDatePicker(
 
 @Composable
 fun PullToDatePicker(
-    dragOffset: Float, refreshThreshold: Float, selectedDate: LocalDate,
+    dragOffset: Float,
+    refreshThreshold: Float,
+    selectedDate: LocalDate,
     onDateSelected: (LocalDate) -> Unit,
     content: @Composable () -> Unit
-
 ) {
+    val today = remember { Clock.System.todayIn(TimeZone.currentSystemDefault()) }
+
     Box(modifier = Modifier.fillMaxSize()) {
-        if (dragOffset > 0) {
+        AnimatedVisibility(
+            visible = dragOffset > 0,
+            enter = fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier.fillMaxWidth()
+        ) {
             val progress = (dragOffset / refreshThreshold).coerceIn(0f, 1f)
 
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .offset { IntOffset(0, (dragOffset - 40.dp.toPx()).roundToInt()) },
-                contentAlignment = Alignment.Center
+                    .offset { IntOffset(0, (dragOffset - 65.dp.toPx()).roundToInt()) }
+                    .graphicsLayer { alpha = progress },
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
+                        .clickable { onDateSelected(today) }
+                        .padding(horizontal = 10.dp, vertical = 2.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "今日",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(6.dp))
+
                 HorizontalDatePicker(
                     selectedDate = selectedDate,
                     onDateSelected = onDateSelected
