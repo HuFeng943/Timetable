@@ -1,6 +1,6 @@
 import com.android.build.api.dsl.ApplicationExtension
 
-val versionPrefix = "0.6.7"
+val versionPrefix = "0.9.9"
 
 val commitCountProvider = providers.exec {
     commandLine("git", "rev-list", "--count", "HEAD")
