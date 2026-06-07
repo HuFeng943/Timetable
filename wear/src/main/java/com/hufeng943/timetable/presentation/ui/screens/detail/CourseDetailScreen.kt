@@ -9,8 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.wear.compose.foundation.pager.HorizontalPager
-import androidx.wear.compose.foundation.pager.rememberPagerState
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.presentation.ui.NavRoutes.editCourse
 import com.hufeng943.timetable.presentation.ui.NavRoutes.listTimeSlot
@@ -38,29 +36,21 @@ fun CourseDetailScreen(
         }
 
         is UiState.Success -> {
-            val pagerState = rememberPagerState { 2 }
+            DetailsPager(courseUi = state.data.currentCourseUi, onCourseClick = {
+                navController.navigateSingle(
+                    editCourse(
+                        state.data.timetableId, state.data.currentCourseUi.id
+                    )
+                )
+            }, onCourseLongClick = {
+                navController.navigateSingle(
+                    listTimeSlot(
+                        state.data.currentCourseUi.id
+                    )
+                )
+            })
 
-            HorizontalPager(
-                modifier = Modifier.fillMaxSize(), state = pagerState
-            ) { page ->
-                when (page) {
-                    0 -> DetailsPager(courseUi = state.data.currentCourseUi, onCourseClick = {
-                        navController.navigateSingle(
-                            editCourse(
-                                state.data.timetableId, state.data.currentCourseUi.id
-                            )
-                        )
-                    }, onCourseLongClick = {
-                        navController.navigateSingle(
-                            listTimeSlot(
-                                state.data.currentCourseUi.id
-                            )
-                        )
-                    })
 
-                    1 -> CourseListPager(state.data.listCourseUi)
-                }
-            }
         }
     }
 }
