@@ -23,6 +23,7 @@
         android:theme="@android:style/Theme.DeviceDefault">
         <service
             android:name=".complication.MainComplicationService"
+            android:enabled="false"
             android:exported="true"
             android:label="@string/complication_label"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
@@ -39,6 +40,7 @@
         </service>
         <service
             android:name=".tile.MainTileService"
+            android:enabled="false"
             android:exported="true"
             android:label="@string/tile_label"
             android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
