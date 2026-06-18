@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.TimePicker
 import androidx.wear.compose.material3.TimePickerType
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
@@ -69,6 +70,7 @@ fun EditTimeSlotScreen(
 
         composable(InternalNavRoutes.START_TIME) {
             HandleEditUiState(uiState) { timeSlot ->
+                ScreenScaffold(timeText = {}) {
                 TimePicker(
                     initialTime = (timeSlot.startTime ?: Clock.System.now().toLocalDateTime(
                         TimeZone.currentSystemDefault()
@@ -81,11 +83,13 @@ fun EditTimeSlotScreen(
                         TimePickerType.HoursMinutesAmPm12H
                     }
                 )
+                }
             }
         }
 
         composable(InternalNavRoutes.END_TIME) {
             HandleEditUiState(uiState) { timeSlot ->
+                ScreenScaffold(timeText = {}) {
                 TimePicker(
                     initialTime = (timeSlot.endTime ?: Clock.System.now().toLocalDateTime(
                         TimeZone.currentSystemDefault()
@@ -98,6 +102,7 @@ fun EditTimeSlotScreen(
                         TimePickerType.HoursMinutesAmPm12H
                     }
                 )
+                }
             }
         }
 

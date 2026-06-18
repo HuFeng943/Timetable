@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.compose.material3.DatePicker
+import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -57,34 +58,39 @@ fun EditTimetableScreen(
 
         composable(InternalNavRoutes.START_DATE) {
             HandleEditUiState(uiState) { timetable ->
-                DatePicker(
-                    onDatePicked = { newDate ->
-                        viewModel.onAction(
-                            EditTimetableAction.UpdateStartDate(
-                                newDate.toKotlinLocalDate()
+                ScreenScaffold(timeText = {}) {
+                    DatePicker(
+                        onDatePicked = { newDate ->
+                            viewModel.onAction(
+                                EditTimetableAction.UpdateStartDate(
+                                    newDate.toKotlinLocalDate()
+                                )
                             )
-                        )
-                        internalNavController.popSafe()
-                    },
-                    initialDate = timetable.semesterStart.toJavaLocalDate(),
-                )
+                            internalNavController.popSafe()
+                        },
+                        initialDate = timetable.semesterStart.toJavaLocalDate(),
+                    )
+                }
             }
         }
 
+
         composable(InternalNavRoutes.END_DATE) {
             HandleEditUiState(uiState) { timetable ->
-                DatePicker(
-                    onDatePicked = { newDate ->
-                        viewModel.onAction(
-                            EditTimetableAction.UpdateEndDate(
-                                newDate.toKotlinLocalDate()
+                ScreenScaffold(timeText = {}) {
+                    DatePicker(
+                        onDatePicked = { newDate ->
+                            viewModel.onAction(
+                                EditTimetableAction.UpdateEndDate(
+                                    newDate.toKotlinLocalDate()
+                                )
                             )
-                        )
-                        internalNavController.popSafe()
-                    },
-                    initialDate = (timetable.semesterEnd
-                        ?: timetable.semesterStart).toJavaLocalDate()
-                )
+                            internalNavController.popSafe()
+                        },
+                        initialDate = (timetable.semesterEnd
+                            ?: timetable.semesterStart).toJavaLocalDate()
+                    )
+                }
             }
         }
 
@@ -111,8 +117,7 @@ fun EditTimetableScreen(
             HandleEditUiState(uiState) { timetable ->
                 DeleteConfirmScreen(
                     detail = stringResource(
-                        R.string.edit_timetable_display_name,
-                        timetable.displayName
+                        R.string.edit_timetable_display_name, timetable.displayName
                     ), onConfirm = {
                     viewModel.onAction(EditTimetableAction.Delete)
                         navController.popSafe()
