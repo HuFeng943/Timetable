@@ -8,10 +8,7 @@ import com.hufeng943.timetable.presentation.ui.NavRoutes.editCourse
 import com.hufeng943.timetable.presentation.ui.NavRoutes.listTimeSlot
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
-import com.hufeng943.timetable.presentation.ui.screens.common.ErrorScreen
-import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
-import com.hufeng943.timetable.presentation.viewmodel.AppError
-import com.hufeng943.timetable.presentation.viewmodel.UiState
+import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState
 import com.hufeng943.timetable.presentation.viewmodel.edit.course.CourseListViewModel
 
 @Composable
@@ -21,18 +18,13 @@ fun CourseListScreen(
     val uiState by viewModel.uiState.collectAsState()
     val navController = LocalNavController.current
 
-    when (val state = uiState) {
-        is UiState.Loading -> LoadingScreen()
-        is UiState.Error -> ErrorScreen(state.throwable)
-        is UiState.Empty -> ErrorScreen(AppError.UnexpectedEmpty())
-        is UiState.Success -> {
-            CourseListPager(courses = state.data.courses, onAddCourse = {
-                navController.navigateSingle(editCourse(state.data.timetableId))
-            }, onCourseClick = { courseId ->
-                navController.navigateSingle(listTimeSlot(courseId))
-            }, onCourseLongClick = { courseId ->
-                navController.navigateSingle(editCourse(state.data.timetableId, courseId))
-            })
-        }
+    HandleEditUiState(uiState) { data ->
+        CourseListPager(courses = data.courses, onAddCourse = {
+            navController.navigateSingle(editCourse(data.timetableId))
+        }, onCourseClick = { courseId ->
+            navController.navigateSingle(listTimeSlot(courseId))
+        }, onCourseLongClick = { courseId ->
+            navController.navigateSingle(editCourse(data.timetableId, courseId))
+        })
     }
 }

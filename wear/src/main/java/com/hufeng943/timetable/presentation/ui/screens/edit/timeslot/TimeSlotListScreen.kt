@@ -10,10 +10,7 @@ import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 import com.hufeng943.timetable.presentation.ui.common.ui.TimeSlotUi
-import com.hufeng943.timetable.presentation.ui.screens.common.ErrorScreen
-import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
-import com.hufeng943.timetable.presentation.viewmodel.AppError
-import com.hufeng943.timetable.presentation.viewmodel.UiState
+import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState
 import com.hufeng943.timetable.presentation.viewmodel.edit.timeslot.TimeSlotListViewModel
 
 @Composable
@@ -24,28 +21,23 @@ fun TimeSlotListScreen(
     val navController = LocalNavController.current
     val appConfig = LocalAppConfig.current
 
-    when (val state = uiState) {
-        is UiState.Loading -> LoadingScreen()
-        is UiState.Error -> ErrorScreen(state.throwable)
-        is UiState.Empty -> ErrorScreen(AppError.UnexpectedEmpty())
-        is UiState.Success -> {
-            val firstDay = appConfig.effectiveFirstDayOfTheWeek
-            val sortedTimeSlots = remember(state.data.timeSlots, firstDay) {
-                state.data.timeSlots.sortedWith(
-                    compareBy<TimeSlotUi> { slot ->
-                        slot.dayOfWeek?.let { (it.ordinal - firstDay.ordinal + 7) % 7 }
-                            ?: Int.MAX_VALUE
-                    }.thenBy { slot ->
-                        slot.startTime?.let { it.hour * 60 + it.minute }
-                            ?: Int.MAX_VALUE
-                    }
-                )
-            }
-            TimeSlotListPager(timeSlots = sortedTimeSlots, onAddTimeSlot = {
-                navController.navigateSingle(NavRoutes.editTimeSlot(state.data.id))
-            }, onTimeSlotClick = { timeSlotId ->
-                navController.navigateSingle(NavRoutes.editTimeSlot(state.data.id, timeSlotId))
-            })
+    HandleEditUiState(uiState) { data ->
+        val firstDay = appConfig.effectiveFirstDayOfTheWeek
+        val sortedTimeSlots = remember(data.timeSlots, firstDay) {
+            data.timeSlots.sortedWith(
+                compareBy<TimeSlotUi> { slot ->
+                    slot.dayOfWeek?.let { (it.ordinal - firstDay.ordinal + 7) % 7 }
+                        ?: Int.MAX_VALUE
+                }.thenBy { slot ->
+                    slot.startTime?.let { it.hour * 60 + it.minute }
+                        ?: Int.MAX_VALUE
+                }
+            )
         }
+        TimeSlotListPager(timeSlots = sortedTimeSlots, onAddTimeSlot = {
+            navController.navigateSingle(NavRoutes.editTimeSlot(data.id))
+        }, onTimeSlotClick = { timeSlotId ->
+            navController.navigateSingle(NavRoutes.editTimeSlot(data.id, timeSlotId))
+        })
     }
 }
