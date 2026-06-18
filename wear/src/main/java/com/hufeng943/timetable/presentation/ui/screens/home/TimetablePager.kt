@@ -30,13 +30,12 @@ import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 import com.hufeng943.timetable.presentation.ui.common.ui.CourseUi
 import com.hufeng943.timetable.presentation.ui.components.CourseCard
+import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState
 import com.hufeng943.timetable.presentation.ui.components.PullToDatePicker
 import com.hufeng943.timetable.presentation.ui.components.PullToDatePickerState
 import com.hufeng943.timetable.presentation.ui.components.pullToDatePickerDrag
 import com.hufeng943.timetable.presentation.ui.components.rememberPullToDatePickerState
 import com.hufeng943.timetable.presentation.ui.components.rememberPullToRefreshConnection
-import com.hufeng943.timetable.presentation.ui.screens.common.ErrorScreen
-import com.hufeng943.timetable.presentation.ui.screens.common.LoadingScreen
 import com.hufeng943.timetable.presentation.viewmodel.UiState
 import com.hufeng943.timetable.presentation.viewmodel.home.TimetableViewModel
 import kotlinx.datetime.LocalDate
@@ -50,52 +49,43 @@ fun TimetablePager(
     val selectedDate by viewModel.selectedDate.collectAsState()
     val navController = LocalNavController.current
 
-    when (val state = uiState) {
-        is UiState.Loading -> {
-            LaunchedEffect(Unit) { onOpenStateChanged(false) } // 安全重置
-            LoadingScreen()
+    LaunchedEffect(uiState) {
+        if (uiState !is UiState.Success) {
+            onOpenStateChanged(false) // 安全重置
+        }
+    }
+
+    HandleEditUiState(
+        uiState = uiState,
+        emptyContent = { EmptyPager() }
+    ) { coursesUi ->
+        val pullToDatePickerState = rememberPullToDatePickerState()
+
+        val handleDateSelected: (LocalDate) -> Unit = { date ->
+            viewModel.updateSelectedDate(date)
         }
 
-        is UiState.Empty -> {
-            LaunchedEffect(Unit) { onOpenStateChanged(false) } // 安全重置
-            EmptyPager()
+        // 组件被拉出时通知上层锁定 Pager
+        LaunchedEffect(pullToDatePickerState.dragOffset) {
+            onOpenStateChanged(pullToDatePickerState.dragOffset > 0)
         }
 
-        is UiState.Error -> {
-            LaunchedEffect(Unit) { onOpenStateChanged(false) } // 安全重置
-            ErrorScreen(state.throwable)
-        }
-
-        is UiState.Success -> {
-            val coursesUi = state.data
-            val pullToDatePickerState = rememberPullToDatePickerState()
-
-            val handleDateSelected: (LocalDate) -> Unit = { date ->
-                viewModel.updateSelectedDate(date)
-            }
-
-            // 组件被拉出时通知上层锁定 Pager
-            LaunchedEffect(pullToDatePickerState.dragOffset) {
-                onOpenStateChanged(pullToDatePickerState.dragOffset > 0)
-            }
-
-            if (coursesUi.isEmpty()) {
-                EmptyCoursePager(
-                    state = pullToDatePickerState,
-                    selectedDate = selectedDate,
-                    onDateSelected = handleDateSelected
-                )
-            } else {
-                CourseListPager(
-                    coursesUi = coursesUi,
-                    state = pullToDatePickerState,
-                    itemKey = { courseUi -> courseUi.timeSlot.id },
-                    selectedDate = selectedDate,
-                    onDateSelected = handleDateSelected
-                ) { courseUi ->
-                    CourseCard(courseUi) {
-                        navController.navigateSingle(courseDetail(courseUi.timeSlot.id))
-                    }
+        if (coursesUi.isEmpty()) {
+            EmptyCoursePager(
+                state = pullToDatePickerState,
+                selectedDate = selectedDate,
+                onDateSelected = handleDateSelected
+            )
+        } else {
+            CourseListPager(
+                coursesUi = coursesUi,
+                state = pullToDatePickerState,
+                itemKey = { courseUi -> courseUi.timeSlot.id },
+                selectedDate = selectedDate,
+                onDateSelected = handleDateSelected
+            ) { courseUi ->
+                CourseCard(courseUi) {
+                    navController.navigateSingle(courseDetail(courseUi.timeSlot.id))
                 }
             }
         }
