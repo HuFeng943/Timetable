@@ -1,5 +1,7 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit.timeslot
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -57,11 +59,16 @@ fun EditTimeSlotMainPager(
         ) {
             item {
                 ListHeader {
-                    Text(
-                        if (timeSlot.id == 0L) stringResource(R.string.edit_timeslot_add) else stringResource(
-                            R.string.edit_timeslot_edit
+                    AnimatedContent(
+                        targetState = timeSlot.id == 0L,
+                        label = "header_text"
+                    ) { isAdd ->
+                        Text(
+                            if (isAdd) stringResource(R.string.edit_timeslot_add) else stringResource(
+                                R.string.edit_timeslot_edit
+                            )
                         )
-                    )
+                    }
                 }
             }
 
@@ -78,12 +85,17 @@ fun EditTimeSlotMainPager(
                             )
                         }
                     }) {
-                    TimeText(
-                        time = timeSlot.startTime,
-                        style = MaterialTheme.typography.labelLarge,
-                        placeholder = stringResource(R.string.not_set),
-                        isVertical = false
-                    )
+                    AnimatedContent(
+                        targetState = timeSlot.startTime,
+                        label = "start_time"
+                    ) { startTime ->
+                        TimeText(
+                            time = startTime,
+                            style = MaterialTheme.typography.labelLarge,
+                            placeholder = stringResource(R.string.not_set),
+                            isVertical = false
+                        )
+                    }
                 }
             }
 
@@ -100,12 +112,14 @@ fun EditTimeSlotMainPager(
                             )
                         }
                     }) {
-                    TimeText(
-                        time = timeSlot.endTime,
-                        style = MaterialTheme.typography.labelLarge,
-                        placeholder = stringResource(R.string.not_set),
-                        isVertical = false
-                    )
+                    AnimatedContent(targetState = timeSlot.endTime, label = "end_time") { endTime ->
+                        TimeText(
+                            time = endTime,
+                            style = MaterialTheme.typography.labelLarge,
+                            placeholder = stringResource(R.string.not_set),
+                            isVertical = false
+                        )
+                    }
                 }
             }
 
@@ -122,12 +136,15 @@ fun EditTimeSlotMainPager(
                             )
                         }
                     }) {
-                    Text(
-                        text = timeSlot.dayOfWeek?.toDisplayString(TextStyle.FULL_STANDALONE)
-                            ?: stringResource(
-                                R.string.not_set
-                            ), style = MaterialTheme.typography.labelLarge
-                    )
+                    AnimatedContent(
+                        targetState = timeSlot.dayOfWeek?.toDisplayString(TextStyle.FULL_STANDALONE)
+                            ?: stringResource(R.string.not_set),
+                        label = "day_of_week"
+                    ) { dayOfWeekStr ->
+                        Text(
+                            text = dayOfWeekStr, style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
             }
 
@@ -144,10 +161,15 @@ fun EditTimeSlotMainPager(
                             )
                         }
                     }) {
-                    Text(
-                        text = timeSlot.recurrence.toDisplayString(),
-                        style = MaterialTheme.typography.labelLarge
-                    )
+                    AnimatedContent(
+                        targetState = timeSlot.recurrence.toDisplayString(),
+                        label = "recurrence"
+                    ) { recurrenceStr ->
+                        Text(
+                            text = recurrenceStr,
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
             }
 
@@ -156,7 +178,11 @@ fun EditTimeSlotMainPager(
                 TitleCard(
                     onClick = onRemarkClick,
                     onLongClick = onRemarkLongClick,
-                    subtitle = { if (timeSlot.remark != null) Text(stringResource(R.string.clear_long_press)) },
+                    subtitle = {
+                        AnimatedVisibility(visible = timeSlot.remark != null) {
+                            Text(stringResource(R.string.clear_long_press))
+                        }
+                    },
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.AutoMirrored.Rounded.Notes, contentDescription = null)
@@ -167,9 +193,14 @@ fun EditTimeSlotMainPager(
                             )
                         }
                     }) {
-                    Text(
-                        text = timeSlot.displayRemark, style = MaterialTheme.typography.labelLarge
-                    )
+                    AnimatedContent(
+                        targetState = timeSlot.displayRemark,
+                        label = "remark"
+                    ) { remark ->
+                        Text(
+                            text = remark, style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
             }
 

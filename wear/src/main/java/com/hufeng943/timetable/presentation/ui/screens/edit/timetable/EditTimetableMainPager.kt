@@ -1,5 +1,7 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit.timetable
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -56,11 +58,16 @@ fun EditTimetableMainPager(
         ) {
             item {
                 ListHeader {
-                    Text(
-                        if (timetable.timetableId == 0L) stringResource(R.string.edit_timetable_add) else stringResource(
-                            R.string.edit_timetable_edit
+                    AnimatedContent(
+                        targetState = timetable.timetableId == 0L,
+                        label = "header_text"
+                    ) { isAdd ->
+                        Text(
+                            if (isAdd) stringResource(R.string.edit_timetable_add) else stringResource(
+                                R.string.edit_timetable_edit
+                            )
                         )
-                    )
+                    }
                 }
             }
 
@@ -78,9 +85,14 @@ fun EditTimetableMainPager(
                         }
                     },
                 ) {
-                    Text(
-                        timetable.displayName, style = MaterialTheme.typography.labelLarge
-                    )
+                    AnimatedContent(
+                        targetState = timetable.displayName,
+                        label = "timetable_name"
+                    ) { name ->
+                        Text(
+                            name, style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
             }
 
@@ -88,7 +100,11 @@ fun EditTimetableMainPager(
                 TitleCard(
                     onClick = onStartDateClick,
                     onLongClick = onStartDateLongClick,
-                    subtitle = { if (!startDateIsToday) Text(stringResource(R.string.set_current_date_long_press)) },
+                    subtitle = {
+                        AnimatedVisibility(visible = !startDateIsToday) {
+                            Text(stringResource(R.string.set_current_date_long_press))
+                        }
+                    },
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Rounded.CalendarToday, contentDescription = null)
@@ -100,10 +116,14 @@ fun EditTimetableMainPager(
                         }
                     },
                 ) {
-                    Text(
-                        timetable.semesterStart.toDisplayString(),
-                        style = MaterialTheme.typography.labelLarge
-                    )
+                    AnimatedContent(
+                        targetState = timetable.semesterStart.toDisplayString(),
+                        label = "start_date"
+                    ) { startDateStr ->
+                        Text(
+                            startDateStr, style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
             }
 
@@ -111,7 +131,11 @@ fun EditTimetableMainPager(
                 TitleCard(
                     onClick = onEndDateClick,
                     onLongClick = onEndDateLongClick,
-                    subtitle = { if (timetable.semesterEnd != null) Text(stringResource(R.string.set_never_ends_long_press)) },
+                    subtitle = {
+                        AnimatedVisibility(visible = timetable.semesterEnd != null) {
+                            Text(stringResource(R.string.set_never_ends_long_press))
+                        }
+                    },
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Rounded.CalendarMonth, contentDescription = null)
@@ -123,11 +147,15 @@ fun EditTimetableMainPager(
                         }
                     },
                 ) {
-                    Text(
-                        timetable.semesterEnd?.toDisplayString()
+                    AnimatedContent(
+                        targetState = timetable.semesterEnd?.toDisplayString()
                             ?: stringResource(R.string.never_ends),
-                        style = MaterialTheme.typography.labelLarge
-                    )
+                        label = "end_date"
+                    ) { endDateStr ->
+                        Text(
+                            endDateStr, style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
             }
 

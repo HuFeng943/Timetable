@@ -1,5 +1,7 @@
 package com.hufeng943.timetable.presentation.ui.screens.edit.course
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -56,10 +58,12 @@ fun EditCourseMainPager(
         ) {
             item {
                 ListHeader {
-                    Text(
-                        if (course.id == 0L) stringResource(R.string.edit_course_add)
-                        else stringResource(R.string.edit_course_edit)
-                    )
+                    AnimatedContent(targetState = course.id == 0L, label = "header_text") { isAdd ->
+                        Text(
+                            if (isAdd) stringResource(R.string.edit_course_add)
+                            else stringResource(R.string.edit_course_edit)
+                        )
+                    }
                 }
             }
 
@@ -77,7 +81,12 @@ fun EditCourseMainPager(
                         }
                     },
                 ) {
-                    Text(course.displayName, style = MaterialTheme.typography.labelLarge)
+                    AnimatedContent(
+                        targetState = course.displayName,
+                        label = "course_name"
+                    ) { name ->
+                        Text(name, style = MaterialTheme.typography.labelLarge)
+                    }
                 }
             }
 
@@ -85,7 +94,11 @@ fun EditCourseMainPager(
                 TitleCard(
                     onClick = onLocationClick,
                     onLongClick = onLocationLongClick,
-                    subtitle = { if (course.location != null) Text(stringResource(R.string.clear_long_press)) },
+                    subtitle = {
+                        AnimatedVisibility(visible = course.location != null) {
+                            Text(stringResource(R.string.clear_long_press))
+                        }
+                    },
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Rounded.Place, contentDescription = null)
@@ -97,10 +110,15 @@ fun EditCourseMainPager(
                         }
                     },
                 ) {
-                    Text(
-                        course.displayLocation,
-                        style = MaterialTheme.typography.labelLarge
-                    )
+                    AnimatedContent(
+                        targetState = course.displayLocation,
+                        label = "course_location"
+                    ) { location ->
+                        Text(
+                            location,
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
             }
 
@@ -108,7 +126,11 @@ fun EditCourseMainPager(
                 TitleCard(
                     onClick = onTeacherClick,
                     onLongClick = onTeacherLongClick,
-                    subtitle = { if (course.teacher != null) Text(stringResource(R.string.clear_long_press)) },
+                    subtitle = {
+                        AnimatedVisibility(visible = course.teacher != null) {
+                            Text(stringResource(R.string.clear_long_press))
+                        }
+                    },
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Rounded.Person, contentDescription = null)
@@ -120,10 +142,15 @@ fun EditCourseMainPager(
                         }
                     },
                 ) {
-                    Text(
-                        course.displayTeacher,
-                        style = MaterialTheme.typography.labelLarge
-                    )
+                    AnimatedContent(
+                        targetState = course.displayTeacher,
+                        label = "course_teacher"
+                    ) { teacher ->
+                        Text(
+                            teacher,
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
             }
 
