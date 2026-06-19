@@ -13,7 +13,8 @@ data class TimeSlotUi(
     val endTime: LocalTime?,
     val dayOfWeek: DayOfWeek?,
     val recurrence: WeekPattern,
-    val remark: String?
+    val remark: String?,
+    val color: Long
 ) {
     val displayRemark: String
         @Composable

@@ -11,11 +11,11 @@ import kotlinx.datetime.DayOfWeek
 fun Course.toCourseUi(selectedTimeSlot: TimeSlot? = null): CourseUi = CourseUi(
     id = this.id,
     name = name,
-    timeSlots = this.timeSlots.map { it.toTimeSlotUi() },
+    timeSlots = this.timeSlots.map { it.toTimeSlotUi(this.color) },
     color = if (this.color == -1L) Color.Unspecified else Color(this.color),
     location = this.location,
     teacher = this.teacher,
-    selectedTimeSlot = selectedTimeSlot?.toTimeSlotUi()
+    selectedTimeSlot = selectedTimeSlot?.toTimeSlotUi(this.color)
 )
 
 fun CourseUi.toCourse(): Course = Course(
