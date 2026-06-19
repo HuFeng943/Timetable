@@ -122,4 +122,6 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.aboutlibraries.compose.m3)
+
+    implementation(libs.materialKolor)
 }
