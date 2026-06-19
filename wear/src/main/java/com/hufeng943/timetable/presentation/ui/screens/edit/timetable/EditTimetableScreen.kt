@@ -11,6 +11,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.R
+import com.hufeng943.timetable.presentation.ui.common.DynamicSubTheme
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 import com.hufeng943.timetable.presentation.ui.common.popSafe
@@ -37,39 +38,43 @@ fun EditTimetableScreen(
     ) {
         composable(InternalNavRoutes.MAIN) {
             HandleEditUiState(uiState) { timetable ->
-                EditTimetableMainPager(
-                    timetable = timetable,
-                    onSave = {
-                        viewModel.onAction(EditTimetableAction.Upsert)
-                        navController.popSafe()
-                    },
-                    onNameClick = { internalNavController.navigateSingle(InternalNavRoutes.NAME) },
-                    onStartDateClick = { internalNavController.navigateSingle(InternalNavRoutes.START_DATE) },
-                    onStartDateLongClick = { viewModel.onAction(EditTimetableAction.UpdateStartDate()) },
-                    onEndDateClick = { internalNavController.navigateSingle(InternalNavRoutes.END_DATE) },
-                    onEndDateLongClick = { viewModel.onAction(EditTimetableAction.UpdateEndDate()) },
-                    onColorClick = { internalNavController.navigateSingle(InternalNavRoutes.COLOR) },
-                    onColorLongClick = { viewModel.onAction(EditTimetableAction.UpdateColor()) },
-                    onDelete = { internalNavController.navigateSingle(InternalNavRoutes.DELETE_CONFIRM) },
-                    startDateIsToday = viewModel.toDay == timetable.semesterStart
-                )
+                DynamicSubTheme(seedColor = timetable.color) {
+                    EditTimetableMainPager(
+                        timetable = timetable,
+                        onSave = {
+                            viewModel.onAction(EditTimetableAction.Upsert)
+                            navController.popSafe()
+                        },
+                        onNameClick = { internalNavController.navigateSingle(InternalNavRoutes.NAME) },
+                        onStartDateClick = { internalNavController.navigateSingle(InternalNavRoutes.START_DATE) },
+                        onStartDateLongClick = { viewModel.onAction(EditTimetableAction.UpdateStartDate()) },
+                        onEndDateClick = { internalNavController.navigateSingle(InternalNavRoutes.END_DATE) },
+                        onEndDateLongClick = { viewModel.onAction(EditTimetableAction.UpdateEndDate()) },
+                        onColorClick = { internalNavController.navigateSingle(InternalNavRoutes.COLOR) },
+                        onColorLongClick = { viewModel.onAction(EditTimetableAction.UpdateColor()) },
+                        onDelete = { internalNavController.navigateSingle(InternalNavRoutes.DELETE_CONFIRM) },
+                        startDateIsToday = viewModel.toDay == timetable.semesterStart
+                    )
+                }
             }
         }
 
         composable(InternalNavRoutes.START_DATE) {
             HandleEditUiState(uiState) { timetable ->
-                ScreenScaffold(timeText = {}) {
-                    DatePicker(
-                        onDatePicked = { newDate ->
-                            viewModel.onAction(
-                                EditTimetableAction.UpdateStartDate(
-                                    newDate.toKotlinLocalDate()
+                DynamicSubTheme(seedColor = timetable.color) {
+                    ScreenScaffold(timeText = {}) {
+                        DatePicker(
+                            onDatePicked = { newDate ->
+                                viewModel.onAction(
+                                    EditTimetableAction.UpdateStartDate(
+                                        newDate.toKotlinLocalDate()
+                                    )
                                 )
-                            )
-                            internalNavController.popSafe()
-                        },
-                        initialDate = timetable.semesterStart.toJavaLocalDate(),
-                    )
+                                internalNavController.popSafe()
+                            },
+                            initialDate = timetable.semesterStart.toJavaLocalDate(),
+                        )
+                    }
                 }
             }
         }
@@ -77,31 +82,35 @@ fun EditTimetableScreen(
 
         composable(InternalNavRoutes.END_DATE) {
             HandleEditUiState(uiState) { timetable ->
-                ScreenScaffold(timeText = {}) {
-                    DatePicker(
-                        onDatePicked = { newDate ->
-                            viewModel.onAction(
-                                EditTimetableAction.UpdateEndDate(
-                                    newDate.toKotlinLocalDate()
+                DynamicSubTheme(seedColor = timetable.color) {
+                    ScreenScaffold(timeText = {}) {
+                        DatePicker(
+                            onDatePicked = { newDate ->
+                                viewModel.onAction(
+                                    EditTimetableAction.UpdateEndDate(
+                                        newDate.toKotlinLocalDate()
+                                    )
                                 )
-                            )
-                            internalNavController.popSafe()
-                        },
-                        initialDate = (timetable.semesterEnd
-                            ?: timetable.semesterStart).toJavaLocalDate()
-                    )
+                                internalNavController.popSafe()
+                            },
+                            initialDate = (timetable.semesterEnd
+                                ?: timetable.semesterStart).toJavaLocalDate()
+                        )
+                    }
                 }
             }
         }
 
         composable(InternalNavRoutes.NAME) {
             HandleEditUiState(uiState) { timetable ->
-                TextEditScreen(
-                    label = stringResource(R.string.edit_timetable_name_hint),
-                    initialText = timetable.semesterName
-                ) { newValue ->
-                    viewModel.onAction(EditTimetableAction.UpdateName(newValue))
-                    internalNavController.popSafe() // 保存后退出
+                DynamicSubTheme(seedColor = timetable.color) {
+                    TextEditScreen(
+                        label = stringResource(R.string.edit_timetable_name_hint),
+                        initialText = timetable.semesterName
+                    ) { newValue ->
+                        viewModel.onAction(EditTimetableAction.UpdateName(newValue))
+                        internalNavController.popSafe() // 保存后退出
+                    }
                 }
             }
         }
@@ -115,15 +124,17 @@ fun EditTimetableScreen(
 
         composable(InternalNavRoutes.DELETE_CONFIRM) {
             HandleEditUiState(uiState) { timetable ->
-                DeleteConfirmScreen(
-                    detail = stringResource(
+                DynamicSubTheme(seedColor = timetable.color) {
+                    DeleteConfirmScreen(
+                        detail = stringResource(
                         R.string.edit_timetable_display_name, timetable.displayName
                     ), onConfirm = {
-                    viewModel.onAction(EditTimetableAction.Delete)
+                            viewModel.onAction(EditTimetableAction.Delete)
                         navController.popSafe()
-                }, onCancel = {
+                        }, onCancel = {
                         internalNavController.popSafe() // 只是关掉确认页，回到编辑页
-                })
+                        })
+                }
             }
         }
     }

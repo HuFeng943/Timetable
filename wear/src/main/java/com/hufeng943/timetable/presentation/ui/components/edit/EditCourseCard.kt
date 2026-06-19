@@ -14,45 +14,45 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
+import com.hufeng943.timetable.presentation.ui.common.DynamicSubTheme
 import com.hufeng943.timetable.presentation.ui.common.ui.CourseUi
 import com.hufeng943.timetable.presentation.ui.components.ColorBox
 
 
 @Composable
 fun EditCourseCard(
-    course: CourseUi,
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
-    modifier: Modifier = Modifier
+    course: CourseUi, onClick: () -> Unit, onLongClick: () -> Unit, modifier: Modifier = Modifier
 ) {
-    TitleCard(
-        onClick = onClick,
-        onLongClick = onLongClick,
-        modifier = modifier.fillMaxWidth(),
-        title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                if (course.color != Color.Unspecified) {
-                    ColorBox(color = course.color)
-                    Spacer(Modifier.width(8.dp))
+    DynamicSubTheme(seedColor = course.color) {
+        TitleCard(
+            onClick = onClick,
+            onLongClick = onLongClick,
+            modifier = modifier.fillMaxWidth(),
+            title = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (course.color != Color.Unspecified) {
+                        ColorBox(color = course.color)
+                        Spacer(Modifier.width(8.dp))
+                    }
+                    Text(
+                        course.displayName, maxLines = 1, modifier = Modifier.basicMarquee(
+                            iterations = Int.MAX_VALUE
+                        )
+                    )
                 }
+            },
+            subtitle = {
+                // 组合地点和教师信息
+                val info = listOfNotNull(
+                    course.location,
+                    course.teacher,
+                    stringResource(R.string.edit_course_number, course.timeSlots.size)
+                ).joinToString(stringResource(R.string.info_separator))
                 Text(
-                    course.displayName, maxLines = 1, modifier = Modifier.basicMarquee(
+                    info, maxLines = 1, modifier = Modifier.basicMarquee(
                         iterations = Int.MAX_VALUE
                     )
                 )
-            }
-        },
-        subtitle = {
-            // 组合地点和教师信息
-            val info = listOfNotNull(
-                course.location,
-                course.teacher,
-                stringResource(R.string.edit_course_number, course.timeSlots.size)
-            ).joinToString(stringResource(R.string.info_separator))
-            Text(
-                info, maxLines = 1, modifier = Modifier.basicMarquee(
-                    iterations = Int.MAX_VALUE
-                )
-            )
-        })
+            })
+    }
 }

@@ -9,6 +9,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.R
+import com.hufeng943.timetable.presentation.ui.common.DynamicSubTheme
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 import com.hufeng943.timetable.presentation.ui.common.popSafe
@@ -33,63 +34,71 @@ fun EditCourseScreen(
     ) {
         composable(InternalNavRoutes.MAIN) {
             HandleEditUiState(uiState) { course ->
-                EditCourseMainPager(
-                    course = course,
-                    onSave = {
-                        viewModel.onAction(EditCourseAction.Upsert)
-                        navController.popSafe()
-                    },
-                    onNameClick = { internalNavController.navigateSingle(InternalNavRoutes.NAME) },
-                    onLocationClick = { internalNavController.navigateSingle(InternalNavRoutes.LOCATION) },
-                    onLocationLongClick = { viewModel.onAction(EditCourseAction.UpdateLocation()) },
-                    onTeacherClick = { internalNavController.navigateSingle(InternalNavRoutes.TEACHER) },
-                    onTeacherLongClick = { viewModel.onAction(EditCourseAction.UpdateTeacher()) },
-                    onColorClick = { internalNavController.navigateSingle(InternalNavRoutes.COLOR) },
-                    onColorLongClick = { viewModel.onAction(EditCourseAction.UpdateColor()) },
-                    onDelete = { internalNavController.navigateSingle(InternalNavRoutes.DELETE_CONFIRM) })
+                DynamicSubTheme(seedColor = course.color) {
+                    EditCourseMainPager(
+                        course = course,
+                        onSave = {
+                            viewModel.onAction(EditCourseAction.Upsert)
+                            navController.popSafe()
+                        },
+                        onNameClick = { internalNavController.navigateSingle(InternalNavRoutes.NAME) },
+                        onLocationClick = { internalNavController.navigateSingle(InternalNavRoutes.LOCATION) },
+                        onLocationLongClick = { viewModel.onAction(EditCourseAction.UpdateLocation()) },
+                        onTeacherClick = { internalNavController.navigateSingle(InternalNavRoutes.TEACHER) },
+                        onTeacherLongClick = { viewModel.onAction(EditCourseAction.UpdateTeacher()) },
+                        onColorClick = { internalNavController.navigateSingle(InternalNavRoutes.COLOR) },
+                        onColorLongClick = { viewModel.onAction(EditCourseAction.UpdateColor()) },
+                        onDelete = { internalNavController.navigateSingle(InternalNavRoutes.DELETE_CONFIRM) })
+                }
             }
         }
 
 
         composable(InternalNavRoutes.NAME) {
             HandleEditUiState(uiState) { course ->
-                TextEditScreen(
-                    label = stringResource(R.string.edit_course_name_hint),
-                    initialText = course.name
-                ) {
-                    viewModel.onAction(EditCourseAction.UpdateName(it))
-                    internalNavController.popSafe()
+                DynamicSubTheme(seedColor = course.color) {
+                    TextEditScreen(
+                        label = stringResource(R.string.edit_course_name_hint),
+                        initialText = course.name
+                    ) {
+                        viewModel.onAction(EditCourseAction.UpdateName(it))
+                        internalNavController.popSafe()
+                    }
                 }
             }
         }
 
         composable(InternalNavRoutes.LOCATION) {
             HandleEditUiState(uiState) { course ->
-                TextEditScreen(
-                    label = stringResource(R.string.edit_course_location_hint),
-                    initialText = course.location ?: ""
-                ) {
-                    viewModel.onAction(
-                        EditCourseAction.UpdateLocation(
-                            it.ifBlank {
-                                null
-                            })
-                    )
-                    internalNavController.popSafe()
+                DynamicSubTheme(seedColor = course.color) {
+                    TextEditScreen(
+                        label = stringResource(R.string.edit_course_location_hint),
+                        initialText = course.location ?: ""
+                    ) {
+                        viewModel.onAction(
+                            EditCourseAction.UpdateLocation(
+                                it.ifBlank {
+                                    null
+                                })
+                        )
+                        internalNavController.popSafe()
+                    }
                 }
             }
         }
 
         composable(InternalNavRoutes.TEACHER) {
             HandleEditUiState(uiState) { course ->
-                TextEditScreen(
-                    label = stringResource(R.string.edit_course_teacher_hint),
-                    initialText = course.teacher ?: ""
-                ) {
-                    viewModel.onAction(EditCourseAction.UpdateTeacher(it.ifBlank {
-                        null
-                    }))
-                    internalNavController.popSafe()
+                DynamicSubTheme(seedColor = course.color) {
+                    TextEditScreen(
+                        label = stringResource(R.string.edit_course_teacher_hint),
+                        initialText = course.teacher ?: ""
+                    ) {
+                        viewModel.onAction(EditCourseAction.UpdateTeacher(it.ifBlank {
+                            null
+                        }))
+                        internalNavController.popSafe()
+                    }
                 }
             }
         }
@@ -103,13 +112,15 @@ fun EditCourseScreen(
 
         composable(InternalNavRoutes.DELETE_CONFIRM) {
             HandleEditUiState(uiState) { course ->
-                DeleteConfirmScreen(
-                    detail = stringResource(
+                DynamicSubTheme(seedColor = course.color) {
+                    DeleteConfirmScreen(
+                        detail = stringResource(
                         R.string.edit_course_display_name, course.displayName
                     ), onConfirm = {
                         viewModel.onAction(EditCourseAction.Delete)
                         navController.popSafe()
                     }, onCancel = { internalNavController.popSafe() })
+                }
             }
         }
     }

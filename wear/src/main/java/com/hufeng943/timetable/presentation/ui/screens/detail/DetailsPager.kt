@@ -32,6 +32,7 @@ import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
+import com.hufeng943.timetable.presentation.ui.common.DynamicSubTheme
 import com.hufeng943.timetable.presentation.ui.common.toDisplayString
 import com.hufeng943.timetable.presentation.ui.common.ui.CourseUi
 import com.hufeng943.timetable.presentation.ui.components.ColorBox
@@ -43,148 +44,151 @@ fun DetailsPager(
     courseUi: CourseUi, onCourseClick: () -> Unit, onCourseLongClick: () -> Unit
 ) {
     val scrollState = rememberScalingLazyListState()
-
-    ScreenScaffold(
-        scrollState = scrollState,
-    ) { contentPadding ->
-        ScalingLazyColumn(
-            state = scrollState,
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = contentPadding,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    ColorBox(color = courseUi.displayColor)
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = courseUi.displayName,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        maxLines = 1,
-                        modifier = Modifier
-                            .weight(1f)
-                            .basicMarquee(iterations = Int.MAX_VALUE)
-                    )
-                }
-            }
-
-            // 日期与时间文字
-            item {
-                val dayStr =
-                    courseUi.timeSlot.dayOfWeek?.toDisplayString(TextStyle.FULL_STANDALONE) ?: ""
-
-                if (dayStr.isEmpty() && courseUi.timeSlot.startTime == null) {
-                    Text(
-                        text = stringResource(R.string.not_set),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 12.dp)
-                    )
-                } else {
+    DynamicSubTheme(seedColor = courseUi.color) {
+        ScreenScaffold(
+            scrollState = scrollState,
+        ) { contentPadding ->
+            ScalingLazyColumn(
+                state = scrollState,
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = contentPadding,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 12.dp)
-                            .basicMarquee(
-                                iterations = Int.MAX_VALUE, // 无限循环滚动
-                            ), verticalAlignment = Alignment.Bottom
+                            .padding(horizontal = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (dayStr.isNotEmpty()) {
-                            Text(
-                                text = dayStr,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                        }
-
-                        TimeText(
-                            time = courseUi.timeSlot.startTime,
-                            style = MaterialTheme.typography.bodyLarge,
-                            isVertical = false
-                        )
-
+                        ColorBox(color = courseUi.displayColor)
+                        Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            text = " - ",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-
-                        TimeText(
-                            time = courseUi.timeSlot.endTime,
-                            style = MaterialTheme.typography.bodyLarge,
-                            isVertical = false
+                            text = courseUi.displayName,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            maxLines = 1,
+                            modifier = Modifier
+                                .weight(1f)
+                                .basicMarquee(iterations = Int.MAX_VALUE)
                         )
                     }
                 }
-            }
 
-            if (!courseUi.location.isNullOrBlank()) {
+                // 日期与时间文字
                 item {
-                    DetailListItem(icon = Icons.Rounded.Place, text = courseUi.location)
-                }
-            }
+                    val dayStr =
+                        courseUi.timeSlot.dayOfWeek?.toDisplayString(TextStyle.FULL_STANDALONE)
+                            ?: ""
 
-            if (!courseUi.teacher.isNullOrBlank()) {
-                item {
-                    DetailListItem(icon = Icons.Rounded.Person, text = courseUi.teacher)
-                }
-            }
-
-            courseUi.dailyOrder?.let { order ->
-                item {
-                    DetailListItem(
-                        icon = Icons.Rounded.FormatListNumbered,
-                        text = stringResource(R.string.edit_course_number, order)
-                    )
-                }
-            }
-
-            val remark = courseUi.timeSlot.remark
-            if (!remark.isNullOrBlank()) {
-                item {
-                    DetailListItem(
-                        icon = Icons.AutoMirrored.Rounded.Notes,
-                        text = remark,
-                        enableMarquee = false
-                    )
-                }
-            }
-
-            item {
-                DetailListItem(
-                    icon = Icons.Rounded.Sync, text = courseUi.timeSlot.recurrence.toDisplayString()
-                )
-            }
-
-            item { Spacer(modifier = Modifier.height(16.dp)) }
-
-            item {
-                FilledTonalButton(
-                    onClick = onCourseClick,
-                    onLongClick = onCourseLongClick,
-                    modifier = Modifier.fillMaxWidth(),
-                    icon = {
-                        Icon(imageVector = Icons.Rounded.Edit, contentDescription = null)
-                    },
-                    label = {
-                        Column(
-                            modifier = Modifier.fillMaxWidth()
+                    if (dayStr.isEmpty() && courseUi.timeSlot.startTime == null) {
+                        Text(
+                            text = stringResource(R.string.not_set),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 8.dp, vertical = 12.dp)
+                        )
+                    } else {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 8.dp, vertical = 12.dp)
+                                .basicMarquee(
+                                    iterations = Int.MAX_VALUE, // 无限循环滚动
+                                ), verticalAlignment = Alignment.Bottom
                         ) {
-                            Text("编辑课程")
-                            Text("长按编辑课时", style = MaterialTheme.typography.labelSmall)
-                        }
-                    })
+                            if (dayStr.isNotEmpty()) {
+                                Text(
+                                    text = dayStr,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                            }
 
+                            TimeText(
+                                time = courseUi.timeSlot.startTime,
+                                style = MaterialTheme.typography.bodyLarge,
+                                isVertical = false
+                            )
+
+                            Text(
+                                text = " - ",
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+
+                            TimeText(
+                                time = courseUi.timeSlot.endTime,
+                                style = MaterialTheme.typography.bodyLarge,
+                                isVertical = false
+                            )
+                        }
+                    }
+                }
+
+                if (!courseUi.location.isNullOrBlank()) {
+                    item {
+                        DetailListItem(icon = Icons.Rounded.Place, text = courseUi.location)
+                    }
+                }
+
+                if (!courseUi.teacher.isNullOrBlank()) {
+                    item {
+                        DetailListItem(icon = Icons.Rounded.Person, text = courseUi.teacher)
+                    }
+                }
+
+                courseUi.dailyOrder?.let { order ->
+                    item {
+                        DetailListItem(
+                            icon = Icons.Rounded.FormatListNumbered,
+                            text = stringResource(R.string.edit_course_number, order)
+                        )
+                    }
+                }
+
+                val remark = courseUi.timeSlot.remark
+                if (!remark.isNullOrBlank()) {
+                    item {
+                        DetailListItem(
+                            icon = Icons.AutoMirrored.Rounded.Notes,
+                            text = remark,
+                            enableMarquee = false
+                        )
+                    }
+                }
+
+                item {
+                    DetailListItem(
+                        icon = Icons.Rounded.Sync,
+                        text = courseUi.timeSlot.recurrence.toDisplayString()
+                    )
+                }
+
+                item { Spacer(modifier = Modifier.height(16.dp)) }
+
+                item {
+                    FilledTonalButton(
+                        onClick = onCourseClick,
+                        onLongClick = onCourseLongClick,
+                        modifier = Modifier.fillMaxWidth(),
+                        icon = {
+                            Icon(imageVector = Icons.Rounded.Edit, contentDescription = null)
+                        },
+                        label = {
+                            Column(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text("编辑课程")
+                                Text("长按编辑课时", style = MaterialTheme.typography.labelSmall)
+                            }
+                        })
+
+                }
             }
         }
     }

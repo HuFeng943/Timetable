@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.hufeng943.timetable.presentation.ui.NavRoutes.editCourse
 import com.hufeng943.timetable.presentation.ui.NavRoutes.listTimeSlot
+import com.hufeng943.timetable.presentation.ui.common.DynamicSubTheme
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
 import com.hufeng943.timetable.presentation.ui.components.HandleEditUiState
@@ -19,12 +20,14 @@ fun CourseListScreen(
     val navController = LocalNavController.current
 
     HandleEditUiState(uiState) { data ->
-        CourseListPager(courses = data.courses, onAddCourse = {
-            navController.navigateSingle(editCourse(data.timetableId))
-        }, onCourseClick = { courseId ->
-            navController.navigateSingle(listTimeSlot(courseId))
-        }, onCourseLongClick = { courseId ->
-            navController.navigateSingle(editCourse(data.timetableId, courseId))
-        })
+        DynamicSubTheme(seedColor = data.color) {
+            CourseListPager(courses = data.courses, onAddCourse = {
+                navController.navigateSingle(editCourse(data.timetableId))
+            }, onCourseClick = { courseId ->
+                navController.navigateSingle(listTimeSlot(courseId))
+            }, onCourseLongClick = { courseId ->
+                navController.navigateSingle(editCourse(data.timetableId, courseId))
+            })
+        }
     }
 }

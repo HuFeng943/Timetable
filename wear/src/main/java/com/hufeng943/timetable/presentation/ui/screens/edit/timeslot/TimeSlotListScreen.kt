@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.hufeng943.timetable.presentation.ui.NavRoutes
+import com.hufeng943.timetable.presentation.ui.common.DynamicSubTheme
 import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
@@ -34,10 +35,12 @@ fun TimeSlotListScreen(
                 }
             )
         }
+        DynamicSubTheme(seedColor = data.color) {
         TimeSlotListPager(timeSlots = sortedTimeSlots, onAddTimeSlot = {
             navController.navigateSingle(NavRoutes.editTimeSlot(data.id))
         }, onTimeSlotClick = { timeSlotId ->
             navController.navigateSingle(NavRoutes.editTimeSlot(data.id, timeSlotId))
         })
+        }
     }
 }

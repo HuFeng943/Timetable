@@ -19,20 +19,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Card
-import androidx.wear.compose.material3.CardDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
+import com.hufeng943.timetable.presentation.ui.common.DynamicSubTheme
 import com.hufeng943.timetable.presentation.ui.common.ui.CourseUi
 
 
 @Composable
 fun CourseCard(course: CourseUi, onClick: () -> Unit) {
+    DynamicSubTheme(seedColor = course.color) {
     Card(
         onClick = onClick,
-        contentPadding = PaddingValues(vertical = 4.dp, horizontal = 10.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = course.displayColor,// 卡片背景色
-        )
+        contentPadding = PaddingValues(vertical = 4.dp, horizontal = 10.dp)
     ) {
         Row(
             modifier = Modifier
@@ -75,5 +73,6 @@ fun CourseCard(course: CourseUi, onClick: () -> Unit) {
                 modifier = Modifier.padding(horizontal = 4.dp)
             )
         }
+    }
     }
 }
