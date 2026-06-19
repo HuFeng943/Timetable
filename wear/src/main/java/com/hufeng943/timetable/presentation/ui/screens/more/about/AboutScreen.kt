@@ -69,8 +69,10 @@ fun AboutScreen() {
             context.packageManager.getPackageInfo(context.packageName, 0).versionName
         } catch (e: Exception) {
             Log.e("AboutScreen", "软件版本号获取失败：$e")
+            null
         }
     } ?: stringResource(R.string.unknown)
+
     val icon = remember {
         val drawable = context.packageManager.getApplicationIcon(context.packageName)
         drawable.toBitmap().asImageBitmap()
@@ -99,47 +101,52 @@ fun AboutScreen() {
             }
 
             item {
-                TitleCard(title = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Image(
-                            painter = BitmapPainter(icon),
-                            contentDescription = null,
-                            modifier = Modifier.size(48.dp)
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(
-                            stringResource(R.string.app_name),
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                    }
+                TitleCard(
+                    title = {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Image(
+                                painter = BitmapPainter(icon),
+                                contentDescription = null,
+                                modifier = Modifier.size(52.dp)
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Column() {
+                                Text(
+                                    stringResource(R.string.app_name),
+                                    style = MaterialTheme.typography.labelLarge
+                                )
+                                Text(
+                                    versionName,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            }
+                        }
 
-                }, modifier = Modifier.fillMaxWidth(), subtitle = {
-                    Text(
-                        text = stringResource(
-                            R.string.about_version_label,
-                            stringResource(R.string.info_separator),
-                            versionName
-                        ), style = MaterialTheme.typography.labelSmall,
-                        modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
-                    )
-                }) {
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
                         text = stringResource(R.string.about_description),
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }
+
             item {
                 var expanded by remember { mutableStateOf(false) }
                 val rotation by animateFloatAsState(
                     targetValue = if (expanded) 180f else 0f, label = "Rotation"
                 )
                 TitleCard(
-                    onClick = { expanded = !expanded }, title = {
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { expanded = !expanded },
+                    title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 imageVector = Icons.Rounded.History,
@@ -147,8 +154,9 @@ fun AboutScreen() {
                                 modifier = Modifier.padding(end = 8.dp)
                             )
                             Text(
-                                stringResource(R.string.about_changelog_title),
-                                modifier = Modifier.weight(1f)
+                                text = stringResource(R.string.about_changelog_title),
+                                modifier = Modifier.weight(1f),
+                                style = MaterialTheme.typography.titleMedium
                             )
                             Icon(
                                 imageVector = Icons.Rounded.KeyboardArrowDown,
@@ -156,16 +164,16 @@ fun AboutScreen() {
                                 modifier = Modifier.rotate(rotation) // 箭头随状态旋转
                             )
                         }
-                    }, subtitle = {
-                        Text(
-                            if (expanded) stringResource(R.string.about_changelog_collapse_hint) else stringResource(
-                                R.string.about_changelog_expand_hint
-                            ),
-                            modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
-                        )
-                    }, modifier = Modifier.fillMaxWidth()
-                ) {
-                    // 动画
+                    },
+                    subtitle = {
+                        if (!expanded) {
+                            Text(
+                                text = stringResource(R.string.about_changelog_expand_hint),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }) {
                     AnimatedVisibility(
                         visible = expanded,
                         enter = expandVertically() + fadeIn(),
@@ -178,68 +186,66 @@ fun AboutScreen() {
                         ) {
                             Text(
                                 text = stringResource(R.string.about_changelog),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                style = MaterialTheme.typography.bodySmall
                             )
                         }
                     }
                 }
             }
             item {
-                TitleCard(
-                    title = {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                imageVector = Icons.Rounded.Info,
-                                contentDescription = null,
-                                modifier = Modifier.padding(end = 8.dp)
-                            )
-                            Text(stringResource(R.string.about_declaration_title))
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    subtitle = {
-                        Text(
-                            text = stringResource(R.string.about_declaration_subtitle),
-                            style = MaterialTheme.typography.labelSmall,
-                            modifier = Modifier.basicMarquee(
-                                iterations = Int.MAX_VALUE
-                            )
+                TitleCard(modifier = Modifier.fillMaxWidth(), title = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Rounded.Info,
+                            contentDescription = null,
+                            modifier = Modifier.padding(end = 8.dp)
                         )
-                    }) {
+                        Text(
+                            text = stringResource(R.string.about_declaration_title),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                }, subtitle = {
+                    Text(
+                        text = stringResource(R.string.about_declaration_subtitle),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
+                    )
+                }) {
                     Text(
                         text = stringResource(R.string.about_declaration_text).trimMargin(),
-                        style = MaterialTheme.typography.labelSmall
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }
 
             item {
-                TitleCard(
-                    onClick = {
-                        navController.navigateSingle(NavRoutes.MORE_ABOUT_LIBRARIES)
-                    },
-                    title = {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                imageVector = Icons.Rounded.Description,
-                                contentDescription = null,
-                                modifier = Modifier.padding(end = 8.dp)
-                            )
-                            Text(stringResource(R.string.about_license_title))
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    subtitle = {
-                        Text(
-                            text = stringResource(R.string.about_license_subtitle),
-                            style = MaterialTheme.typography.labelSmall,
-                            modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
+                TitleCard(modifier = Modifier.fillMaxWidth(), onClick = {
+                    navController.navigateSingle(NavRoutes.MORE_ABOUT_LIBRARIES)
+                }, title = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Rounded.Description,
+                            contentDescription = null,
+                            modifier = Modifier.padding(end = 8.dp)
                         )
-                    }) {
+                        Text(
+                            text = stringResource(R.string.about_license_title),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                }, subtitle = {
+                    Text(
+                        text = stringResource(R.string.about_license_subtitle),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
+                    )
+                }) {
                     Text(
                         text = stringResource(R.string.about_license_description),
-                        style = MaterialTheme.typography.labelSmall
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }

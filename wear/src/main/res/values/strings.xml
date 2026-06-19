@@ -83,7 +83,6 @@
     <string name="apperror_unexpectedempty">Unexpected empty state</string>
     <string name="apperror_unknown">An unknown error occurred: %1$s</string>
     <!-- About -->
-    <string name="about_version_label">App version %1$s %2$s</string>
     <string name="about_description">A timetable app designed for smartwatches, focused on providing a concise and intuitive course viewing experience.</string>
     <string name="about_declaration_title">Declaration</string>
     <string name="about_declaration_subtitle" translatable="false">https://github.com/HuFeng943/Timetable</string>
@@ -93,8 +92,7 @@
     <string name="about_library_version">v%1$s</string>
     <string name="about_library_developers">By %1$s</string>
     <string name="about_changelog_title">Changelog</string>
-    <string name="about_changelog_collapse_hint">Tap to collapse</string>
-    <string name="about_changelog_expand_hint">Tap to expand for details</string>
+    <string name="about_changelog_expand_hint">Tap to expand</string>
     <string name="about_changelog">TODO</string>
     <string name="about_license_title">Open Source License</string>
     <string name="about_license_subtitle">Tap to view third-party libraries used</string>

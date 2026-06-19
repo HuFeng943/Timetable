@@ -74,7 +74,6 @@
     <string name="apperror_unexpectedempty">意外的空状态</string>
     <string name="apperror_unknown">发生了未知的错误：%1$s</string>
     <!-- About -->
-    <string name="about_version_label">应用版本 %1$s %2$s</string>
     <string name="about_description">一个为智能手表设计的课程表应用，专注于提供简洁直观的课程查看体验</string>
     <string name="about_declaration_title">声明</string>
     <string name="about_declaration_text">" · 本应用由 HuFeng943 开发，并借助生成式 AI 辅助\n · 目前仍在持续完善中，部分功能可能尚未完整实现\n · 开发过程中参考了社区开源项目，在此致谢"</string>
@@ -83,8 +82,7 @@
     <string name="about_library_version">版本 %1$s</string>
     <string name="about_library_developers">作者 %1$s</string>
     <string name="about_changelog_title">更新内容</string>
-    <string name="about_changelog_collapse_hint">点击收起</string>
-    <string name="about_changelog_expand_hint">点击展开查看详情</string>
+    <string name="about_changelog_expand_hint">点击展开</string>
     <string name="about_changelog">TODO</string>
     <string name="about_license_title">开源协议</string>
     <string name="about_license_subtitle">单击以查看使用到的第三方库</string>
