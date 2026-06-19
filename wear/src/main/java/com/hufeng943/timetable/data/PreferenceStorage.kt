@@ -2,6 +2,7 @@ package com.hufeng943.timetable.data
 
 import android.content.Context
 import android.text.format.DateFormat
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -26,6 +27,7 @@ class PreferenceStorage @Inject constructor(
         val TIME_FORMAT = stringPreferencesKey("time_format")
         val APP_LANGUAGE = stringPreferencesKey("app_language")
         val FIRST_DAY_OF_THE_WEEK = stringPreferencesKey("first_day_of_the_week")
+        val DYNAMIC_COLOR_ENABLED = booleanPreferencesKey("dynamic_color_enabled")
     }
 
     val appConfigFlow: Flow<AppConfig> = context.dataStore.data.map { prefs ->
@@ -68,7 +70,8 @@ class PreferenceStorage @Inject constructor(
             is24HourFormat = finalIs24Hour,
             timeFormatSetting = formatSetting,
             firstDayOfTheWeekSetting = firstDaySetting,
-            effectiveFirstDayOfTheWeek = effectiveFirstDay
+            effectiveFirstDayOfTheWeek = effectiveFirstDay,
+            isDynamicColorEnabled = prefs[Keys.DYNAMIC_COLOR_ENABLED] ?: true
         )
     }
 
@@ -82,6 +85,10 @@ class PreferenceStorage @Inject constructor(
 
     suspend fun setFirstDayOfTheWeek(firstDay: FirstDayOfTheWeek) {
         context.dataStore.edit { it[Keys.FIRST_DAY_OF_THE_WEEK] = firstDay.name }
+    }
+
+    suspend fun setDynamicColorEnabled(enabled: Boolean) {
+        context.dataStore.edit { it[Keys.DYNAMIC_COLOR_ENABLED] = enabled }
     }
 }
 

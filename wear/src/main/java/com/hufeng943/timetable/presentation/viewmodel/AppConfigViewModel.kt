@@ -48,4 +48,10 @@ class AppConfigViewModel @Inject constructor(
             preferenceStorage.setFirstDayOfTheWeek(firstDay)
         }
     }
+
+    fun updateDynamicColorEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            preferenceStorage.setDynamicColorEnabled(enabled)
+        }
+    }
 }

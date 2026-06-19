@@ -10,7 +10,8 @@ data class AppConfig(
     val timeFormatSetting: TimeFormat = TimeFormat.SYSTEM,
     val is24HourFormat: Boolean = true,
     val firstDayOfTheWeekSetting: FirstDayOfTheWeek = FirstDayOfTheWeek.SYSTEM,
-    val effectiveFirstDayOfTheWeek: DayOfWeek = DayOfWeek.MONDAY
+    val effectiveFirstDayOfTheWeek: DayOfWeek = DayOfWeek.MONDAY,
+    val isDynamicColorEnabled: Boolean = true
 )
 
 val LocalAppConfig = staticCompositionLocalOf { AppConfig() }

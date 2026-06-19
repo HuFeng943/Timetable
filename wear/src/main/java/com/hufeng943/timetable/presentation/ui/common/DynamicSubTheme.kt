@@ -18,16 +18,18 @@ fun DynamicSubTheme(
     style: PaletteStyle = PaletteStyle.Vibrant,
     content: @Composable () -> Unit
 ) {
-    val currentColorScheme = if (seedColor != Color.Unspecified) {
-        rememberDynamicColorScheme(
-            seedColor = seedColor,
-            isDark = isDark,
-            isAmoled = isAmoled,
-            style = style
-        )
-    } else {
-        MaterialTheme.colorScheme
-    }
+    val config = LocalAppConfig.current
 
-    MaterialTheme(colorScheme = currentColorScheme, content = content)
+    if (config.isDynamicColorEnabled) {
+        val currentColorScheme = if (seedColor != Color.Unspecified) {
+            rememberDynamicColorScheme(
+                seedColor = seedColor, isDark = isDark, isAmoled = isAmoled, style = style
+            )
+        } else {
+            MaterialTheme.colorScheme
+        }
+        MaterialTheme(colorScheme = currentColorScheme, content = content)
+    } else {
+        content()
+    }
 }

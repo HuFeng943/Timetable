@@ -26,7 +26,11 @@ fun SettingScreen(
                 config = config,
                 onLanguageSelectClick = { internalNavController.navigateSingle(InternalNavRoutes.LANGUAGE_SELECT) },
                 onTimeFormatSelectClick = { internalNavController.navigateSingle(InternalNavRoutes.TIME_FORMAT_SELECT) },
-                onFirstDaySelectClick = { internalNavController.navigateSingle(InternalNavRoutes.FIRST_DAY_SELECT) })
+                onFirstDaySelectClick = { internalNavController.navigateSingle(InternalNavRoutes.FIRST_DAY_SELECT) },
+                onDynamicColorToggle = { enabled ->
+                    appConfigViewModel.updateDynamicColorEnabled(enabled)
+                }
+            )
         }
 
         composable(InternalNavRoutes.LANGUAGE_SELECT) {

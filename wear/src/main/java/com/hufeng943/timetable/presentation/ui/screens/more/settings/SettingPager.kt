@@ -1,10 +1,13 @@
 package com.hufeng943.timetable.presentation.ui.screens.more.settings
 
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccessTime
+import androidx.compose.material.icons.rounded.ColorLens
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Language
@@ -22,6 +25,7 @@ import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SwitchButton
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
@@ -36,7 +40,8 @@ fun SettingPager(
     config: AppConfig,
     onLanguageSelectClick: () -> Unit,
     onTimeFormatSelectClick: () -> Unit,
-    onFirstDaySelectClick: () -> Unit
+    onFirstDaySelectClick: () -> Unit,
+    onDynamicColorToggle: (Boolean) -> Unit
 ) {
     val scrollState = rememberScalingLazyListState()
     val navController = LocalNavController.current
@@ -118,6 +123,27 @@ fun SettingPager(
                     title = stringResource(R.string.settings_first_day),
                     value = currentFirstDayLabel,
                     onClick = onFirstDaySelectClick
+                )
+            }
+
+            // 动态色彩设置
+            item {
+                SwitchButton(
+                    checked = config.isDynamicColorEnabled,
+                    onCheckedChange = onDynamicColorToggle,
+                    modifier = Modifier.fillMaxWidth(),
+                    icon = {
+                        Icon(Icons.Rounded.ColorLens, contentDescription = null)
+                    },
+                    label = {
+                        Text(stringResource(R.string.settings_dynamic_color))
+                    },
+                    secondaryLabel = {
+                        Text(
+                            stringResource(R.string.settings_dynamic_color_summary),
+                            modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
+                        )
+                    }
                 )
             }
         }

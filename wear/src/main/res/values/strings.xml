@@ -116,6 +116,8 @@
     <string name="settings_first_day_monday">Monday</string>
     <string name="settings_first_day_sunday">Sunday</string>
     <string name="settings_first_day_saturday">Saturday</string>
+    <string name="settings_dynamic_color">Content-based theme color</string>
+    <string name="settings_dynamic_color_summary">UI theme colors change dynamically with course colors</string>
     <!-- Language -->
     <string-array name="language_values" translatable="false">
         <item>@null</item>
