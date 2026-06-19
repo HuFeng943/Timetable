@@ -14,7 +14,7 @@ data class TimeSlotUi(
     val dayOfWeek: DayOfWeek?,
     val recurrence: WeekPattern,
     val remark: String?,
-    val color: Long
+    val color: androidx.compose.ui.graphics.Color
 ) {
     val displayRemark: String
         @Composable
