@@ -3,7 +3,9 @@ package com.hufeng943.timetable.presentation.ui.screens.more.about
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -114,7 +116,7 @@ fun AboutScreen() {
                                 modifier = Modifier.size(52.dp)
                             )
                             Spacer(modifier = Modifier.width(12.dp))
-                            Column() {
+                            Column {
                                 Text(
                                     stringResource(R.string.app_name),
                                     style = MaterialTheme.typography.labelLarge
@@ -143,6 +145,7 @@ fun AboutScreen() {
                 val rotation by animateFloatAsState(
                     targetValue = if (expanded) 180f else 0f, label = "Rotation"
                 )
+
                 TitleCard(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { expanded = !expanded },
@@ -166,7 +169,11 @@ fun AboutScreen() {
                         }
                     },
                     subtitle = {
-                        if (!expanded) {
+                        AnimatedVisibility(
+                            visible = !expanded,
+                            enter = fadeIn(spring(stiffness = Spring.StiffnessVeryLow)),
+                            exit = fadeOut(spring(stiffness = Spring.StiffnessHigh))
+                        ) {
                             Text(
                                 text = stringResource(R.string.about_changelog_expand_hint),
                                 style = MaterialTheme.typography.labelSmall,
@@ -179,16 +186,13 @@ fun AboutScreen() {
                         enter = expandVertically() + fadeIn(),
                         exit = shrinkVertically() + fadeOut()
                     ) {
-                        Column(
+                        Text(
+                            text = stringResource(R.string.about_changelog),
+                            style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier
                                 .padding(top = 8.dp)
                                 .fillMaxWidth()
-                        ) {
-                            Text(
-                                text = stringResource(R.string.about_changelog),
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                        }
+                        )
                     }
                 }
             }
