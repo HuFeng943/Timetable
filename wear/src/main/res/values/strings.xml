@@ -76,9 +76,10 @@
     <string name="recurrence_odd_week">Odd weeks only</string>
     <string name="recurrence_even_week">Even weeks only</string>
     <!-- AppError -->
-    <string name="apperror_timetablenotfound">Timetable not found (ID: %1$d)</string>
-    <string name="apperror_coursenotfound">Course not found (ID: %1$d)</string>
-    <string name="apperror_timeslotnotfound">Time slot not found (ID: %1$d)</string>
+    <string name="apperror">Unexpected condition!</string>
+    <string name="apperror_timetablenotfound">Timetable not found (ID: %1$s)</string>
+    <string name="apperror_coursenotfound">Course not found (ID: %1$s)</string>
+    <string name="apperror_timeslotnotfound">Time slot not found (ID: %1$s)</string>
     <string name="apperror_invalidparameter">Invalid parameter: %1$s</string>
     <string name="apperror_unexpectedempty">Unexpected empty state</string>
     <string name="apperror_unknown">An unknown error occurred: %1$s</string>

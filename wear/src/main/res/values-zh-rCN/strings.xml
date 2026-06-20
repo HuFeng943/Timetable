@@ -67,9 +67,10 @@
     <string name="recurrence_odd_week">仅在单周上课</string>
     <string name="recurrence_even_week">仅在双周上课</string>
     <!-- AppError -->
-    <string name="apperror_timetablenotfound">找不到这个课表 (ID: %1$d)</string>
-    <string name="apperror_coursenotfound">找不到这节课 (ID: %1$d)</string>
-    <string name="apperror_timeslotnotfound">找不到这个时间段 (ID: %1$d)</string>
+    <string name="apperror">意外情况！</string>
+    <string name="apperror_timetablenotfound">找不到这个课表 (ID: %1$s)</string>
+    <string name="apperror_coursenotfound">找不到这节课 (ID: %1$s)</string>
+    <string name="apperror_timeslotnotfound">找不到这个时间段 (ID: %1$s)</string>
     <string name="apperror_invalidparameter">跳转参数错误：%1$s</string>
     <string name="apperror_unexpectedempty">意外的空状态</string>
     <string name="apperror_unknown">发生了未知的错误：%1$s</string>
