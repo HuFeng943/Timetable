@@ -3,6 +3,7 @@ package com.hufeng943.timetable.presentation.ui.common
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.wear.compose.material3.MaterialTheme
+import com.hufeng943.timetable.presentation.theme.TimetableTheme
 import com.materialkolor.PaletteStyle
 
 /**
@@ -21,14 +22,14 @@ fun DynamicSubTheme(
     val config = LocalAppConfig.current
 
     if (config.isDynamicColorEnabled) {
-        val currentColorScheme = if (seedColor != Color.Unspecified) {
-            rememberDynamicColorScheme(
+        if (seedColor != Color.Unspecified) {
+            val currentColorScheme = rememberDynamicColorScheme(
                 seedColor = seedColor, isDark = isDark, isAmoled = isAmoled, style = style
             )
+            MaterialTheme(colorScheme = currentColorScheme, content = content)
         } else {
-            MaterialTheme.colorScheme
+            TimetableTheme(content)
         }
-        MaterialTheme(colorScheme = currentColorScheme, content = content)
     } else {
         content()
     }
