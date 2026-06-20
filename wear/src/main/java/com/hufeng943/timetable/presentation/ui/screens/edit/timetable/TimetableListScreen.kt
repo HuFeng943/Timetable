@@ -19,7 +19,8 @@ fun TimetableListScreen(
     val uiState by viewModel.uiState.collectAsState()
     val navController = LocalNavController.current
 
-    HandleEditUiState(uiState) { data ->
+
+    HandleEditUiState(uiState, emptyList()) { data ->
         TimetableListPager(timetables = data, onAddTimetable = {
             navController.navigateSingle(NavRoutes.EDIT_TIMETABLE)
         }, onTimetableClick = { id ->

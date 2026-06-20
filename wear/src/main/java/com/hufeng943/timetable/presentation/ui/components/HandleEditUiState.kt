@@ -28,6 +28,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @Composable
 fun <T> HandleEditUiState(
     uiState: UiState<T>,
+    emptyAsSuccess: T? = null,
     emptyContent: @Composable () -> Unit = { ErrorScreen(AppError.UnexpectedEmpty()) },
     successContent: @Composable (T) -> Unit
 ) {
@@ -62,7 +63,8 @@ fun <T> HandleEditUiState(
             } else {
                 fadeIn(tween(0)) togetherWith fadeOut(tween(0))
             }
-        }, label = "UiStateTransition"
+        },
+        label = "UiStateTransition"
     ) { targetState ->
         when (targetState) {
             is UiState.Loading -> {
@@ -78,7 +80,12 @@ fun <T> HandleEditUiState(
             }
 
             is UiState.Error -> ErrorScreen(targetState.throwable)
-            is UiState.Empty -> emptyContent()
+            is UiState.Empty -> if (emptyAsSuccess != null) {
+                successContent(emptyAsSuccess)
+            } else {
+                emptyContent()
+            }
+
             is UiState.Success -> successContent(targetState.data)
         }
     }
