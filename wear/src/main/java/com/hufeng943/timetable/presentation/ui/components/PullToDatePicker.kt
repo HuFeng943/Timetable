@@ -81,11 +81,8 @@ fun rememberPullToRefreshConnection(
                 if (!isTouching()) {
                     return Offset.Zero
                 }
-                val firstVisibleItem = scrollState.layoutInfo.visibleItemsInfo.firstOrNull()
-                val isAtTop = firstVisibleItem?.index == 0 && (firstVisibleItem.offset) > -80
                 val currentOffset = state.dragOffset
-
-                if (available.y > 0 && isAtTop && currentOffset < state.maxDragDistance) {
+                if (available.y > 0 && !scrollState.canScrollBackward && currentOffset < state.maxDragDistance) {
                     val newOffset =
                         (currentOffset + available.y).coerceIn(0f, state.maxDragDistance)
                     val consumed = newOffset - currentOffset
@@ -140,8 +137,7 @@ fun PullToDatePicker(
                         .background(MaterialTheme.colorScheme.secondaryContainer)
                         .clickable { onDateSelected(today) }
                         .padding(horizontal = 10.dp, vertical = 2.dp),
-                    contentAlignment = Alignment.Center
-                ) {
+                    contentAlignment = Alignment.Center) {
                     Text(
                         text = "今日",
                         style = MaterialTheme.typography.labelSmall,
@@ -152,8 +148,7 @@ fun PullToDatePicker(
                 Spacer(modifier = Modifier.height(6.dp))
 
                 HorizontalDatePicker(
-                    selectedDate = selectedDate,
-                    onDateSelected = onDateSelected
+                    selectedDate = selectedDate, onDateSelected = onDateSelected
                 )
             }
         }
