@@ -14,7 +14,7 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.RadioButton
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.ui.common.toDisplayString
+import com.hufeng943.timetable.presentation.ui.components.toDisplayString
 import com.hufeng943.timetable.shared.model.WeekPattern
 
 @Composable

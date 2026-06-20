@@ -18,7 +18,7 @@ import androidx.wear.compose.material3.RadioButton
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
-import com.hufeng943.timetable.presentation.ui.common.toDisplayString
+import com.hufeng943.timetable.presentation.ui.components.toDisplayString
 import kotlinx.datetime.DayOfWeek
 import java.time.format.TextStyle
 

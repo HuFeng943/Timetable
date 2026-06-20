@@ -1,4 +1,4 @@
-package com.hufeng943.timetable.presentation.ui.common
+package com.hufeng943.timetable.presentation.ui.components
 
 import android.text.format.DateFormat
 import androidx.compose.runtime.Composable

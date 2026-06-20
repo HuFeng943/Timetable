@@ -25,9 +25,9 @@ import androidx.wear.compose.material3.Card
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
-import com.hufeng943.timetable.presentation.ui.common.toDisplayString
 import com.hufeng943.timetable.presentation.ui.common.ui.TimeSlotUi
 import com.hufeng943.timetable.presentation.ui.components.TimeText
+import com.hufeng943.timetable.presentation.ui.components.toDisplayString
 import java.time.format.TextStyle
 
 @Composable
