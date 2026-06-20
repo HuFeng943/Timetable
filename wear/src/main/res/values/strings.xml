@@ -83,20 +83,33 @@
     <string name="apperror_unexpectedempty">Unexpected empty state</string>
     <string name="apperror_unknown">An unknown error occurred: %1$s</string>
     <!-- About -->
-    <string name="about_description">A timetable app designed for smartwatches, focused on providing a concise and intuitive course viewing experience.</string>
+    <string name="about_description">    A timetable app designed for smartwatches, focused on providing a concise and intuitive course viewing experience.</string>
     <string name="about_declaration_title">Declaration</string>
     <string name="about_declaration_subtitle" translatable="false">https://github.com/HuFeng943/Timetable</string>
-    <string name="about_declaration_text">" · Developed by HuFeng943 with the assistance of generative AI\n · Still under continuous improvement, some features may not be fully implemented yet\n · Thanks to the open source projects referenced during development"</string>
+    <string name="about_declaration_text">
+        " · Developed by HuFeng943 with the assistance of generative AI\n"
+        " · Still under continuous improvement, some features may not be fully implemented yet\n"
+        " · Thanks to the open source projects referenced during development"
+    </string>
     <string name="about_library">Third-party Libraries</string>
     <string name="about_library_open_source">✔ Open Source</string>
     <string name="about_library_version">v%1$s</string>
     <string name="about_library_developers">By %1$s</string>
     <string name="about_changelog_title">Changelog</string>
     <string name="about_changelog_expand_hint">Tap to expand</string>
-    <string name="about_changelog">TODO</string>
+    <string name="about_changelog">
+        " · Added animations to some UI components and optimized the UI\n"
+        " · Added content-based dynamic theme color feature\n"
+        " · Fixed an issue where the date picker could not be pulled down"
+    </string>
     <string name="about_license_title">Open Source License</string>
     <string name="about_license_subtitle">Tap to view third-party libraries used</string>
-    <string name="about_license_description">" · This project adopts the MIT License + Commons Clause dual license\n · The MIT License allows free use, modification, and distribution, provided that the copyright notice is retained\n · The Commons Clause adds the restriction: you may not sell the software or its functionality as a core value of a paid product or service\n · Please refer to the LICENSE file in the project for full terms"</string>
+    <string name="about_license_description">
+        " · This project adopts the MIT License + Commons Clause dual license\n"
+        " · The MIT License allows free use, modification, and distribution, provided that the copyright notice is retained\n"
+        " · The Commons Clause adds the restriction: you may not sell the software or its functionality as a core value of a paid product or service\n"
+        " · Please refer to the LICENSE file in the project for full terms"
+    </string>
     <!-- Common -->
     <string name="delete_confirm">Are you sure you want to delete?</string>
     <string name="delete_confirm_hint">Once deleted, %1$s cannot be recovered.</string>

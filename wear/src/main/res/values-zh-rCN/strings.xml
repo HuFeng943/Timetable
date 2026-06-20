@@ -74,19 +74,32 @@
     <string name="apperror_unexpectedempty">意外的空状态</string>
     <string name="apperror_unknown">发生了未知的错误：%1$s</string>
     <!-- About -->
-    <string name="about_description">一个为智能手表设计的课程表应用，专注于提供简洁直观的课程查看体验</string>
+    <string name="about_description">"    一个为智能手表设计的课程表应用，专注于提供简洁直观的课程查看体验"</string>
     <string name="about_declaration_title">声明</string>
-    <string name="about_declaration_text">" · 本应用由 HuFeng943 开发，并借助生成式 AI 辅助\n · 目前仍在持续完善中，部分功能可能尚未完整实现\n · 开发过程中参考了社区开源项目，在此致谢"</string>
+    <string name="about_declaration_text">
+        " · 本应用由 HuFeng943 开发，并借助生成式 AI 辅助\n"
+        " · 目前仍在持续完善中，部分功能可能尚未完整实现\n"
+        " · 开发过程中参考了社区开源项目，在此致谢"
+    </string>
     <string name="about_library">第三方库</string>
     <string name="about_library_open_source">✔ 开源协议</string>
     <string name="about_library_version">版本 %1$s</string>
     <string name="about_library_developers">作者 %1$s</string>
     <string name="about_changelog_title">更新内容</string>
     <string name="about_changelog_expand_hint">点击展开</string>
-    <string name="about_changelog">TODO</string>
+    <string name="about_changelog">
+        " · 为部分界面组件添加动画、优化UI\n"
+        " · 增加基于内容的动态主题色功能\n"
+        " · 修复了无法下拉日期选择器的问题"
+    </string>
     <string name="about_license_title">开源协议</string>
     <string name="about_license_subtitle">单击以查看使用到的第三方库</string>
-    <string name="about_license_description"> · 本项目采用 MIT License + Commons Clause 双协议\n · MIT License 允许自由使用、修改和分发，但须保留版权声明\n · Commons Clause 附加限制：不得将本软件或其功能作为付费产品或服务的核心价值进行售卖\n · 详细条款请查阅项目中的 LICENSE 文件</string>
+    <string name="about_license_description">
+        " · 本项目采用 MIT License + Commons Clause 双协议\n"
+        " · MIT License 允许自由使用、修改和分发，但须保留版权声明\n"
+        " · Commons Clause 附加限制：不得将本软件或其功能作为付费产品或服务的核心价值进行售卖\n"
+        " · 详细条款请查阅项目中的 LICENSE 文件"
+    </string>
     <!-- Common -->
     <string name="delete_confirm">确定删除吗？</string>
     <string name="delete_confirm_hint">%1$s 一旦删除就找不回来了</string>
