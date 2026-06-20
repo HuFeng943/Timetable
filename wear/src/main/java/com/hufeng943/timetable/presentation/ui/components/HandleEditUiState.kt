@@ -45,7 +45,9 @@ fun <T> HandleEditUiState(
     }
 
     AnimatedContent(
-        targetState = uiState, transitionSpec = {
+        targetState = uiState,
+        contentKey = { state -> state::class },
+        transitionSpec = {
             if (targetState is UiState.Loading || initialState is UiState.Loading) {
                 // 淡入 + 从 92% 放大到 100%
                 (fadeIn(animationSpec = tween(220)) + scaleIn(
