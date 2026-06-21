@@ -1,6 +1,6 @@
 import com.android.build.api.dsl.ApplicationExtension
 
-val versionPrefix = "0.9.9"
+val versionPrefix = "1.0.0"
 
 val commitCountProvider = providers.exec {
     commandLine("git", "rev-list", "--count", "HEAD")
@@ -32,7 +32,7 @@ configure<ApplicationExtension> {
 
         versionCode = if (isRelease) commitCountProvider.get() else 1
         versionName = if (isRelease) {
-            commitCountProvider.map { count -> "$versionPrefix-$count" }.get()
+            commitCountProvider.map { count -> "$versionPrefix ($count)" }.get()
         } else {
             "$versionPrefix-debug"
         }

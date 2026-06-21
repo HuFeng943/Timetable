@@ -101,8 +101,10 @@
     <string name="about_changelog">
         " · Added animations to some UI components and optimized the UI\n"
         " · Added content-based dynamic theme color feature\n"
-        " · Fixed an issue where the date picker could not be pulled down"
-    </string>
+        " · Fixed an issue where the date picker could not be pulled down\n"
+        " · Fixed an issue where deleting a course on the course details page caused an error\n"
+        " · Refactored some components to use MD3 design"
+</string>
     <string name="about_license_title">Open Source License</string>
     <string name="about_license_subtitle">Tap to view third-party libraries used</string>
     <string name="about_license_description">
