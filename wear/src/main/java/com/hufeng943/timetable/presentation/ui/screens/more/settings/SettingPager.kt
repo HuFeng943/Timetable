@@ -19,20 +19,26 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumnItemScope
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.SwitchButton
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
+import androidx.wear.compose.material3.lazy.TransformationSpec
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.data.FirstDayOfTheWeek
 import com.hufeng943.timetable.data.TimeFormat
 import com.hufeng943.timetable.presentation.ui.common.AppConfig
-import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import kotlinx.coroutines.launch
 
 @Composable
@@ -43,8 +49,8 @@ fun SettingPager(
     onFirstDaySelectClick: () -> Unit,
     onDynamicColorToggle: (Boolean) -> Unit
 ) {
-    val scrollState = rememberScalingLazyListState()
-    val navController = LocalNavController.current
+    val scrollState = rememberTransformingLazyColumnState()
+    val transformationSpec = rememberTransformationSpec()
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -87,11 +93,17 @@ fun SettingPager(
                 )
             }
         }) { contentPadding ->
-        ScalingLazyColumn(
-            autoCentering = null, state = scrollState, contentPadding = contentPadding
+        TransformingLazyColumn(
+            state = scrollState, contentPadding = contentPadding
         ) {
             item {
-                ListHeader {
+                ListHeader(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ListHeaderDefaults.minimumTopListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec)
+                ) {
                     Text(stringResource(R.string.more_menu_settings))
                 }
             }
@@ -102,6 +114,7 @@ fun SettingPager(
                     icon = Icons.Rounded.Language,
                     title = stringResource(R.string.settings_language),
                     value = currentLanguageLabel,
+                    transformationSpec = transformationSpec,
                     onClick = onLanguageSelectClick
                 )
             }
@@ -112,6 +125,7 @@ fun SettingPager(
                     icon = Icons.Rounded.AccessTime,
                     title = stringResource(R.string.settings_time_format),
                     value = currentTimeFormatLabel,
+                    transformationSpec = transformationSpec,
                     onClick = onTimeFormatSelectClick
                 )
             }
@@ -122,6 +136,7 @@ fun SettingPager(
                     icon = Icons.Rounded.DateRange,
                     title = stringResource(R.string.settings_first_day),
                     value = currentFirstDayLabel,
+                    transformationSpec = transformationSpec,
                     onClick = onFirstDaySelectClick
                 )
             }
@@ -131,7 +146,11 @@ fun SettingPager(
                 SwitchButton(
                     checked = config.isDynamicColorEnabled,
                     onCheckedChange = onDynamicColorToggle,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
                     icon = {
                         Icon(Icons.Rounded.ColorLens, contentDescription = null)
                     },
@@ -151,19 +170,28 @@ fun SettingPager(
 }
 
 @Composable
-private fun SettingItemCard(
+private fun TransformingLazyColumnItemScope.SettingItemCard(
     icon: ImageVector,
     title: String,
     value: String,
+    transformationSpec: TransformationSpec,
     onClick: () -> Unit
 ) {
-    TitleCard(onClick = onClick, title = {
-        Row {
-            Icon(imageVector = icon, contentDescription = null)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(title)
+    TitleCard(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .transformedHeight(this, transformationSpec)
+            .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+        transformation = SurfaceTransformation(transformationSpec),
+        title = {
+            Row {
+                Icon(imageVector = icon, contentDescription = null)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(title)
+            }
         }
-    }) {
+    ) {
         Text(value)
     }
 }
