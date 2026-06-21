@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CalendarMonth
@@ -16,15 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.ui.TimetableUi
 import com.hufeng943.timetable.presentation.ui.components.ColorPickerCard
@@ -45,7 +51,8 @@ fun EditTimetableMainPager(
     onDelete: () -> Unit,
     startDateIsToday: Boolean
 ) {
-    val scrollState = rememberScalingLazyListState()
+    val scrollState = rememberTransformingLazyColumnState()
+    val transformationSpec = rememberTransformationSpec()
 
     ScreenScaffold(
         scrollState = scrollState, edgeButton = {
@@ -53,11 +60,17 @@ fun EditTimetableMainPager(
                 Icon(Icons.Rounded.Check, contentDescription = stringResource(R.string.check))
             }
         }) { contentPadding ->
-        ScalingLazyColumn(
-            autoCentering = null, state = scrollState, contentPadding = contentPadding
+        TransformingLazyColumn(
+            state = scrollState, contentPadding = contentPadding
         ) {
             item {
-                ListHeader {
+                ListHeader(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ListHeaderDefaults.minimumTopListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec)
+                ) {
                     AnimatedContent(
                         targetState = timetable.timetableId == 0L,
                         label = "header_text"
@@ -74,6 +87,11 @@ fun EditTimetableMainPager(
             item { // 修改名称
                 TitleCard(
                     onClick = onNameClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Rounded.CollectionsBookmark, contentDescription = null)
@@ -100,6 +118,11 @@ fun EditTimetableMainPager(
                 TitleCard(
                     onClick = onStartDateClick,
                     onLongClick = onStartDateLongClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
                     subtitle = {
                         AnimatedVisibility(visible = !startDateIsToday) {
                             Text(stringResource(R.string.set_current_date_long_press))
@@ -131,6 +154,11 @@ fun EditTimetableMainPager(
                 TitleCard(
                     onClick = onEndDateClick,
                     onLongClick = onEndDateLongClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
                     subtitle = {
                         AnimatedVisibility(visible = timetable.semesterEnd != null) {
                             Text(stringResource(R.string.set_never_ends_long_press))
@@ -165,14 +193,25 @@ fun EditTimetableMainPager(
                     color = timetable.displayColor,
                     onClick = onColorClick,
                     onLongClick = onColorLongClick,
-                    isNull = timetable.color == Color.Unspecified
+                    isNull = timetable.color == Color.Unspecified,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec)
                 )
             }
 
             if (timetable.timetableId != 0L) { // 只有编辑时才显示
                 item {
                     DeleteButton(
-                        label = stringResource(R.string.edit_timetable_delete), onClick = onDelete
+                        label = stringResource(R.string.edit_timetable_delete),
+                        onClick = onDelete,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .transformedHeight(this, transformationSpec)
+                            .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                        transformation = SurfaceTransformation(transformationSpec)
                     )
                 }
             }

@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Notes
@@ -16,15 +17,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.ui.TimeSlotUi
 import com.hufeng943.timetable.presentation.ui.components.DeleteButton
@@ -44,7 +50,8 @@ fun EditTimeSlotMainPager(
     onRemarkLongClick: () -> Unit,
     onDelete: () -> Unit,
 ) {
-    val scrollState = rememberScalingLazyListState()
+    val scrollState = rememberTransformingLazyColumnState()
+    val transformationSpec = rememberTransformationSpec()
 
     val canSave =
         timeSlot.startTime != null && timeSlot.endTime != null && timeSlot.dayOfWeek != null
@@ -54,14 +61,19 @@ fun EditTimeSlotMainPager(
                 Icon(Icons.Rounded.Check, contentDescription = stringResource(R.string.check))
             }
         }) { contentPadding ->
-        ScalingLazyColumn(
-            autoCentering = null, state = scrollState, contentPadding = contentPadding
+        TransformingLazyColumn(
+            state = scrollState, contentPadding = contentPadding
         ) {
             item {
-                ListHeader {
+                ListHeader(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ListHeaderDefaults.minimumTopListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec)
+                ) {
                     AnimatedContent(
-                        targetState = timeSlot.id == 0L,
-                        label = "header_text"
+                        targetState = timeSlot.id == 0L, label = "header_text"
                     ) { isAdd ->
                         Text(
                             if (isAdd) stringResource(R.string.edit_timeslot_add) else stringResource(
@@ -75,7 +87,13 @@ fun EditTimeSlotMainPager(
             // 开始时间
             item {
                 TitleCard(
-                    onClick = onStartTimeClick, title = {
+                    onClick = onStartTimeClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
+                    title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Rounded.AccessTime, contentDescription = null)
                             Spacer(modifier = Modifier.width(8.dp))
@@ -86,8 +104,7 @@ fun EditTimeSlotMainPager(
                         }
                     }) {
                     AnimatedContent(
-                        targetState = timeSlot.startTime,
-                        label = "start_time"
+                        targetState = timeSlot.startTime, label = "start_time"
                     ) { startTime ->
                         TimeText(
                             time = startTime,
@@ -102,7 +119,13 @@ fun EditTimeSlotMainPager(
             // 结束时间
             item {
                 TitleCard(
-                    onClick = onEndTimeClick, title = {
+                    onClick = onEndTimeClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
+                    title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Rounded.AccessTime, contentDescription = null)
                             Spacer(modifier = Modifier.width(8.dp))
@@ -126,7 +149,13 @@ fun EditTimeSlotMainPager(
             // 星期
             item {
                 TitleCard(
-                    onClick = onDayOfWeekClick, title = {
+                    onClick = onDayOfWeekClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
+                    title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Rounded.DateRange, contentDescription = null)
                             Spacer(modifier = Modifier.width(8.dp))
@@ -138,8 +167,7 @@ fun EditTimeSlotMainPager(
                     }) {
                     AnimatedContent(
                         targetState = timeSlot.dayOfWeek?.toDisplayString(TextStyle.FULL_STANDALONE)
-                            ?: stringResource(R.string.not_set),
-                        label = "day_of_week"
+                            ?: stringResource(R.string.not_set), label = "day_of_week"
                     ) { dayOfWeekStr ->
                         Text(
                             text = dayOfWeekStr, style = MaterialTheme.typography.labelLarge
@@ -151,7 +179,13 @@ fun EditTimeSlotMainPager(
             // 重复规则
             item {
                 TitleCard(
-                    onClick = onRecurrenceClick, title = {
+                    onClick = onRecurrenceClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
+                    title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Rounded.Refresh, contentDescription = null)
                             Spacer(modifier = Modifier.width(8.dp))
@@ -162,12 +196,10 @@ fun EditTimeSlotMainPager(
                         }
                     }) {
                     AnimatedContent(
-                        targetState = timeSlot.recurrence.toDisplayString(),
-                        label = "recurrence"
+                        targetState = timeSlot.recurrence.toDisplayString(), label = "recurrence"
                     ) { recurrenceStr ->
                         Text(
-                            text = recurrenceStr,
-                            style = MaterialTheme.typography.labelLarge
+                            text = recurrenceStr, style = MaterialTheme.typography.labelLarge
                         )
                     }
                 }
@@ -178,6 +210,11 @@ fun EditTimeSlotMainPager(
                 TitleCard(
                     onClick = onRemarkClick,
                     onLongClick = onRemarkLongClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
                     subtitle = {
                         AnimatedVisibility(visible = timeSlot.remark != null) {
                             Text(stringResource(R.string.clear_long_press))
@@ -194,8 +231,7 @@ fun EditTimeSlotMainPager(
                         }
                     }) {
                     AnimatedContent(
-                        targetState = timeSlot.displayRemark,
-                        label = "remark"
+                        targetState = timeSlot.displayRemark, label = "remark"
                     ) { remark ->
                         Text(
                             text = remark, style = MaterialTheme.typography.labelLarge
@@ -207,7 +243,13 @@ fun EditTimeSlotMainPager(
             if (timeSlot.id != 0L) {
                 item {
                     DeleteButton(
-                        label = stringResource(R.string.edit_timeslot_delete), onClick = onDelete
+                        label = stringResource(R.string.edit_timeslot_delete),
+                        onClick = onDelete,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .transformedHeight(this, transformationSpec)
+                            .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                        transformation = SurfaceTransformation(transformationSpec)
                     )
                 }
             }

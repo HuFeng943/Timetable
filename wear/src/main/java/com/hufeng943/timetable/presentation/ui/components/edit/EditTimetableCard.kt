@@ -3,7 +3,6 @@ package com.hufeng943.timetable.presentation.ui.components.edit
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -11,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
 import com.hufeng943.timetable.R
@@ -23,12 +23,14 @@ fun EditTimetableCard(
     onTimetableClick: (Long) -> Unit,
     timetable: TimetableUi,
     onTimetableLongClick: (Long) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    transformation: SurfaceTransformation? = null
 ) {
     DynamicSubTheme(seedColor = timetable.color) {
-        TitleCard(// TODO 课表未开始/正进行/已结束状态显示
+        TitleCard( // TODO 课表未开始/正进行/已结束状态显示
             onClick = { onTimetableClick(timetable.timetableId) },
             onLongClick = { onTimetableLongClick(timetable.timetableId) },
+            transformation = transformation,
             title = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (timetable.color != Color.Unspecified) {
@@ -51,7 +53,7 @@ fun EditTimetableCard(
                     )
                 )
             },
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier
         )
     }
 }

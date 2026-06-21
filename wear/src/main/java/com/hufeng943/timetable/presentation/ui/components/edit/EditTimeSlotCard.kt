@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Card
 import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.ui.TimeSlotUi
@@ -32,13 +33,17 @@ import java.time.format.TextStyle
 
 @Composable
 fun EditTimeSlotCard(
-    timeSlot: TimeSlotUi, onClick: () -> Unit, modifier: Modifier = Modifier
+    timeSlot: TimeSlotUi,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    transformation: SurfaceTransformation? = null
 ) {
     val locale = LocalLocale.current.platformLocale
 
     Card(
         onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
+        transformation = transformation,
         contentPadding = PaddingValues(vertical = 4.dp, horizontal = 10.dp)
     ) {
         Row(

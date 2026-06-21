@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Book
@@ -16,15 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.ui.CourseUi
 import com.hufeng943.timetable.presentation.ui.components.ColorPickerCard
@@ -43,21 +49,31 @@ fun EditCourseMainPager(
     onColorLongClick: () -> Unit,
     onDelete: () -> Unit,
 ) {
-    val scrollState = rememberScalingLazyListState()
-    ScreenScaffold(scrollState = scrollState, edgeButton = {
-        EdgeButton(
-            onClick = onSave
-        ) {
-            Icon(
-                Icons.Rounded.Check, contentDescription = stringResource(R.string.check)
-            )
+    val scrollState = rememberTransformingLazyColumnState()
+    val transformationSpec = rememberTransformationSpec()
+
+    ScreenScaffold(
+        scrollState = scrollState,
+        edgeButton = {
+            EdgeButton(onClick = onSave) {
+                Icon(
+                    Icons.Rounded.Check, contentDescription = stringResource(R.string.check)
+                )
+            }
         }
-    }) { contentPadding ->
-        ScalingLazyColumn(
-            autoCentering = null, state = scrollState, contentPadding = contentPadding
+    ) { contentPadding ->
+        TransformingLazyColumn(
+            state = scrollState,
+            contentPadding = contentPadding
         ) {
             item {
-                ListHeader {
+                ListHeader(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ListHeaderDefaults.minimumTopListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec)
+                ) {
                     AnimatedContent(targetState = course.id == 0L, label = "header_text") { isAdd ->
                         Text(
                             if (isAdd) stringResource(R.string.edit_course_add)
@@ -70,6 +86,11 @@ fun EditCourseMainPager(
             item { // 课程名称
                 TitleCard(
                     onClick = onNameClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Rounded.Book, contentDescription = null)
@@ -94,6 +115,11 @@ fun EditCourseMainPager(
                 TitleCard(
                     onClick = onLocationClick,
                     onLongClick = onLocationLongClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
                     subtitle = {
                         AnimatedVisibility(visible = course.location != null) {
                             Text(stringResource(R.string.clear_long_press))
@@ -126,6 +152,11 @@ fun EditCourseMainPager(
                 TitleCard(
                     onClick = onTeacherClick,
                     onLongClick = onTeacherLongClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
                     subtitle = {
                         AnimatedVisibility(visible = course.teacher != null) {
                             Text(stringResource(R.string.clear_long_press))
@@ -160,14 +191,25 @@ fun EditCourseMainPager(
                     color = course.displayColor,
                     onClick = onColorClick,
                     onLongClick = onColorLongClick,
-                    isNull = course.color == Color.Unspecified
+                    isNull = course.color == Color.Unspecified,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec)
                 )
             }
 
             if (course.id != 0L) {
                 item {
                     DeleteButton(
-                        label = stringResource(R.string.edit_course_delete), onClick = onDelete
+                        label = stringResource(R.string.edit_course_delete),
+                        onClick = onDelete,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .transformedHeight(this, transformationSpec)
+                            .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                        transformation = SurfaceTransformation(transformationSpec)
                     )
                 }
             }
