@@ -2,6 +2,7 @@ package com.hufeng943.timetable.presentation.ui.screens.more.about
 
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
@@ -13,16 +14,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
-import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.CardDefaults
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
 import com.hufeng943.timetable.R
 import com.mikepenz.aboutlibraries.entity.Library
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
@@ -30,7 +36,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AboutLibrariesScreen() {
-    val scrollState = rememberScalingLazyListState()
+    val scrollState = rememberTransformingLazyColumnState()
+    val transformationSpec = rememberTransformationSpec()
     val context = LocalContext.current
     val libs by produceLibraries(R.raw.aboutlibraries)
     val scope = rememberCoroutineScope()
@@ -48,18 +55,31 @@ fun AboutLibrariesScreen() {
                 )
             }
         }) { contentPadding ->
-        ScalingLazyColumn(
-            autoCentering = null, state = scrollState, contentPadding = contentPadding
+        TransformingLazyColumn(
+            state = scrollState, contentPadding = contentPadding
         ) {
             item {
-                ListHeader {
+                ListHeader(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ListHeaderDefaults.minimumTopListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec)
+                ) {
                     Text(stringResource(R.string.about_library))
                 }
             }
 
             libs?.let {
                 items(it.libraries) { library ->
-                    LibraryCard(library = library)
+                    LibraryCard(
+                        library = library,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .transformedHeight(this, transformationSpec)
+                            .minimumVerticalContentPadding(CardDefaults.minimumVerticalListContentPadding),
+                        transformation = SurfaceTransformation(transformationSpec)
+                    )
                 }
             }
         }
@@ -67,37 +87,44 @@ fun AboutLibrariesScreen() {
 }
 
 @Composable
-fun LibraryCard(library: Library, modifier: Modifier = Modifier) {
+fun LibraryCard(
+    library: Library,
+    modifier: Modifier = Modifier,
+    transformation: SurfaceTransformation? = null
+) {
     val context = LocalContext.current
-    TitleCard(title = {
-        Text(
-            text = library.name,
-            fontWeight = FontWeight.Bold,
-            maxLines = 1,
-            modifier = Modifier.basicMarquee(
-                iterations = Int.MAX_VALUE
+    TitleCard(
+        modifier = modifier,
+        transformation = transformation,
+        title = {
+            Text(
+                text = library.name,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                modifier = Modifier.basicMarquee(
+                    iterations = Int.MAX_VALUE
+                )
             )
-        )
-    }, subtitle = {
-        Column() {
-            if (library.openSource) {
-                Text(
-                    text = stringResource(R.string.about_library_open_source),
-                    style = MaterialTheme.typography.bodySmall,
-                )
-            }
-            if (!library.website.isNullOrBlank()) {
-                Text(
-                    text = library.website.toString(),
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.basicMarquee(
-                        iterations = Int.MAX_VALUE
+        }, subtitle = {
+            Column {
+                if (library.openSource) {
+                    Text(
+                        text = stringResource(R.string.about_library_open_source),
+                        style = MaterialTheme.typography.bodySmall,
                     )
-                )
+                }
+                if (!library.website.isNullOrBlank()) {
+                    Text(
+                        text = library.website.toString(),
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.basicMarquee(
+                            iterations = Int.MAX_VALUE
+                        )
+                    )
 
+                }
             }
-        }
-    }) {
+        }) {
         Column(modifier = Modifier.padding(horizontal = 12.dp)) {
             library.artifactVersion?.let {
                 Text(

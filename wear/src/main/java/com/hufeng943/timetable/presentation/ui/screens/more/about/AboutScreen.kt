@@ -42,16 +42,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.CardDefaults
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TitleCard
-import com.google.android.gms.wearable.Wearable
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.NavRoutes
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
@@ -61,11 +65,11 @@ import kotlinx.coroutines.launch
 @SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 fun AboutScreen() {
-    val scrollState = rememberScalingLazyListState()
+    val scrollState = rememberTransformingLazyColumnState()
+    val transformationSpec = rememberTransformationSpec()
     val navController = LocalNavController.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val nodeClient = Wearable.getNodeClient(context)
     val versionName = remember {
         try {
             context.packageManager.getPackageInfo(context.packageName, 0).versionName
@@ -93,11 +97,17 @@ fun AboutScreen() {
                 )
             }
         }) { contentPadding ->
-        ScalingLazyColumn(
-            autoCentering = null, state = scrollState, contentPadding = contentPadding
+        TransformingLazyColumn(
+            state = scrollState, contentPadding = contentPadding
         ) {
             item {
-                ListHeader {
+                ListHeader(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ListHeaderDefaults.minimumTopListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec)
+                ) {
                     Text(stringResource(R.string.more_menu_about))
                 }
             }
@@ -130,7 +140,11 @@ fun AboutScreen() {
                         }
 
                     },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(CardDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec)
                 ) {
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
@@ -147,7 +161,11 @@ fun AboutScreen() {
                 )
 
                 TitleCard(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(CardDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
                     onClick = { expanded = !expanded },
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -164,7 +182,7 @@ fun AboutScreen() {
                             Icon(
                                 imageVector = Icons.Rounded.KeyboardArrowDown,
                                 contentDescription = null,
-                                modifier = Modifier.rotate(rotation) // 箭头随状态旋转
+                                modifier = Modifier.rotate(rotation)
                             )
                         }
                     },
@@ -197,26 +215,33 @@ fun AboutScreen() {
                 }
             }
             item {
-                TitleCard(modifier = Modifier.fillMaxWidth(), title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Rounded.Info,
-                            contentDescription = null,
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
+                TitleCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(CardDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
+                    title = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Rounded.Info,
+                                contentDescription = null,
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text(
+                                text = stringResource(R.string.about_declaration_title),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                    },
+                    subtitle = {
                         Text(
-                            text = stringResource(R.string.about_declaration_title),
-                            style = MaterialTheme.typography.titleMedium
+                            text = stringResource(R.string.about_declaration_subtitle),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
                         )
-                    }
-                }, subtitle = {
-                    Text(
-                        text = stringResource(R.string.about_declaration_subtitle),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
-                    )
-                }) {
+                    }) {
                     Text(
                         text = stringResource(R.string.about_declaration_text).trimMargin(),
                         style = MaterialTheme.typography.bodySmall
@@ -225,28 +250,36 @@ fun AboutScreen() {
             }
 
             item {
-                TitleCard(modifier = Modifier.fillMaxWidth(), onClick = {
-                    navController.navigateSingle(NavRoutes.MORE_ABOUT_LIBRARIES)
-                }, title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Rounded.Description,
-                            contentDescription = null,
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
+                TitleCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(CardDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
+                    onClick = {
+                        navController.navigateSingle(NavRoutes.MORE_ABOUT_LIBRARIES)
+                    },
+                    title = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Rounded.Description,
+                                contentDescription = null,
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text(
+                                text = stringResource(R.string.about_license_title),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                    },
+                    subtitle = {
                         Text(
-                            text = stringResource(R.string.about_license_title),
-                            style = MaterialTheme.typography.titleMedium
+                            text = stringResource(R.string.about_license_subtitle),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
                         )
-                    }
-                }, subtitle = {
-                    Text(
-                        text = stringResource(R.string.about_license_subtitle),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
-                    )
-                }) {
+                    }) {
                     Text(
                         text = stringResource(R.string.about_license_description),
                         style = MaterialTheme.typography.bodySmall
