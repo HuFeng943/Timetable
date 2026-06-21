@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.foundation.lazy.ScalingLazyListState
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumnState
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
 import kotlinx.datetime.LocalDate
@@ -73,7 +73,9 @@ fun Modifier.pullToDatePickerDrag(state: PullToDatePickerState): Modifier = this
 
 @Composable
 fun rememberPullToRefreshConnection(
-    scrollState: ScalingLazyListState, state: PullToDatePickerState, isTouching: () -> Boolean
+    scrollState: TransformingLazyColumnState,
+    state: PullToDatePickerState,
+    isTouching: () -> Boolean
 ): NestedScrollConnection {
     return remember(scrollState, state) {
         object : NestedScrollConnection {

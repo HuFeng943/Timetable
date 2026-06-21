@@ -1,7 +1,11 @@
 package com.hufeng943.timetable.presentation.ui.screens.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -17,13 +21,21 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.rotary.onPreRotaryScrollEvent
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumnItemScope
 import androidx.wear.compose.foundation.lazy.itemsIndexed
-import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.ScrollIndicator
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.lazy.TransformationSpec
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.NavRoutes.courseDetail
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
@@ -51,7 +63,7 @@ fun TimetablePager(
 
     LaunchedEffect(uiState) {
         if (uiState !is UiState.Success) {
-            onOpenStateChanged(false) // 安全重置
+            onOpenStateChanged(false)
         }
     }
 
@@ -65,7 +77,6 @@ fun TimetablePager(
             viewModel.updateSelectedDate(date)
         }
 
-        // 组件被拉出时通知上层锁定 Pager
         LaunchedEffect(pullToDatePickerState.dragOffset) {
             onOpenStateChanged(pullToDatePickerState.dragOffset > 0)
         }
@@ -83,8 +94,15 @@ fun TimetablePager(
                 itemKey = { courseUi -> courseUi.timeSlot.id },
                 selectedDate = selectedDate,
                 onDateSelected = handleDateSelected
-            ) { courseUi ->
-                CourseCard(courseUi) {
+            ) { courseUi, transformationSpec ->
+                CourseCard(
+                    course = courseUi,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec)
+                ) {
                     navController.navigateSingle(courseDetail(courseUi.timeSlot.id))
                 }
             }
@@ -135,26 +153,38 @@ private fun CourseListPager(
     selectedDate: LocalDate,
     onDateSelected: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
-    itemContent: @Composable (CourseUi) -> Unit
+    itemContent: @Composable TransformingLazyColumnItemScope.(CourseUi, TransformationSpec) -> Unit
 ) {
-    val scrollState = rememberScalingLazyListState(initialCenterItemIndex = 0)
+    val scrollState = rememberTransformingLazyColumnState(initialAnchorItemIndex = 0)
+    val transformationSpec = rememberTransformationSpec()
     var isTouching by remember { mutableStateOf(false) }
 
     val nestedScrollConnection = rememberPullToRefreshConnection(
         scrollState = scrollState, state = state, isTouching = { isTouching })
 
-    ScreenScaffold(scrollState = scrollState) { contentPadding ->
+    ScreenScaffold(
+        scrollState = scrollState,
+        scrollIndicator = {
+            AnimatedVisibility(
+                visible = state.dragOffset == 0f,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                ScrollIndicator(state = scrollState)
+            }
+        }
+    ) { contentPadding ->
         PullToDatePicker(
             dragOffset = state.dragOffset,
             refreshThreshold = state.refreshThreshold,
             selectedDate = selectedDate,
             onDateSelected = onDateSelected
         ) {
-            ScalingLazyColumn(
+            TransformingLazyColumn(
                 modifier = modifier
                     .fillMaxSize()
                     .onPreRotaryScrollEvent {
-                        state.dragOffset > 0 // 直接消费掉表冠事件
+                        state.dragOffset > 0
                     }
                     .pointerInput(Unit) {
                         awaitPointerEventScope {
@@ -168,7 +198,13 @@ private fun CourseListPager(
                 state = scrollState,
                 contentPadding = contentPadding) {
                 item {
-                    ListHeader {
+                    ListHeader(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .transformedHeight(this, transformationSpec)
+                            .minimumVerticalContentPadding(ListHeaderDefaults.minimumTopListContentPadding),
+                        transformation = SurfaceTransformation(transformationSpec)
+                    ) {
                         Text(
                             text = stringResource(R.string.home_title),
                             style = MaterialTheme.typography.titleMedium
@@ -177,7 +213,7 @@ private fun CourseListPager(
                 }
                 itemsIndexed(
                     items = coursesUi, key = { _, item -> itemKey(item) }) { _, item ->
-                    itemContent(item)
+                    itemContent(item, transformationSpec)
                 }
             }
         }
