@@ -9,6 +9,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.hufeng943.timetable.R
+import com.hufeng943.timetable.presentation.ui.NavRoutes
 import com.hufeng943.timetable.presentation.ui.common.DynamicSubTheme
 import com.hufeng943.timetable.presentation.ui.common.LocalNavController
 import com.hufeng943.timetable.presentation.ui.common.navigateSingle
@@ -118,7 +119,9 @@ fun EditCourseScreen(
                         R.string.edit_course_display_name, course.displayName
                     ), onConfirm = {
                         viewModel.onAction(EditCourseAction.Delete)
-                        navController.popSafe()
+                            if (!navController.popBackStack(NavRoutes.COURSE_DETAIL, true)) {
+                                navController.popSafe()
+                            }
                     }, onCancel = { internalNavController.popSafe() })
                 }
             }
