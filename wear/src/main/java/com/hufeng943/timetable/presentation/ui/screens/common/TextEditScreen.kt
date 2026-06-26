@@ -18,22 +18,29 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.foundation.lazy.AutoCenteringParams
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumnDefaults
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
 import com.hufeng943.timetable.R
 
 @Composable
 fun TextEditScreen(
     label: String, initialText: String, onSave: (String) -> Unit
 ) {
-    val scrollState = rememberScalingLazyListState()
+    val scrollState = rememberTransformingLazyColumnState(initialAnchorItemIndex = 1)
+    val transformationSpec = rememberTransformationSpec()
     // 状态管理
     var textValue by remember { mutableStateOf(initialText) }
 
@@ -45,14 +52,22 @@ fun TextEditScreen(
                 Icons.Rounded.Check, contentDescription = stringResource(R.string.check)
             )
         }
-    }) {
-        ScalingLazyColumn(
-            autoCentering = AutoCenteringParams(itemIndex = 1),
-            modifier = Modifier.fillMaxSize(),
+    }) { contentPadding ->
+        TransformingLazyColumn(
             state = scrollState,
+            contentPadding = contentPadding,
+            flingBehavior = TransformingLazyColumnDefaults.snapFlingBehavior(scrollState),
+            rotaryScrollableBehavior = RotaryScrollableDefaults.snapBehavior(scrollState),
+            modifier = Modifier.fillMaxSize(),
         ) {
             item {
-                ListHeader {
+                ListHeader(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ListHeaderDefaults.minimumTopListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec)
+                ) {
                     Text(label)
                 }
             }
@@ -69,6 +84,8 @@ fun TextEditScreen(
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding)
                         .background(
                             color = MaterialTheme.colorScheme.surfaceContainer,
                             shape = CircleShape // 圆角两边

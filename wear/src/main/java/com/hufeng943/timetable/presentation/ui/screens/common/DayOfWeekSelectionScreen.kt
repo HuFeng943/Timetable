@@ -9,13 +9,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumnDefaults
 import androidx.wear.compose.foundation.lazy.items
-import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.RadioButton
+import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
 import com.hufeng943.timetable.R
 import com.hufeng943.timetable.presentation.ui.common.LocalAppConfig
 import com.hufeng943.timetable.presentation.ui.components.toDisplayString
@@ -37,25 +45,50 @@ fun DayOfWeekSelectionScreen(
         // 补偿 Header 占用的位置
     }
 
-    val scrollState = rememberScalingLazyListState(
-        initialCenterItemIndex = initialIndex
+    val scrollState = rememberTransformingLazyColumnState(
+        initialAnchorItemIndex = initialIndex
     )
+    val transformationSpec = rememberTransformationSpec()
 
-    ScalingLazyColumn(
-        state = scrollState, modifier = Modifier
-            .fillMaxSize()
-            .selectableGroup()
-    ) {
-        item { ListHeader { Text(stringResource(R.string.selection_week)) } }
+    ScreenScaffold(scrollState = scrollState) { contentPadding ->
+        TransformingLazyColumn(
+            state = scrollState,
+            contentPadding = contentPadding,
+            flingBehavior = TransformingLazyColumnDefaults.snapFlingBehavior(scrollState),
+            rotaryScrollableBehavior = RotaryScrollableDefaults.snapBehavior(scrollState),
+            modifier = Modifier
+                .fillMaxSize()
+                .selectableGroup()
+        ) {
+            item {
+                ListHeader(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ListHeaderDefaults.minimumTopListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec)
+                ) {
+                    Text(stringResource(R.string.selection_week))
+                }
+            }
 
-        items(days) { day ->
-            RadioButton(
-                selected = (day == initialDay), onSelect = { onDaySelected(day) }, label = {
-                    Text(text = day.toDisplayString(TextStyle.FULL_STANDALONE))
-                }, icon = {
-                    Icon(Icons.Rounded.DateRange, contentDescription = null)
-                }, modifier = Modifier.fillMaxWidth()
-            )
+            items(days) { day ->
+                RadioButton(
+                    selected = (day == initialDay),
+                    onSelect = { onDaySelected(day) },
+                    label = {
+                        Text(text = day.toDisplayString(TextStyle.FULL_STANDALONE))
+                    },
+                    icon = {
+                        Icon(Icons.Rounded.DateRange, contentDescription = null)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec)
+                )
+            }
         }
     }
 }

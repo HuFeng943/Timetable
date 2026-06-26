@@ -22,10 +22,12 @@ import androidx.compose.ui.input.rotary.onPreRotaryScrollEvent
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumnDefaults
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumnItemScope
 import androidx.wear.compose.foundation.lazy.itemsIndexed
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
-import androidx.wear.compose.material3.ButtonDefaults
+import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
+import androidx.wear.compose.material3.CardDefaults
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.MaterialTheme
@@ -100,7 +102,7 @@ fun TimetablePager(
                     modifier = Modifier
                         .fillMaxWidth()
                         .transformedHeight(this, transformationSpec)
-                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+                        .minimumVerticalContentPadding(CardDefaults.minimumVerticalListContentPadding),
                     transformation = SurfaceTransformation(transformationSpec)
                 ) {
                     navController.navigateSingle(courseDetail(courseUi.timeSlot.id))
@@ -196,7 +198,10 @@ private fun CourseListPager(
                     }
                     .nestedScroll(nestedScrollConnection),
                 state = scrollState,
-                contentPadding = contentPadding) {
+                flingBehavior = TransformingLazyColumnDefaults.snapFlingBehavior(scrollState),
+                rotaryScrollableBehavior = RotaryScrollableDefaults.snapBehavior(scrollState),
+                contentPadding = contentPadding
+            ) {
                 item {
                     ListHeader(
                         modifier = Modifier
@@ -213,7 +218,7 @@ private fun CourseListPager(
                 }
                 itemsIndexed(
                     items = coursesUi, key = { _, item -> itemKey(item) }) { _, item ->
-                    itemContent(item, transformationSpec)
+                    this.itemContent(item, transformationSpec)
                 }
             }
         }
